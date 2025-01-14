@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+<<<<<<< HEAD
     "build": "vite build --config vite.config.js && vite build --config vite-content.config.js && vite build --config vite-background.config.js",
     "preview": "vite preview",
     "prepare": "husky",
@@ -15,6 +16,16 @@
   "dependencies": {
     "@tanstack/react-query": "^5.64.1",
     "firebase": "^11.2.0",
+=======
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "husky",
+    "lint": "eslint --cache .",
+    "format": "prettier --cache --write ."
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.64.1",
+>>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -26,7 +37,10 @@
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+<<<<<<< HEAD
     "daisyui": "^4.12.23",
+=======
+>>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.2",
@@ -34,7 +48,10 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
+<<<<<<< HEAD
     "markdown-toc": "^1.2.0",
+=======
+>>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
     "postcss": "^8.5.0",
     "prettier": "3.4.2",
     "tailwindcss": "^3.4.17",

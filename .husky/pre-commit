@@ -1,4 +1,7 @@
 npm run format
 npm run lint
+<<<<<<< HEAD
 npm run toc
+=======
+>>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
 git add .

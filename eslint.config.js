@@ -36,6 +36,7 @@ export default [
       ],
     },
   },
+<<<<<<< HEAD
   {
     languageOptions: {
       globals: {
@@ -44,5 +45,7 @@ export default [
       },
     },
   },
+=======
+>>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   eslintConfigPrettier,
 ];
