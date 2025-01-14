@@ -4,11 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        "mainSkyblue": "#6CAFD9",
-        "subGray": "#333",
-      }
+        mainSkyblue: "#6CAFD9",
+        subGray: "#333",
+      },
     },
   },
   plugins: [],
-}
-
+};

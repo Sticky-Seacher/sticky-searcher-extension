@@ -9,7 +9,7 @@ function App() {
         Hello world!
       </h1>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;
