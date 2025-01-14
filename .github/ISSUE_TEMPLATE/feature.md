@@ -1,9 +1,9 @@
 ---
 name: Issue Feature Template
 about: 기능구현에 대한 설명
-title: '[Feature]'
-labels: ''
-assignees: ''
+title: "[Feature]"
+labels: ""
+assignees: ""
 ---
 
 ### 기능 설명 (칸반보드 노션 링크 추가)

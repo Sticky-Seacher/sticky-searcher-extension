@@ -1,9 +1,9 @@
 ---
 name: Issue Bug Template
 about: 버그를 제보하는 템플릿
-title: '[BUG]'
-labels: ''
-assignees: ''
+title: "[BUG]"
+labels: ""
+assignees: ""
 ---
 
 ### 버그가 나타난 기능
