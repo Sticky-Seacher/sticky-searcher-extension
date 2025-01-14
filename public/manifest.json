@@ -1,0 +1,19 @@
+{
+  "name": "Sticky Searcher",
+  "description": "사용자의 검색환경을 개선해보자 🔎",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "Click to open panel",
+    "default_icon": "sticky-seacher-logo.png"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "permissions": [
+    "sidePanel"
+  ]
+}
