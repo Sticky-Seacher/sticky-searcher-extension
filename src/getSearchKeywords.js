@@ -1,9 +1,7 @@
 function getSearchKeywords() {
   const currentUrl = new URL(window.location.href);
   const urlParams = new URLSearchParams(currentUrl.search);
-  const allCondition = ["+", "AND", "|", "OR", "*", "-", ",", `"`, "(", ")"];
-  const filterCondition = ["+", "AND", "|", "OR", "*", " ", ","];
-  const exceptionCondition = [`"`, "(", ")"];
+  const allCondition = ["+", " AND ", "|", " OR ", " -", `"`, " ", ","];
   let keywords;
 
   for (const key of urlParams.keys()) {
@@ -12,34 +10,44 @@ function getSearchKeywords() {
     }
   }
 
+  if (keywords.includes(`"`)) {
+    keywords = keywords.replaceAll(`"`, "");
+    return [keywords];
+  }
+
   for (let i = 0; i < allCondition.length; i++) {
     if (keywords === allCondition[i]) {
-      return keywords;
+      return [keywords];
     }
   }
 
-  exceptionCondition.forEach((condition) => {
-    if (keywords.includes(condition)) {
-      keywords = keywords.replaceAll(`"`, "");
-      keywords = keywords.replaceAll("(", "");
-      keywords = keywords.replaceAll(")", "");
+  for (let i = 0; i < allCondition.length; i++) {
+    if (
+      keywords[0] === allCondition[i] ||
+      keywords[keywords.length - 1] === allCondition[i]
+    ) {
+      return [keywords];
     }
-  });
-
-  if (keywords.includes("-")) {
-    const deleteIndex = keywords.indexOf("-");
-    keywords = keywords.slice(0, deleteIndex - 1);
   }
 
-  filterCondition.forEach((condition) => {
+  if (keywords.includes(" -")) {
+    const deleteIndex = keywords.indexOf(" -");
+    keywords = keywords.slice(0, deleteIndex);
+  }
+
+  allCondition.forEach((condition) => {
     if (keywords.includes(condition)) {
       keywords = keywords.split(condition);
     }
   });
 
-  return keywords;
+  if (typeof keywords === "object") {
+    keywords = keywords.filter((keyword) => keyword !== "");
+    keywords = keywords.map((keyword) => keyword.trim());
+    return keywords;
+  } else {
+    return [keywords];
+  }
 }
 
 getSearchKeywords();
-
-// window.onload
