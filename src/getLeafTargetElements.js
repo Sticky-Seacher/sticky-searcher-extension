@@ -6,7 +6,7 @@ function getLeafTargetElements(rootElement, targetString) {
     throw TypeError("targetString에는 string을 제공해주세요.");
   }
 
-  const result = [];
+  const targetElements = [];
 
   const textNodeIterator = document.createNodeIterator(
     rootElement,
@@ -27,11 +27,11 @@ function getLeafTargetElements(rootElement, targetString) {
   ) {
     const targetElement = currentNode.parentElement;
     if (targetElement.nodeName.toLowerCase() !== "script") {
-      result.push(targetElement);
+      targetElements.push(targetElement);
     }
   }
 
-  return result;
+  return targetElements;
 }
 
 export default getLeafTargetElements;
