@@ -1,4 +1,11 @@
 function getLeafTargetElements(rootElement, targetString) {
+  if (!(rootElement instanceof Element)) {
+    throw TypeError("rootElement에는 Element를 제공해주세요.");
+  }
+  if (typeof targetString !== "string") {
+    throw TypeError("targetString에는 string을 제공해주세요.");
+  }
+
   const result = [];
 
   const textNodeIterator = document.createNodeIterator(
