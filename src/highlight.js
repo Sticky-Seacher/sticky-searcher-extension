@@ -1,7 +1,9 @@
-export function makeRandomColor() {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
+const READABLE_RGB_RANGE = 150;
+
+export function makeRandomColor(rgbRangeEnd) {
+  const r = Math.floor(Math.random() * rgbRangeEnd);
+  const g = Math.floor(Math.random() * rgbRangeEnd);
+  const b = Math.floor(Math.random() * rgbRangeEnd);
   return `rgb(${r}, ${g}, ${b})`;
 }
 
@@ -9,10 +11,10 @@ function getColors(numberOfColorsNeeded) {
   const memory = [];
 
   return Array.from(Array(numberOfColorsNeeded), () => {
-    let color = makeRandomColor();
+    let color = makeRandomColor(READABLE_RGB_RANGE);
 
     while (memory.includes(color)) {
-      color = makeRandomColor();
+      color = makeRandomColor(READABLE_RGB_RANGE);
     }
 
     memory.push(color);
@@ -34,13 +36,13 @@ function setHighlight(keyword, targetElement, color) {
     const parentElement = currentTextNode.parentElement;
     const text = currentTextNode.textContent;
 
-    const excludedArray = text.split(keyword);
+    const excludedList = text.split(keyword);
 
-    excludedArray.forEach((stringFragment, index) => {
+    excludedList.forEach((stringFragment, index) => {
       const notKeywordText = document.createTextNode(stringFragment);
       parentElement.insertBefore(notKeywordText, currentTextNode);
 
-      if (index !== excludedArray.length - 1) {
+      if (index !== excludedList.length - 1) {
         const highlightedSpan = document.createElement("span");
         highlightedSpan.textContent = keyword;
         highlightedSpan.style = `background:${color}`;
