@@ -1,13 +1,15 @@
 export function getDescription() {
-  const metaDescription = document.querySelector(`meta[name="description"]`);
-  const metaOgDescription = document.querySelector(
+  const descriptionMetaElement = document.querySelector(
+    `meta[name="description"]`
+  );
+  const ogDescriptionMetaElement = document.querySelector(
     `meta[property="og:description"]`
   );
 
-  let metaDescriptionText = metaDescription
+  let metaDescriptionText = descriptionMetaElement
     .getAttribute("content")
     .replaceAll(/png|jpg|jpeg|gif/gi, " ");
-  let metaOgDescriptionText = metaOgDescription
+  let metaOgDescriptionText = ogDescriptionMetaElement
     .getAttribute("content")
     .replaceAll(/png|jpg|jpeg|gif/gi, " ");
 
@@ -22,10 +24,10 @@ export function getDescription() {
 
   const finalFilterDescription = [];
 
-  metaDescription && finalFilterDescription.push(metaFilterText);
-  metaOgDescription && finalFilterDescription.push(metaOgFilterText);
+  descriptionMetaElement && finalFilterDescription.push(metaFilterText);
+  ogDescriptionMetaElement && finalFilterDescription.push(metaOgFilterText);
 
-  if (metaDescription && metaOgDescription === false) {
+  if (descriptionMetaElement && ogDescriptionMetaElement === false) {
     throw Error("찾으시는 정보가 없습니다.");
   }
 }
