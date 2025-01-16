@@ -20,24 +20,6 @@ function getColors(numberOfColorsNeeded) {
   });
 }
 
-// function setHighlight(keywords, targetElement, colors) {
-//   const origin = targetElement.innerHTML;
-
-//   let replace = origin;
-
-//   for (let i = 0; i < keywords.length; i += 1) {
-//     const keyword = keywords[i];
-//     const color = colors[i];
-
-//     replace = replace.replaceAll(
-//       keyword,
-//       `<span style="background:${color}">${keyword}</span>`
-//     );
-//   }
-
-//   targetElement.innerHTML = replace;
-// }
-
 function setHighlight(keyword, targetElement, color) {
   const textNodeIterator = document.createNodeIterator(
     targetElement,
@@ -55,12 +37,10 @@ function setHighlight(keyword, targetElement, color) {
     const excludedArray = text.split(keyword);
 
     excludedArray.forEach((stringFragment, index) => {
-      // text node화 해서 삽입
       const notKeywordText = document.createTextNode(stringFragment);
       parentElement.insertBefore(notKeywordText, currentTextNode);
 
       if (index !== excludedArray.length - 1) {
-        // element화 해서 삽입
         const highlightedSpan = document.createElement("span");
         highlightedSpan.textContent = keyword;
         highlightedSpan.style = `background:${color}`;
@@ -68,7 +48,7 @@ function setHighlight(keyword, targetElement, color) {
       }
     });
 
-    parentElement.removeChild(currentTextNode); // 기존 text node 제거
+    parentElement.removeChild(currentTextNode);
   }
 }
 
