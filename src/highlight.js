@@ -38,7 +38,7 @@ function getColors(numberOfColorsNeeded) {
 //   targetElement.innerHTML = replace;
 // }
 
-function setHighlight(keywords, targetElement, colors) {
+function setHighlight(keyword, targetElement, color) {
   const textNodeIterator = document.createNodeIterator(
     targetElement,
     NodeFilter.SHOW_TEXT
@@ -52,26 +52,22 @@ function setHighlight(keywords, targetElement, colors) {
     const parentElement = currentTextNode.parentElement;
     const text = currentTextNode.textContent;
 
-    for (let i = 0; i < keywords.length; i += 1) {
-      const keyword = keywords[i];
-      const color = colors[i];
+    const excludedArray = text.split(keyword);
 
-      const excludedArray = text.split(keyword);
+    excludedArray.forEach((stringFragment, index) => {
+      // text node화 해서 삽입
+      const notKeywordText = document.createTextNode(stringFragment);
+      parentElement.insertBefore(notKeywordText, currentTextNode);
 
-      excludedArray.forEach((stringFragment, index) => {
-        // text node화 해서 삽입
-        const notKeywordText = document.createTextNode(stringFragment);
-        parentElement.insertBefore(notKeywordText, currentTextNode);
+      if (index !== excludedArray.length - 1) {
+        // element화 해서 삽입
+        const highlightedSpan = document.createElement("span");
+        highlightedSpan.textContent = keyword;
+        highlightedSpan.style = `background:${color}`;
+        parentElement.insertBefore(highlightedSpan, currentTextNode);
+      }
+    });
 
-        if (index !== excludedArray.length - 1) {
-          // element화 해서 삽입
-          const highlightedSpan = document.createElement("span");
-          highlightedSpan.textContent = keyword;
-          highlightedSpan.style = `background:${color}`;
-          parentElement.insertBefore(highlightedSpan, currentTextNode);
-        }
-      });
-    }
     parentElement.removeChild(currentTextNode); // 기존 text node 제거
   }
 }
@@ -87,6 +83,8 @@ export function highlightKeywords(keywords, body, getLeafTargetElements) {
   const uniqueElements = new Set(targetElements);
 
   for (const element of uniqueElements) {
-    setHighlight(keywords, element, colors);
+    for (let i = 0; i < keywords.length; i += 1) {
+      setHighlight(keywords[i], element, colors[i]);
+    }
   }
 }
