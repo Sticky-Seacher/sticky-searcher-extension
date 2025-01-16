@@ -20,22 +20,60 @@ function getColors(numberOfColorsNeeded) {
   });
 }
 
+// function setHighlight(keywords, targetElement, colors) {
+//   const origin = targetElement.innerHTML;
+
+//   let replace = origin;
+
+//   for (let i = 0; i < keywords.length; i += 1) {
+//     const keyword = keywords[i];
+//     const color = colors[i];
+
+//     replace = replace.replaceAll(
+//       keyword,
+//       `<span style="background:${color}">${keyword}</span>`
+//     );
+//   }
+
+//   targetElement.innerHTML = replace;
+// }
+
 function setHighlight(keywords, targetElement, colors) {
-  const origin = targetElement.innerHTML;
+  const textNodeIterator = document.createNodeIterator(
+    targetElement,
+    NodeFilter.SHOW_TEXT
+  );
 
-  let replace = origin;
+  for (
+    let currentTextNode = textNodeIterator.nextNode();
+    currentTextNode;
+    currentTextNode = textNodeIterator.nextNode()
+  ) {
+    const parentElement = currentTextNode.parentElement;
+    const text = currentTextNode.textContent;
 
-  for (let i = 0; i < keywords.length; i += 1) {
-    const keyword = keywords[i];
-    const color = colors[i];
+    for (let i = 0; i < keywords.length; i += 1) {
+      const keyword = keywords[i];
+      const color = colors[i];
 
-    replace = replace.replace(
-      keyword,
-      `<span style="background:${color}">${keyword}</span>`
-    );
+      const excludedArray = text.split(keyword);
+
+      excludedArray.forEach((stringFragment, index) => {
+        // text node화 해서 삽입
+        const notKeywordText = document.createTextNode(stringFragment);
+        parentElement.insertBefore(notKeywordText, currentTextNode);
+
+        if (index !== excludedArray.length - 1) {
+          // element화 해서 삽입
+          const highlightedSpan = document.createElement("span");
+          highlightedSpan.textContent = keyword;
+          highlightedSpan.style = `background:${color}`;
+          parentElement.insertBefore(highlightedSpan, currentTextNode);
+        }
+      });
+    }
+    parentElement.removeChild(currentTextNode); // 기존 text node 제거
   }
-
-  targetElement.innerHTML = replace;
 }
 
 export function highlightKeywords(keywords, body, getLeafTargetElements) {
@@ -46,7 +84,9 @@ export function highlightKeywords(keywords, body, getLeafTargetElements) {
     targetElements.push(...getLeafTargetElements(body, keyword));
   }
 
-  for (const targetElement of targetElements) {
-    setHighlight(keywords, targetElement, colors);
+  const uniqueElements = new Set(targetElements);
+
+  for (const element of uniqueElements) {
+    setHighlight(keywords, element, colors);
   }
 }
