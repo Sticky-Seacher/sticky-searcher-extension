@@ -54,12 +54,12 @@ function setHighlight(keyword, targetElement, color) {
   }
 }
 
-export function highlightKeywords(keywords, body, getLeafTargetElements) {
+export function highlightKeywords(keywords, body, selectorAllOfKeywordParent) {
   const targetElements = [];
   const colors = getColors(keywords.length);
 
   for (const keyword of keywords) {
-    targetElements.push(...getLeafTargetElements(body, keyword));
+    targetElements.push(...selectorAllOfKeywordParent(body, keyword));
   }
 
   const uniqueElements = new Set(targetElements);
