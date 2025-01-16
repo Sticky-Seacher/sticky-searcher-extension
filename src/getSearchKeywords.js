@@ -1,8 +1,8 @@
-function getSearchKeywords() {
+export function getSearchKeywords() {
   const currentUrl = new URL(window.location.href);
   const urlParams = new URLSearchParams(currentUrl.search);
   const allCondition = ["+", " AND ", "|", " OR ", " -", `"`, " ", ","];
-  let keywords;
+  let keywords = null;
 
   for (const key of urlParams.keys()) {
     if (key === "q" || key === "query") {
@@ -41,7 +41,7 @@ function getSearchKeywords() {
     }
   });
 
-  if (typeof keywords === "object") {
+  if (Array.isArray(keywords)) {
     keywords = keywords.filter((keyword) => keyword !== "");
     keywords = keywords.map((keyword) => keyword.trim());
     return keywords;
@@ -49,5 +49,3 @@ function getSearchKeywords() {
     return [keywords];
   }
 }
-
-getSearchKeywords();
