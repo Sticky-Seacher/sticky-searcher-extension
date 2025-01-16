@@ -27,7 +27,7 @@ export function getDescription() {
   descriptionMetaElement && finalFilterDescription.push(metaFilterText);
   ogDescriptionMetaElement && finalFilterDescription.push(metaOgFilterText);
 
-  if (descriptionMetaElement && ogDescriptionMetaElement === false) {
+  if (!descriptionMetaElement && !ogDescriptionMetaElement) {
     throw Error("찾으시는 정보가 없습니다.");
   }
 }
