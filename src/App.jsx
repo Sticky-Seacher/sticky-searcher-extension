@@ -1,13 +1,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { HistoryButton } from "./sidePanel-history-button.jsx";
+import HistorySection from "./components/history-section";
+import LatelyHistoryGroup from "./components/lately-history-croup/LatelyHistoryGroup";
+import SearchSection from "./components/search-section";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <HistoryButton />
+      <HistorySection />
+      <SearchSection />
+      <LatelyHistoryGroup />
     </QueryClientProvider>
   );
 }

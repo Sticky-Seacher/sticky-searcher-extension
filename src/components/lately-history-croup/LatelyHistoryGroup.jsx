@@ -1,4 +1,4 @@
-export function LatelyHistoryGroup() {
+export default function LatelyHistoryGroup() {
   return (
     <div>
       <p className="text-lg font-semibold mt-[10px] mb-[10px]">
