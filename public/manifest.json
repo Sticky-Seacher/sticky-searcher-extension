@@ -1,28 +1,19 @@
 {
   "name": "Sticky Searcher",
   "description": "사용자의 검색환경을 개선해보자 🔎",
-<<<<<<< HEAD
   "version": "1.1",
-=======
-  "version": "1.0",
->>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   "manifest_version": 3,
   "action": {
     "default_title": "Click to open panel",
     "default_icon": "sticky-seacher-logo.png"
   },
   "background": {
-<<<<<<< HEAD
     "service_worker": "assets/background.js",
     "type": "module"
-=======
-    "service_worker": "service-worker.js"
->>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   },
   "side_panel": {
     "default_path": "index.html"
   },
-<<<<<<< HEAD
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -46,7 +37,4 @@
       }
     }
   }
-=======
-  "permissions": ["sidePanel"]
->>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
 }
