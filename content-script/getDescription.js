@@ -30,4 +30,6 @@ export function getDescription() {
   if (!descriptionMetaElement && !ogDescriptionMetaElement) {
     throw Error("찾으시는 정보가 없습니다.");
   }
+
+  return finalFilterDescription;
 }
