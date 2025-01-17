@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { HistoryButton } from "./sidePanel-history-button.jsx";
+
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <h1 className="text-3xl font-bold underline text-mainSkyblue">
-        Hello world!
-      </h1>
+      <HistoryButton />
     </QueryClientProvider>
   );
 }
