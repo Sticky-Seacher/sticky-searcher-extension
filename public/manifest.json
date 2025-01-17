@@ -8,11 +8,17 @@
     "default_icon": "sticky-seacher-logo.png"
   },
   "background": {
-    "service_worker": "service-worker.js"
+    "service_worker": "assets/background.js"
   },
   "side_panel": {
     "default_path": "index.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["assets/content.js"]
+    }
+  ],
   "permissions": ["sidePanel", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "commands": {
