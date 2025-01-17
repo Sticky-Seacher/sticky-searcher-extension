@@ -6,21 +6,32 @@ export function getDescription() {
     `meta[property="og:description"]`
   );
 
-  let metaDescriptionText = descriptionMetaElement
-    .getAttribute("content")
-    .replaceAll(/png|jpg|jpeg|gif/gi, " ");
-  let metaOgDescriptionText = ogDescriptionMetaElement
-    .getAttribute("content")
-    .replaceAll(/png|jpg|jpeg|gif/gi, " ");
+  let metaDescriptionText;
+  let metaFilterText;
+  let metaOgDescriptionText;
+  let metaOgFilterText;
 
-  const metaFilterText = metaDescriptionText
-    .split(/[|!?|~,'"|/./]/)
-    .filter((text) => text !== "")
-    .map((blank) => blank.trim());
-  const metaOgFilterText = metaOgDescriptionText
-    .split(/[|!?|~,'"|/./]/)
-    .filter((text) => text !== "")
-    .map((blank) => blank.trim());
+  if (descriptionMetaElement) {
+    metaDescriptionText = descriptionMetaElement
+      .getAttribute("content")
+      .replaceAll(/png|jpg|jpeg|gif/gi, " ");
+
+    metaFilterText = metaDescriptionText
+      .split(/[|!?|~,'"|/./]/)
+      .filter((text) => text !== "")
+      .map((blank) => blank.trim());
+  }
+
+  if (ogDescriptionMetaElement) {
+    metaOgDescriptionText = ogDescriptionMetaElement
+      .getAttribute("content")
+      .replaceAll(/png|jpg|jpeg|gif/gi, " ");
+
+    metaOgFilterText = metaOgDescriptionText
+      .split(/[|!?|~,'"|/./]/)
+      .filter((text) => text !== "")
+      .map((blank) => blank.trim());
+  }
 
   const finalFilterDescription = [];
 

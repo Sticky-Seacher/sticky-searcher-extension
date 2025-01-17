@@ -1,9 +1,17 @@
-const READABLE_RGB_RANGE = 150;
+export function makeRandomColor() {
+  let r = 0;
+  let b = 0;
+  let g = 0;
+  let isReadable = false;
 
-export function makeRandomColor(rgbRangeEnd) {
-  const r = Math.floor(Math.random() * rgbRangeEnd);
-  const g = Math.floor(Math.random() * rgbRangeEnd);
-  const b = Math.floor(Math.random() * rgbRangeEnd);
+  while (!isReadable) {
+    r = Math.floor(Math.random() * 256);
+    g = Math.floor(Math.random() * 256);
+    b = Math.floor(Math.random() * 256);
+
+    isReadable = 0.2126 * r + 0.7152 * g + 0.0722 * b >= 0.583788;
+  }
+
   return `rgb(${r}, ${g}, ${b})`;
 }
 
@@ -11,10 +19,10 @@ function getColors(numberOfColorsNeeded) {
   const memory = [];
 
   return Array.from(Array(numberOfColorsNeeded), () => {
-    let color = makeRandomColor(READABLE_RGB_RANGE);
+    let color = makeRandomColor();
 
     while (memory.includes(color)) {
-      color = makeRandomColor(READABLE_RGB_RANGE);
+      color = makeRandomColor();
     }
 
     memory.push(color);
@@ -34,6 +42,14 @@ function setHighlight(keyword, targetElement, color) {
     currentTextNode = textNodeIterator.nextNode()
   ) {
     const parentElement = currentTextNode.parentElement;
+
+    if (
+      parentElement.tagName.toLowerCase() === "input" ||
+      parentElement.tagName.toLowerCase() === "textarea"
+    ) {
+      continue;
+    }
+
     const text = currentTextNode.textContent;
 
     const excludedList = text.split(keyword);
