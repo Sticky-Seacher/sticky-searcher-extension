@@ -9,7 +9,9 @@ import UserInfoProvider from "./context/UserInfo";
 =======
 >>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
 
-import { HistoryButton } from "./sidePanel-history-button.jsx";
+import HistorySection from "./components/history-section";
+import LatelyHistoryGroup from "./components/lately-history-croup/LatelyHistoryGroup";
+import SearchSection from "./components/search-section";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +49,9 @@ function App() {
 =======
   return (
     <QueryClientProvider client={queryClient}>
-      <HistoryButton />
+      <HistorySection />
+      <SearchSection />
+      <LatelyHistoryGroup />
     </QueryClientProvider>
 >>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   );
