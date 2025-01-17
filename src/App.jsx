@@ -9,6 +9,8 @@ import UserInfoProvider from "./context/UserInfo";
 =======
 >>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
 
+import { HistoryButton } from "./sidePanel-history-button.jsx";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -45,9 +47,7 @@ function App() {
 =======
   return (
     <QueryClientProvider client={queryClient}>
-      <h1 className="text-3xl font-bold underline text-mainSkyblue">
-        Hello world!
-      </h1>
+      <HistoryButton />
     </QueryClientProvider>
 >>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   );
