@@ -20,7 +20,15 @@
       "js": ["assets/content.js"]
     }
   ],
-  "permissions": ["sidePanel", "activeTab", "scripting"],
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "unlimitedStorage",
+    "storage",
+    "webNavigation",
+    "notifications"
+  ],
   "host_permissions": ["<all_urls>"],
   "commands": {
     "_execute_action": {
