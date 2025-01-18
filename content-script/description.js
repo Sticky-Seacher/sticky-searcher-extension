@@ -1,7 +1,6 @@
 export const SELECTOR = "div[data-sncf]";
 
-export function getDescriptionListForOnePage(selector) {
-  const descriptionList = [];
+export function getDescriptionElements(selector) {
   const checkedElements = [];
 
   document.querySelectorAll(selector).forEach((element) => {
@@ -13,24 +12,43 @@ export function getDescriptionListForOnePage(selector) {
       element.textContent !== "" &&
       elementsSharingTheSameParent.length === 0
     ) {
-      descriptionList.push(element.textContent);
       checkedElements.push(element);
     }
   });
 
-  const refinedList = descriptionList.map((draft) => {
-    let result = draft;
+  return checkedElements;
+}
 
-    if (draft.includes("—")) {
-      result = draft.split("—").slice(1).join("");
-    }
+function refineDescription(draft) {
+  let result = draft;
 
-    const sentences = result
-      .split(".")
-      .map((blank) => blank.trim())
-      .filter((text) => text !== "");
-    return sentences[0];
+  if (draft.includes("—")) {
+    result = draft.split("—").slice(1).join("");
+  }
+
+  const sentences = result
+    .split(".")
+    .map((blank) => blank.trim())
+    .filter((text) => text !== "");
+  return sentences[0];
+}
+
+export function setLinkMap(descriptionElements, keywords) {
+  const linkMap = new Map();
+
+  descriptionElements.forEach((element) => {
+    const parent = element.parentElement;
+
+    const linkZone = parent.firstElementChild;
+    const link = linkZone.querySelector("a").href;
+
+    const description = refineDescription(element.textContent);
+
+    linkMap.set(link, {
+      description,
+      keywords,
+    });
   });
 
-  return refinedList;
+  return linkMap;
 }
