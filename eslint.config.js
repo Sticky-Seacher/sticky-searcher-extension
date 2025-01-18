@@ -36,5 +36,14 @@ export default [
       ],
     },
   },
+  // https://stackoverflow.com/questions/48584556/eslint-chrome-is-not-defined-no-undef
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.webextensions,
+      },
+    },
+  },
   eslintConfigPrettier,
 ];
