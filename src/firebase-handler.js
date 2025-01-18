@@ -1,35 +1,28 @@
-import { addDoc, collection } from "firebase/firestore";
+import { deleteDoc, doc, getDocs } from "firebase/firestore";
 
-import { db } from "./firebase";
+import { groups, histories, user, users } from "./firebase-collection";
 
-const users = collection(db, "users");
-export const user = await addDoc(users, {
-  uid: "안녕",
-  accessToken: "",
-});
+const addHistory = async () => {
+  user;
+};
 
-const groups = collection(db, "users", user.id, "groups");
-export const group = await addDoc(groups, {
-  id: "t",
-  title: "yy",
-});
+const getUser = async () => {
+  const userData = await getDocs(users);
+  return userData.docs.map((user) => user.data());
+};
 
-const histories = collection(
-  db,
-  "users",
-  user.id,
-  "groups",
-  group.id,
-  "histories"
-);
-export const history = await addDoc(histories, {
-  id: "",
-  faviconSrc: "",
-  siteTitle: "",
-  url: "현재 url",
-  createdTime: "",
-  keywords: {
-    keyword1: 6,
-    keyword2: 40,
-  },
-});
+const getGroup = async () => {
+  const groupData = await getDocs(groups);
+  return groupData.docs.map((group) => group.data());
+};
+
+const getHistory = async () => {
+  const historyData = await getDocs(histories);
+  return historyData.docs.map((history) => history.data());
+};
+
+const deleteHistory = async () => {
+  await deleteDoc(doc(users, user.id));
+};
+
+export { addHistory, getUser, getGroup, getHistory, deleteHistory };
