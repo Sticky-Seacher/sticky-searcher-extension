@@ -36,5 +36,13 @@ export default [
       ],
     },
   },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.webextensions,
+      },
+    },
+  },
   eslintConfigPrettier,
 ];
