@@ -1,4 +1,13 @@
 import iconUrl from "../public/sticky-seacher-logo.png";
+import { convertToLinkMap } from "./convertToLinkMap";
+import { createRules } from "./createRules";
+
+chrome.runtime.onInstalled.addListener(async function () {
+  const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+  chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: existingRules.map((rule) => rule.id),
+  });
+});
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
@@ -37,5 +46,23 @@ chrome.webNavigation.onCompleted.addListener((details) => {
     }
 
     sendMessageToActiveTab("give-me-linkMap");
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local") {
+    chrome.declarativeNetRequest.getDynamicRules().then((existingRules) => {
+      const newRules = [];
+
+      for (let { newValue } of Object.values(changes)) {
+        const newLinkMaps = convertToLinkMap(newValue);
+        newRules.push(...createRules(newLinkMaps, 1));
+      }
+
+      chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: existingRules.map((rule) => rule.id),
+        addRules: newRules,
+      });
+    });
   }
 });
