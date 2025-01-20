@@ -4,3 +4,7 @@
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
+
+chrome.identity.getAuthToken({ interactive: true }, function (token) {
+  return token;
+});
