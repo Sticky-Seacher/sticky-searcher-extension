@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
-export default function TextButton({ text }) {
+export default function TextButton({ text, onClick }) {
   return (
-    <button className="bg-[#333] text-[#fff] border w-[50%] py-[10px] rounded-full">
+    <button
+      onClick={onClick}
+      className="bg-[#333] text-[#fff] border w-[50%] py-[10px] rounded-full"
+    >
       {text}
     </button>
   );

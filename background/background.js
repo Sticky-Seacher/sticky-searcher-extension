@@ -23,9 +23,13 @@ chrome.webNavigation.onCompleted.addListener((details) => {
   if (isGoogleSearch) {
     const tabId = details.tabId;
 
-    async function sendMessageToActiveTab(message) {
+    async function sendMessageToActiveTab(message, callbback = () => {}) {
       const response = await chrome.tabs.sendMessage(tabId, message);
 
+      callbback(response);
+    }
+
+    sendMessageToActiveTab("give-me-linkMap", (response) => {
       chrome.storage.local.set({ [`${tabId}`]: response }).then(() => {
         chrome.notifications.create({
           type: "basic",
@@ -43,9 +47,7 @@ chrome.webNavigation.onCompleted.addListener((details) => {
           message: data[tabId],
         });
       });
-    }
-
-    sendMessageToActiveTab("give-me-linkMap");
+    });
   }
 });
 

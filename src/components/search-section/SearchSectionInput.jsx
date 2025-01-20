@@ -1,4 +1,11 @@
 export function SearchSectionInput() {
+  function handleArrowClick(goto) {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const activeTab = tabs[0];
+      chrome.tabs.sendMessage(activeTab.id, { goto });
+    });
+  }
+
   return (
     <>
       <input
@@ -10,8 +17,8 @@ export function SearchSectionInput() {
         <span className="text-[#ccc] font-extralight leading-[50px]">
           Total
         </span>
-        <button>↑</button>
-        <button>↓</button>
+        <button onClick={() => handleArrowClick("prev")}>↑</button>
+        <button onClick={() => handleArrowClick("next")}>↓</button>
         <button className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full">
           <img
             src="./search_icon.png"
