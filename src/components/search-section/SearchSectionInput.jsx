@@ -4,21 +4,23 @@ import { useState } from "react";
 export function SearchSectionInput({ currentKeyword }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
 
-  function handleArrowClick(goto) {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const activeTab = tabs[0];
-      chrome.tabs.sendMessage(activeTab.id, {
-        goto: goto === "next" ? 1 : -1,
-        currentScrollIndex,
-        keyword: currentKeyword,
-      });
+  async function handleArrowClick(goto) {
+    const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
 
+    const activeTab = tabs[0];
+    const response = await chrome.tabs.sendMessage(activeTab.id, {
+      goto: goto === "next" ? 1 : -1,
+      currentScrollIndex,
+      keyword: currentKeyword,
+    });
+
+    if (response.isDone) {
       if (goto === "next") {
         setCurrentScrollIndex(currentScrollIndex + 1);
       } else {
         setCurrentScrollIndex(currentScrollIndex - 1);
       }
-    });
+    }
   }
 
   return (

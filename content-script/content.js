@@ -10,7 +10,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const keywords = getSearchKeywords();
     const linkMap = setLinkMap(descriptionElements, keywords);
     const mapJson = JSON.stringify(linkMap, replacer);
+
     sendResponse(mapJson);
+
+    return true;
   }
 
   if (request.keywords) {
@@ -18,7 +21,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.goto) {
-    scroll(request.goto, request.currentScrollIndex, request.keyword);
+    const result = scroll(
+      request.goto,
+      request.currentScrollIndex,
+      request.keyword
+    );
+
+    sendResponse(result);
+
+    return true;
   }
 });
 
@@ -26,9 +37,19 @@ function scroll(goto, currentScrollIndex, keyword) {
   const keywordElements = Array.from(
     document.querySelectorAll(`[data-highlight="${keyword}"]`)
   );
+
+  if (
+    currentScrollIndex + goto > keywordElements.length - 1 ||
+    currentScrollIndex + goto < 0
+  ) {
+    return { isDone: false, message: "바운데리 값입니다." };
+  }
+
   keywordElements[currentScrollIndex + goto].scrollIntoView({
     behavior: "instant",
     block: "center",
   });
   keywordElements[currentScrollIndex + goto].style = `background:yellow`;
+
+  return { isDone: true };
 }
