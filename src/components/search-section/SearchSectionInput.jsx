@@ -1,6 +1,7 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 
-export function SearchSectionInput() {
+export function SearchSectionInput({ currentKeyword }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
 
   function handleArrowClick(goto) {
@@ -9,7 +10,7 @@ export function SearchSectionInput() {
       chrome.tabs.sendMessage(activeTab.id, {
         goto: goto === "next" ? 1 : -1,
         currentScrollIndex,
-        keyword: "banana",
+        keyword: currentKeyword,
       });
 
       if (goto === "next") {
@@ -44,3 +45,7 @@ export function SearchSectionInput() {
     </>
   );
 }
+
+SearchSectionInput.propTypes = {
+  currentKeyword: PropTypes.string.isRequired,
+};
