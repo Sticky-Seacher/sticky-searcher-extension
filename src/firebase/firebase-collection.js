@@ -1,6 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 
-import { db } from "./firebase";
+import { db } from "../firebase";
 
 const users = collection(db, "users");
 const user = await addDoc(users, {
