@@ -1,9 +1,27 @@
-/* eslint-disable react/prop-types */
+/*global chrome*/
+import { useState } from "react";
+
 export default function IconButton({ iconSrc, text }) {
+  const [userToken, setUserToken] = useState(null); // eslint-disable-line no-unused-vars
+
+  function handleLogin() {
+    chrome.runtime.sendMessage(
+      {
+        message: "userStatus",
+      },
+      (response) => {
+        if (response.message) {
+          setUserToken(response.message);
+          chrome.tabs.create({ url: "http://localhost:5174" });
+        }
+      }
+    );
+  }
   return (
     <button
       id="getUrl"
       className="w-[50%] h-[45px] bg-[#333] text-[#fff] rounded-[5px] flex justify-center items-center"
+      onClick={handleLogin}
     >
       <img
         src={iconSrc}

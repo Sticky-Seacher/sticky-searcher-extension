@@ -5,6 +5,11 @@ chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
 
-chrome.identity.getAuthToken({ interactive: true }, function (token) {
-  return token;
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.message === "userStatus") {
+    chrome.identity.getAuthToken({ interactive: true }, function (token) {
+      sendResponse({ message: token });
+    });
+  }
+  return true;
 });
