@@ -18,18 +18,18 @@ export function SearchSectionInput({ currentKeyword }) {
     }
   }
 
-  async function handleArrowClick(goto) {
+  async function handleArrowClick(direction) {
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
 
     const activeTab = tabs[0];
     const response = await chrome.tabs.sendMessage(activeTab.id, {
-      goto: goto === "next" ? 1 : -1,
+      step: direction === "next" ? 1 : -1,
       currentScrollIndex,
       keyword: currentKeyword,
     });
 
     if (response.isDone) {
-      if (goto === "next") {
+      if (direction === "next") {
         setCurrentScrollIndex(currentScrollIndex + 1);
       } else {
         setCurrentScrollIndex(currentScrollIndex - 1);

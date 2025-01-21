@@ -28,9 +28,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
-  if (request.goto) {
+  if (request.step) {
     const result = scroll(
-      request.goto,
+      request.step,
       request.currentScrollIndex,
       request.keyword
     );
@@ -44,19 +44,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 let defaultStyle = "";
 const UPDATED_STYLE = "background: yellow";
 
-function scroll(goto, currentScrollIndex, keyword) {
+function scroll(step, currentScrollIndex, keyword) {
   const keywordElements = Array.from(
     document.querySelectorAll(`[data-highlight="${keyword}"]`)
   );
 
   if (
-    currentScrollIndex + goto > keywordElements.length - 1 ||
-    currentScrollIndex + goto < 0
+    currentScrollIndex + step > keywordElements.length - 1 ||
+    currentScrollIndex + step < 0
   ) {
     return { isDone: false, message: "바운데리 값입니다." };
   }
 
-  if (goto === 0) {
+  if (step === 0) {
     defaultStyle = keywordElements[0].style.cssText;
     keywordElements[0].scrollIntoView({
       behavior: "instant",
@@ -67,11 +67,11 @@ function scroll(goto, currentScrollIndex, keyword) {
     return { isDone: true };
   }
 
-  keywordElements[currentScrollIndex + goto].scrollIntoView({
+  keywordElements[currentScrollIndex + step].scrollIntoView({
     behavior: "instant",
     block: "center",
   });
-  keywordElements[currentScrollIndex + goto].style = UPDATED_STYLE;
+  keywordElements[currentScrollIndex + step].style = UPDATED_STYLE;
   keywordElements[currentScrollIndex].style = defaultStyle;
 
   return { isDone: true };

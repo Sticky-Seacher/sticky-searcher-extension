@@ -13,8 +13,8 @@ export default function SearchSection() {
   async function handleKeywordClick() {
     setIsKeywordOn(!isKeywordOn);
     if (!isKeywordOn) {
-      const data = await chrome.storage.local.get(null);
-      const linkMapJsons = Object.values(data);
+      const tabIdToLinkMapJson = await chrome.storage.local.get(null);
+      const linkMapJsons = Object.values(tabIdToLinkMapJson);
       const linkMap = convertToLinkMap(linkMapJsons[0]);
       const mapIterator = linkMap.values();
       for (const { keywords } of mapIterator) {
