@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
   return true;
-
+});
 chrome.webNavigation.onCompleted.addListener((details) => {
   const url = new URL(details.url);
   const isGoogleSearch =
