@@ -14,19 +14,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.keywords) {
-    console.log("키워드 받음", request.keywords);
     highlightKeywords(request.keywords, document.body, getLeafTargetElements);
   }
 
-  if (request.goto === "next") {
-    start(request.goto);
-  }
-
-  if (request.goto === "prev") {
-    start(request.goto);
+  if (request.goto) {
+    scroll(request.goto, request.currentScrollIndex, request.keyword);
   }
 });
 
-function start(goto) {
-  console.log(`${goto} 작동`);
+function scroll(goto, currentScrollIndex, keyword) {
+  const keywordElements = Array.from(
+    document.querySelectorAll(`[data-highlight="${keyword}"]`)
+  );
+  keywordElements[currentScrollIndex + goto].scrollIntoView({
+    behavior: "instant",
+    block: "center",
+  });
+  keywordElements[currentScrollIndex + goto].style = `background:yellow`;
 }

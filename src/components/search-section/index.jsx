@@ -10,6 +10,7 @@ export default function SearchSection() {
   const [keywords, setKeywords] = useState([]);
 
   async function handleKeywordClick() {
+    setIsKeywordOn(!isKeywordOn);
     if (!isKeywordOn) {
       const data = await chrome.storage.local.get(null);
       const linkMapJsons = Object.values(data);
@@ -17,7 +18,7 @@ export default function SearchSection() {
       const mapIterator = linkMap.values();
       for (const { keywords } of mapIterator) {
         setKeywords(keywords);
-        setIsKeywordOn(!isKeywordOn);
+
         break;
       }
     }
@@ -27,7 +28,6 @@ export default function SearchSection() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
       const activeTab = tabs[0];
       chrome.tabs.sendMessage(activeTab.id, { keywords });
-      console.log("키워드 보냄");
     });
   }
 

@@ -1,8 +1,22 @@
+import { useState } from "react";
+
 export function SearchSectionInput() {
+  const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
+
   function handleArrowClick(goto) {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
       const activeTab = tabs[0];
-      chrome.tabs.sendMessage(activeTab.id, { goto });
+      chrome.tabs.sendMessage(activeTab.id, {
+        goto: goto === "next" ? 1 : -1,
+        currentScrollIndex,
+        keyword: "banana",
+      });
+
+      if (goto === "next") {
+        setCurrentScrollIndex(currentScrollIndex + 1);
+      } else {
+        setCurrentScrollIndex(currentScrollIndex - 1);
+      }
     });
   }
 

@@ -7,10 +7,6 @@ import SearchSection from "./components/search-section";
 const queryClient = new QueryClient();
 
 function App() {
-  chrome.storage.local.get(null).then((data) => {
-    console.log(data); // 됨
-  });
-
   return (
     <QueryClientProvider client={queryClient}>
       <HistorySection />
