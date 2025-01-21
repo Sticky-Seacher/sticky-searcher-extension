@@ -37,8 +37,8 @@
     "notifications",
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
-    "identity", 
-    "tabs",
+    "identity",
+    "tabs"
   ],
   "host_permissions": ["<all_urls>"],
   "commands": {

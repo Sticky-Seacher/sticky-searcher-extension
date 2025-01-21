@@ -1,4 +1,4 @@
-/*global chrome*/
+import PropTypes from "prop-types";
 import { useState } from "react";
 
 export default function IconButton({ iconSrc, text }) {
@@ -32,3 +32,8 @@ export default function IconButton({ iconSrc, text }) {
     </button>
   );
 }
+
+IconButton.propTypes = {
+  text: PropTypes.string.isRequired,
+  iconSrc: PropTypes.string.isRequired,
+};
