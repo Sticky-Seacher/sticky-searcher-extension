@@ -38,6 +38,8 @@ export function SearchSectionInput({ currentKeyword }) {
     getKeywordElementTotalCount(currentKeyword);
   }, [currentKeyword]);
 
+  const indicator = `${currentScrollIndex}/${totalCount}`;
+
   return (
     <>
       <input
@@ -49,7 +51,7 @@ export function SearchSectionInput({ currentKeyword }) {
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
         <span className="text-[#ccc] font-extralight leading-[50px]">
-          {currentScrollIndex} / {totalCount}
+          {currentScrollIndex === -1 ? "" : indicator}
         </span>
         <button onClick={() => handleArrowClick("prev")}>↑</button>
         <button onClick={() => handleArrowClick("next")}>↓</button>
