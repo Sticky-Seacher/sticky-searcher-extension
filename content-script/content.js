@@ -24,16 +24,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.message === "get-keyword-element-total-count") {
     sendResponse({
-      totalCount: document.querySelectorAll(`[data-highlight="${request.keyword}"]`).length
+      totalCount: document.querySelectorAll(
+        `[data-highlight="${request.keyword}"]`
+      ).length,
     });
-
-    return true;
-  }
-
-  if (request.init) {
-    const result = scroll(0, 0, request.keyword);
-
-    sendResponse(result);
 
     return true;
   }
@@ -52,12 +46,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 let defaultStyle = "";
-const UPDATED_STYLE = "background: yellow";
+const UPDATED_STYLE = "background: rgb(76, 168, 128)";
 
 function scroll(step, currentScrollIndex, keyword) {
   const keywordElements = Array.from(
     document.querySelectorAll(`[data-highlight="${keyword}"]`)
   );
+
+  if (currentScrollIndex === -1) {
+    defaultStyle = keywordElements[0].style.cssText;
+  }
 
   if (
     currentScrollIndex + step > keywordElements.length - 1 ||
@@ -66,23 +64,15 @@ function scroll(step, currentScrollIndex, keyword) {
     return { isDone: false, message: "바운데리 값입니다." };
   }
 
-  if (step === 0) {
-    defaultStyle = keywordElements[0].style.cssText;
-    keywordElements[0].scrollIntoView({
-      behavior: "instant",
-      block: "center",
-    });
-    keywordElements[0].style = UPDATED_STYLE;
-
-    return { isDone: true };
-  }
-
   keywordElements[currentScrollIndex + step].scrollIntoView({
     behavior: "instant",
     block: "center",
   });
-  keywordElements[currentScrollIndex + step].style = UPDATED_STYLE;
-  keywordElements[currentScrollIndex].style = defaultStyle;
 
-  return { isDone: true };
+  keywordElements[currentScrollIndex + step].style = UPDATED_STYLE;
+  if (currentScrollIndex !== -1) {
+    keywordElements[currentScrollIndex].style = defaultStyle;
+  }
+
+  return { isDone: true, newIndex: currentScrollIndex + step };
 }

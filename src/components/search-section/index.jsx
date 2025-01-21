@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
@@ -34,9 +34,8 @@ export default function SearchSection() {
     return activeTab;
   }
 
-  async function handleKeywordClick() {
-    setIsKeywordOn(!isKeywordOn);
-    if (!isKeywordOn) {
+  useEffect(() => {
+    async function fireSearch() {
       const allInOneLinkMap = await collectAllLinkMap();
 
       const { url } = await getActiveTab();
@@ -49,9 +48,16 @@ export default function SearchSection() {
         const { keywords } = allInOneLinkMap.get(link);
         setCurrentKeyword(keywords[0]);
         setKeywordsForSearch([...keywords]);
+      } else {
+        setCurrentKeyword("");
+        setKeywordsForSearch([]);
       }
     }
-  }
+
+    if (isKeywordOn) {
+      fireSearch();
+    }
+  }, [isKeywordOn]);
 
   if (keywordsForSearch.length > 0) {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -70,7 +76,7 @@ export default function SearchSection() {
         <TextButton text={"Descrition"} />
         <TextButton
           text={"keyword"}
-          onClick={() => handleKeywordClick()}
+          onClick={() => setIsKeywordOn(!isKeywordOn)}
         />
       </div>
       <KeywordGroup
