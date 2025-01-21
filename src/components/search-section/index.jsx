@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 
 import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
-import { KeywordGroup } from "./KetwordGroup";
+import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
 
 export default function SearchSection() {
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [currentKeyword, setCurrentKeyword] = useState("");
+  const [bonus, setBonus] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -71,6 +72,8 @@ export default function SearchSection() {
       <SearchSectionInput
         key={currentKeyword}
         currentKeyword={currentKeyword}
+        handleEnter={(value) => setBonus((prv) => [value, ...prv])}
+        group={[...bonus, ...keywordsForSearch]}
       />
       <div className="flex gap-[15px]">
         <TextButton text={"Descrition"} />
@@ -80,8 +83,8 @@ export default function SearchSection() {
         />
       </div>
       <KeywordGroup
-        currentKeyword={currentKeyword}
-        keywords={keywordsForSearch}
+        setCurrentKeyword={setCurrentKeyword}
+        group={[...bonus, ...keywordsForSearch]}
       />
     </>
   );

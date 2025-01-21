@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-export function SearchSectionInput({ currentKeyword }) {
+export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(-1);
   const [value, setValue] = useState(currentKeyword);
   const [totalCount, setTotalCount] = useState(0);
@@ -48,6 +48,11 @@ export function SearchSectionInput({ currentKeyword }) {
         placeholder="키워드를 입력해 주세요"
         value={value}
         onChange={(event) => setValue(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !group.includes(value)) {
+            handleEnter(value);
+          }
+        }}
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
         <span className="text-[#ccc] font-extralight leading-[50px]">
@@ -55,7 +60,10 @@ export function SearchSectionInput({ currentKeyword }) {
         </span>
         <button onClick={() => handleArrowClick("prev")}>↑</button>
         <button onClick={() => handleArrowClick("next")}>↓</button>
-        <button className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full">
+        <button
+          onClick={() => handleEnter(value)}
+          className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full"
+        >
           <img
             src="./search_icon.png"
             alt="search_icon"
@@ -69,4 +77,6 @@ export function SearchSectionInput({ currentKeyword }) {
 
 SearchSectionInput.propTypes = {
   currentKeyword: PropTypes.string.isRequired,
+  handleEnter: PropTypes.func.isRequired,
+  group: PropTypes.array.isRequired,
 };
