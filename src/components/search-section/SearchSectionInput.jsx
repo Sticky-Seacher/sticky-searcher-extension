@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SearchSectionInput({ currentKeyword }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
   const [value, setValue] = useState(currentKeyword);
+  const [totalCount, setTotalCount] = useState(0);
 
   async function handleSearchClick() {
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
@@ -38,6 +39,24 @@ export function SearchSectionInput({ currentKeyword }) {
     }
   }
 
+  useEffect(() => {
+    async function getKeywordElementTotalCount(keyword) {
+      const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
+      const activeTab = tabs[0];
+      const response = await chrome.tabs.sendMessage(activeTab.id, {
+        message: "get-keyword-element-total-count",
+        keyword,
+      });
+
+      setTotalCount(response.totalCount);
+    }
+    getKeywordElementTotalCount(currentKeyword);
+
+  }, [currentKeyword]);
+
+  console.log("currentKeyword->", currentKeyword, "value->", value);
+  console.log("totalCount ->", totalCount)
+
   return (
     <>
       <input
@@ -49,7 +68,7 @@ export function SearchSectionInput({ currentKeyword }) {
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
         <span className="text-[#ccc] font-extralight leading-[50px]">
-          Total
+          {currentScrollIndex} / {totalCount}
         </span>
         <button onClick={() => handleArrowClick("prev")}>↑</button>
         <button onClick={() => handleArrowClick("next")}>↓</button>

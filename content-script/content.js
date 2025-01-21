@@ -22,6 +22,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     highlightKeywords(request.keywords, document.body, getLeafTargetElements);
   }
 
+  if (request.message === "get-keyword-element-total-count") {
+    sendResponse({
+      totalCount: document.querySelectorAll(`[data-highlight="${request.keyword}"]`).length
+    });
+
+    return true;
+  }
+
   if (request.init) {
     const result = scroll(0, 0, request.keyword);
 
