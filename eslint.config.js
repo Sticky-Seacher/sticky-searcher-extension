@@ -37,5 +37,13 @@ export default [
       "react/prop-types": "off",
     },
   },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.webextensions,
+      },
+    },
+  },
   eslintConfigPrettier,
 ];

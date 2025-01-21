@@ -8,7 +8,8 @@
     "default_icon": "sticky-seacher-logo.png"
   },
   "background": {
-    "service_worker": "assets/background.js"
+    "service_worker": "assets/background.js",
+    "type": "module"
   },
   "side_panel": {
     "default_path": "index.html"
@@ -26,7 +27,17 @@
       "https://www.googleapis.com/auth/userinfo.email"
     ]
   },
-  "permissions": ["sidePanel", "activeTab", "scripting", "identity", "tabs"],
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "unlimitedStorage",
+    "storage",
+    "webNavigation",
+    "notifications",
+    "identity", 
+    "tabs",
+  ],
   "host_permissions": ["<all_urls>"],
   "commands": {
     "_execute_action": {
