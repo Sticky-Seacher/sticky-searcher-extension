@@ -20,6 +20,13 @@
       "js": ["assets/content.js"]
     }
   ],
+  "oauth2": {
+    "client_id": "399990500021-ph0q3br6s9io670u9vt0sotshsk5fafq.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  },
   "permissions": [
     "sidePanel",
     "activeTab",
@@ -29,7 +36,9 @@
     "webNavigation",
     "notifications",
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "declarativeNetRequestFeedback",
+    "identity", 
+    "tabs",
   ],
   "host_permissions": ["<all_urls>"],
   "commands": {
