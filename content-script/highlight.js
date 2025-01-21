@@ -62,6 +62,7 @@ function setHighlight(keyword, targetElement, color) {
         const highlightedSpan = document.createElement("span");
         highlightedSpan.textContent = keyword;
         highlightedSpan.style = `background:${color}`;
+        highlightedSpan.dataset.highlight = keyword;
         parentElement.insertBefore(highlightedSpan, currentTextNode);
       }
     });

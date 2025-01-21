@@ -35,6 +35,8 @@
     "storage",
     "webNavigation",
     "notifications",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
     "identity", 
     "tabs",
   ],
