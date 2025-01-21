@@ -18,6 +18,8 @@ export default function SearchSection() {
       const linkMap = convertToLinkMap(linkMapJsons[0]);
       const mapIterator = linkMap.values();
       for (const { keywords } of mapIterator) {
+        // eslint-disable-next-line no-debugger
+        debugger;
         setKeywords(keywords);
         setCurrentKeyword(keywords[0]);
 

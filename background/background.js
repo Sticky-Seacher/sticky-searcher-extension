@@ -57,8 +57,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
       const newRules = [];
 
       for (let { newValue } of Object.values(changes)) {
-        const newLinkMaps = convertToLinkMap(newValue);
-        newRules.push(...createRules(newLinkMaps, 1));
+        if (newValue) {
+          const newLinkMaps = convertToLinkMap(newValue);
+          newRules.push(...createRules(newLinkMaps, 1));
+        }
       }
 
       chrome.declarativeNetRequest.updateDynamicRules({
@@ -67,4 +69,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
       });
     });
   }
+});
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+  chrome.storage.local.remove(`${tabId}`);
 });
