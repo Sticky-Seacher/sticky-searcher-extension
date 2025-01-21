@@ -11,6 +11,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const linkMap = setLinkMap(descriptionElements, keywords);
     const mapJson = JSON.stringify(linkMap, replacer);
 
+    highlightKeywords(keywords, document.body, getLeafTargetElements);
+
     sendResponse(mapJson);
 
     return true;
