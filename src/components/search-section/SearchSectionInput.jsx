@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export function SearchSectionInput({ currentKeyword }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
+  const [value, setValue] = useState(currentKeyword);
 
   async function handleSearchClick() {
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
@@ -43,6 +44,8 @@ export function SearchSectionInput({ currentKeyword }) {
         type="text"
         className="w-full h-[50px] border border-[100] pl-[20px] my-[30px] text-[#333] rounded-full"
         placeholder="키워드를 입력해 주세요"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
         <span className="text-[#ccc] font-extralight leading-[50px]">

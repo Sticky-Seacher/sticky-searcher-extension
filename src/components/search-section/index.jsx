@@ -7,35 +7,65 @@ import { SearchSectionInput } from "./SearchSectionInput";
 
 export default function SearchSection() {
   const [isKeywordOn, setIsKeywordOn] = useState(false);
-  const [keywords, setKeywords] = useState([]);
+  const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [currentKeyword, setCurrentKeyword] = useState("");
+
+  async function collectAllLinkMap() {
+    const tabIdToLinkMapJson = await chrome.storage.local.get(null);
+    const AllLinkMapJsons = Object.values(tabIdToLinkMapJson);
+
+    const allInOneLinkMap = new Map();
+
+    AllLinkMapJsons.forEach((linkMapJson) => {
+      const linkMap = convertToLinkMap(linkMapJson);
+      for (const [link, { description, keywords }] of linkMap) {
+        allInOneLinkMap.set(link, { description, keywords });
+      }
+    });
+
+    return allInOneLinkMap;
+  }
+
+  async function getActiveTab() {
+    const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
+
+    const activeTab = tabs[0];
+
+    return activeTab;
+  }
 
   async function handleKeywordClick() {
     setIsKeywordOn(!isKeywordOn);
     if (!isKeywordOn) {
-      const tabIdToLinkMapJson = await chrome.storage.local.get(null);
-      const linkMapJsons = Object.values(tabIdToLinkMapJson);
-      const linkMap = convertToLinkMap(linkMapJsons[0]);
-      const mapIterator = linkMap.values();
-      for (const { keywords } of mapIterator) {
-        setKeywords(keywords);
-        setCurrentKeyword(keywords[0]);
+      const allInOneLinkMap = await collectAllLinkMap();
 
-        break;
+      const { url } = await getActiveTab();
+
+      const link = url.includes("#:~:text=")
+        ? url.substring(0, url.indexOf("#:~:text="))
+        : url;
+
+      if (allInOneLinkMap.has(link)) {
+        const { keywords } = allInOneLinkMap.get(link);
+        setCurrentKeyword(keywords[0]);
+        setKeywordsForSearch([...keywords]);
       }
     }
   }
 
-  if (keywords.length > 0) {
+  if (keywordsForSearch.length > 0) {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
       const activeTab = tabs[0];
-      chrome.tabs.sendMessage(activeTab.id, { keywords });
+      chrome.tabs.sendMessage(activeTab.id, { keywords: keywordsForSearch });
     });
   }
 
   return (
     <>
-      <SearchSectionInput currentKeyword={currentKeyword} />
+      <SearchSectionInput
+        key={currentKeyword}
+        currentKeyword={currentKeyword}
+      />
       <div className="flex gap-[15px]">
         <TextButton text={"Descrition"} />
         <TextButton
@@ -45,7 +75,7 @@ export default function SearchSection() {
       </div>
       <KeywordGroup
         currentKeyword={currentKeyword}
-        keywords={keywords}
+        keywords={keywordsForSearch}
       />
     </>
   );
