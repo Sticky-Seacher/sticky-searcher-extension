@@ -1,6 +1,6 @@
 import { deleteDoc, doc, getDocs } from "firebase/firestore";
 
-import { groups, histories, user, users } from "./firebase-collection";
+import { groups, histories, user, users } from "./firebase/firebase-collection";
 
 const addHistory = async () => {
   user;
