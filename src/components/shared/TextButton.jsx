@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types */
+import PropTypes from "prop-types";
+
 export default function TextButton({ text, onClick }) {
   return (
     <button
@@ -9,3 +10,8 @@ export default function TextButton({ text, onClick }) {
     </button>
   );
 }
+
+TextButton.propTypes = {
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
