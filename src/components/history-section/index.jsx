@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
-
+import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
 import IconButton from "../shared/IconButton";
 
 export default function HistorySection() {
-  const [userToken, setUserToken] = useState(null);
+  let userToken = "";
   const options = {
     year: "numeric",
     month: "numeric",
@@ -16,6 +14,11 @@ export default function HistorySection() {
   const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
     new Date()
   );
+  const groupTitle = "New Keyword Group";
+  const favicon = "favicon";
+  const siteName = "구글";
+  const url = "google.com";
+  const keywords = { apple: 3, banana: 15 };
 
   function handleMovePage() {
     chrome.runtime.sendMessage(
@@ -24,7 +27,7 @@ export default function HistorySection() {
       },
       (response) => {
         if (response.message) {
-          setUserToken(response.message);
+          userToken = response.message;
           chrome.tabs.create({ url: "http://localhost:5174" });
         }
       }
@@ -38,7 +41,17 @@ export default function HistorySection() {
       },
       (response) => {
         if (response.message) {
-          setUserToken(response.message);
+          userToken = response.message;
+          addDefaultGroup(userToken);
+          addHistory(
+            userToken,
+            groupTitle,
+            favicon,
+            siteName,
+            url,
+            currentDate,
+            keywords
+          );
         }
       }
     );
