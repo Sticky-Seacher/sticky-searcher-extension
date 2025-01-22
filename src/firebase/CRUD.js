@@ -9,20 +9,35 @@ import {
 
 import { db } from "./firebase";
 
+async function addDefaultGroup(token) {
+  const rootCollection = doc(db, token, "New Keyword Group");
+  await setDoc(rootCollection, {
+    title: "New Keyword Group",
+  });
+}
+
 async function addGroup(token, title) {
-  const rootCollection = doc(db, token);
+  const rootCollection = doc(collection(db, token));
   await setDoc(rootCollection, {
     title,
   });
 }
 
-async function addHistory(token, title, faviconSrc, siteTitle, url, keywords) {
-  const subCollection = doc(collection(db, token, title, "histories"));
+async function addHistory(
+  token,
+  titleId,
+  faviconSrc,
+  siteTitle,
+  url,
+  createdTime,
+  keywords
+) {
+  const subCollection = doc(collection(db, token, titleId, "histories"));
   await setDoc(subCollection, {
     faviconSrc,
     siteTitle,
     url,
-    createdTime: "",
+    createdTime,
     keywords,
   });
 }
@@ -60,6 +75,7 @@ async function deleteHistory(token, title, historyId) {
 }
 
 export {
+  addDefaultGroup,
   addGroup,
   addHistory,
   getGroups,

@@ -1,27 +1,11 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
-export default function IconButton({ iconSrc, text }) {
-  const [userToken, setUserToken] = useState(null); // eslint-disable-line no-unused-vars
-
-  function handleLogin() {
-    chrome.runtime.sendMessage(
-      {
-        message: "userStatus",
-      },
-      (response) => {
-        if (response.message) {
-          setUserToken(response.message);
-          chrome.tabs.create({ url: "http://localhost:5174" });
-        }
-      }
-    );
-  }
+export default function IconButton({ iconSrc, text, onClick }) {
   return (
     <button
       id="getUrl"
       className="w-[50%] h-[45px] bg-[#333] text-[#fff] rounded-[5px] flex justify-center items-center"
-      onClick={handleLogin}
+      onClick={onClick}
     >
       <img
         src={iconSrc}
@@ -36,4 +20,5 @@ export default function IconButton({ iconSrc, text }) {
 IconButton.propTypes = {
   text: PropTypes.string.isRequired,
   iconSrc: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
