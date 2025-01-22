@@ -32,8 +32,9 @@ function ToggleableKeywordButton({ keyword }) {
   );
 }
 
-export function KeywordGroup({ countsPerKeywords }) {
+export function KeywordGroup({ countsPerKeywords, handleDelete }) {
   const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
+
   return (
     <>
       <div>
@@ -45,9 +46,15 @@ export function KeywordGroup({ countsPerKeywords }) {
             return (
               <li
                 key={index}
-                className="bg-[#333] text-[#fff] text-xs py-[10px] rounded-full"
+                className="text-xs py-[10px]"
               >
                 <ToggleableKeywordButton keyword={keyword} />
+                <button
+                  onClick={() => handleDelete(keyword)}
+                  className="px-1"
+                >
+                  X
+                </button>
               </li>
             );
           })}
@@ -59,6 +66,7 @@ export function KeywordGroup({ countsPerKeywords }) {
 
 KeywordGroup.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 ToggleableKeywordButton.propTypes = {

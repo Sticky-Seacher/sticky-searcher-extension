@@ -84,6 +84,11 @@ export default function SearchSection() {
     }
   }
 
+  function handleKeywordDelete(keyword) {
+    setBonus((prev) => prev.filter((b) => b !== keyword));
+    setKeywordsForSearch((prev) => prev.filter((k) => k !== keyword));
+  }
+
   return (
     <>
       <SearchSectionInput
@@ -100,7 +105,10 @@ export default function SearchSection() {
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
       </div>
-      <KeywordGroup countsPerKeywords={countsPerKeywords} />
+      <KeywordGroup
+        countsPerKeywords={countsPerKeywords}
+        handleDelete={handleKeywordDelete}
+      />
     </>
   );
 }
