@@ -1,6 +1,36 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-import TextButton from "../shared/TextButton";
+import { ToggleableTextButton } from "../shared/TextButton";
+
+function ToggleableKeywordButton({ keyword }) {
+  const [isOn, setIsOn] = useState(true);
+
+  async function handleClick(isOn) {
+    const nextIsOn = !isOn;
+
+    setIsOn(nextIsOn);
+
+    const tabs = await chrome.tabs.query({
+      currentWindow: true,
+      active: true,
+    });
+    const activeTab = tabs[0];
+    await chrome.tabs.sendMessage(activeTab.id, {
+      message: "toggle-highlight",
+      toggleIsOn: nextIsOn,
+      targetKeyword: keyword,
+    });
+  }
+
+  return (
+    <ToggleableTextButton
+      onClick={() => handleClick(isOn)}
+      text={keyword}
+      isOn={isOn}
+    />
+  );
+}
 
 export function KeywordGroup({ countsPerKeywords }) {
   const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
@@ -17,7 +47,7 @@ export function KeywordGroup({ countsPerKeywords }) {
                 key={index}
                 className="bg-[#333] text-[#fff] text-xs py-[10px] rounded-full"
               >
-                <TextButton text={keyword} />
+                <ToggleableKeywordButton keyword={keyword} />
               </li>
             );
           })}
@@ -29,4 +59,8 @@ export function KeywordGroup({ countsPerKeywords }) {
 
 KeywordGroup.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
+};
+
+ToggleableKeywordButton.propTypes = {
+  keyword: PropTypes.string.isRequired,
 };
