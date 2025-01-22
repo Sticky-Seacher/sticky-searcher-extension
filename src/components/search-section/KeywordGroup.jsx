@@ -2,7 +2,8 @@ import PropTypes from "prop-types";
 
 import TextButton from "../shared/TextButton";
 
-export function KeywordGroup({ group }) {
+export function KeywordGroup({ countsPerKeywords }) {
+  const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
   return (
     <>
       <div>
@@ -10,7 +11,7 @@ export function KeywordGroup({ group }) {
           Keyword Group
         </p>
         <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
-          {group.map((keyword, index) => {
+          {existingKeywords.map((keyword, index) => {
             return (
               <li
                 key={index}
@@ -27,6 +28,5 @@ export function KeywordGroup({ group }) {
 }
 
 KeywordGroup.propTypes = {
-  group: PropTypes.array.isRequired,
-  setCurrentKeyword: PropTypes.func.isRequired,
+  countsPerKeywords: PropTypes.array.isRequired,
 };

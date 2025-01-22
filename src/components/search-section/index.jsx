@@ -8,8 +8,9 @@ import { SearchSectionInput } from "./SearchSectionInput";
 export default function SearchSection() {
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
-  const [currentKeyword, setCurrentKeyword] = useState("");
   const [bonus, setBonus] = useState([]);
+
+  const [countsPerKeywords, setCountsPerKeywords] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -36,63 +37,70 @@ export default function SearchSection() {
   }
 
   useEffect(() => {
-    async function fireSearch() {
-      const allInOneLinkMap = await collectAllLinkMap();
+    async function makeCountsPerKeywords(group) {
+      if (group.length > 0) {
+        const tabs = await chrome.tabs.query({
+          currentWindow: true,
+          active: true,
+        });
+        const activeTab = tabs[0];
+        const response = await chrome.tabs.sendMessage(activeTab.id, {
+          keywords: group,
+        });
 
-      const { url } = await getActiveTab();
-
-      const link = url.includes("#:~:text=")
-        ? url.substring(0, url.indexOf("#:~:text="))
-        : url;
-
-      if (allInOneLinkMap.has(link)) {
-        const { keywords } = allInOneLinkMap.get(link);
-        setCurrentKeyword(keywords[0]);
-        setKeywordsForSearch([...keywords]);
+        setCountsPerKeywords(response);
       }
     }
 
-    if (isKeywordOn) {
-      fireSearch();
-    } else {
-      setCurrentKeyword("");
-      setKeywordsForSearch([]);
-    }
-  }, [isKeywordOn]);
-
-  useEffect(() => {
-    const group = [...bonus, ...keywordsForSearch];
-
-    if (group.length > 0) {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, { keywords: group });
-      });
-    }
+    makeCountsPerKeywords([...bonus, ...keywordsForSearch]);
   }, [bonus, keywordsForSearch]);
+
+  async function fireSearch() {
+    const allInOneLinkMap = await collectAllLinkMap();
+    const detectedKeywordsByGoogle = [];
+
+    const { url } = await getActiveTab();
+
+    const link = url.includes("#:~:text=")
+      ? url.substring(0, url.indexOf("#:~:text="))
+      : url;
+
+    if (allInOneLinkMap.has(link)) {
+      const { keywords } = allInOneLinkMap.get(link);
+      detectedKeywordsByGoogle.push(...keywords);
+    }
+
+    return detectedKeywordsByGoogle;
+  }
+
+  async function handleKeywordTextButtonClick(isKeywordOn) {
+    const nextIsKeywordOn = !isKeywordOn;
+
+    setIsKeywordOn(nextIsKeywordOn);
+
+    if (nextIsKeywordOn) {
+      const detectedKeywordsByGoogle = await fireSearch();
+      setKeywordsForSearch([...detectedKeywordsByGoogle]);
+    }
+  }
 
   return (
     <>
       <SearchSectionInput
-        key={currentKeyword}
-        currentKeyword={currentKeyword}
+        key={countsPerKeywords[0] ? countsPerKeywords[0].keyword : "default"}
         handleEnter={(value) => {
           setBonus((prv) => [value, ...prv]);
-          setCurrentKeyword(value);
         }}
-        group={[...bonus, ...keywordsForSearch]}
+        countsPerKeywords={countsPerKeywords}
       />
       <div className="flex gap-[15px]">
         <TextButton text={"Descrition"} />
         <TextButton
           text={"keyword"}
-          onClick={() => setIsKeywordOn(!isKeywordOn)}
+          onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
       </div>
-      <KeywordGroup
-        setCurrentKeyword={setCurrentKeyword}
-        group={[...bonus, ...keywordsForSearch]}
-      />
+      <KeywordGroup countsPerKeywords={countsPerKeywords} />
     </>
   );
 }

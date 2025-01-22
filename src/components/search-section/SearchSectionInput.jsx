@@ -1,44 +1,43 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
+function Indicator({ currentScrollIndex, countsPerKeywords }) {
+  return (
+    <span className="text-[#ccc] font-extralight leading-[50px]">
+      {`${currentScrollIndex === -1 ? 0 : currentScrollIndex + 1}/${countsPerKeywords[0] ? countsPerKeywords[0].count : 0}`}
+    </span>
+  );
+}
+
+export function SearchSectionInput({ handleEnter, countsPerKeywords }) {
   const [currentScrollIndex, setCurrentScrollIndex] = useState(-1);
-  const [value, setValue] = useState(currentKeyword);
-  const [totalCount, setTotalCount] = useState(0);
+  const [value, setValue] = useState(
+    countsPerKeywords[0] ? countsPerKeywords[0].keyword : ""
+  );
+  const [isShowing, setIsShowing] = useState(
+    countsPerKeywords[0] ? true : false
+  );
 
   async function handleArrowClick(direction) {
+    const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
+
+    if (!existingKeywords.includes(value)) {
+      return;
+    }
+
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
 
     const activeTab = tabs[0];
     const response = await chrome.tabs.sendMessage(activeTab.id, {
       step: direction === "next" ? 1 : -1,
       currentScrollIndex,
-      keyword: currentKeyword,
+      keyword: value,
     });
 
     if (response.isDone) {
       setCurrentScrollIndex(response.newIndex);
     }
   }
-
-  useEffect(() => {
-    async function getKeywordElementTotalCount(keywordInInput) {
-      const tabs = await chrome.tabs.query({
-        currentWindow: true,
-        active: true,
-      });
-      const activeTab = tabs[0];
-      const response = await chrome.tabs.sendMessage(activeTab.id, {
-        message: "get-keyword-element-total-count",
-        keyword: keywordInInput,
-      });
-
-      setTotalCount(response.totalCount);
-    }
-    getKeywordElementTotalCount(currentKeyword);
-  }, [currentKeyword]);
-
-  const indicator = `${currentScrollIndex}/${totalCount}`;
 
   return (
     <>
@@ -47,21 +46,39 @@ export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
         className="w-full h-[50px] border border-[100] pl-[20px] my-[30px] text-[#333] rounded-full"
         placeholder="키워드를 입력해 주세요"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => {
+          setIsShowing(false);
+          setValue(event.target.value);
+        }}
         onKeyDown={(event) => {
-          if (event.key === "Enter" && !group.includes(value)) {
+          const existingKeywords = countsPerKeywords.map(
+            ({ keyword }) => keyword
+          );
+
+          if (event.key === "Enter" && !existingKeywords.includes(value)) {
             handleEnter(value);
           }
         }}
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
-        <span className="text-[#ccc] font-extralight leading-[50px]">
-          {currentScrollIndex === -1 ? "" : indicator}
-        </span>
+        {isShowing && (
+          <Indicator
+            currentScrollIndex={currentScrollIndex}
+            countsPerKeywords={countsPerKeywords}
+          />
+        )}
         <button onClick={() => handleArrowClick("prev")}>↑</button>
         <button onClick={() => handleArrowClick("next")}>↓</button>
         <button
-          onClick={() => handleEnter(value)}
+          onClick={() => {
+            const existingKeywords = countsPerKeywords.map(
+              ({ keyword }) => keyword
+            );
+
+            if (!existingKeywords.includes(value)) {
+              handleEnter(value);
+            }
+          }}
           className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full"
         >
           <img
@@ -75,8 +92,12 @@ export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
   );
 }
 
+Indicator.propTypes = {
+  currentScrollIndex: PropTypes.number.isRequired,
+  countsPerKeywords: PropTypes.array.isRequired,
+};
+
 SearchSectionInput.propTypes = {
-  currentKeyword: PropTypes.string.isRequired,
   handleEnter: PropTypes.func.isRequired,
-  group: PropTypes.array.isRequired,
+  countsPerKeywords: PropTypes.array.isRequired,
 };

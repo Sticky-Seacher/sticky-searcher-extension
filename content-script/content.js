@@ -24,14 +24,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
 
     highlightKeywords(newKeywords, document.body, getLeafTargetElements);
-  }
 
-  if (request.message === "get-keyword-element-total-count") {
-    const keywordElements = getKeywordElements(request.keyword);
-
-    sendResponse({
-      totalCount: keywordElements.length,
+    const result = request.keywords.map((keyword) => {
+      return {
+        keyword,
+        count: document.querySelectorAll(`[data-highlight="${keyword}"]`)
+          .length,
+      };
     });
+
+    sendResponse(result);
 
     return true;
   }
@@ -48,10 +50,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
-
-function getKeywordElements(keyword) {
-  return document.querySelectorAll(`[data-highlight="${keyword}"]`);
-}
 
 let defaultStyle = "";
 const UPDATED_STYLE = "background: rgb(76, 168, 128)";
