@@ -49,14 +49,14 @@ export default function SearchSection() {
         const { keywords } = allInOneLinkMap.get(link);
         setCurrentKeyword(keywords[0]);
         setKeywordsForSearch([...keywords]);
-      } else {
-        setCurrentKeyword("");
-        setKeywordsForSearch([]);
       }
     }
 
     if (isKeywordOn) {
       fireSearch();
+    } else {
+      setCurrentKeyword("");
+      setKeywordsForSearch([]);
     }
   }, [isKeywordOn]);
 
@@ -76,7 +76,10 @@ export default function SearchSection() {
       <SearchSectionInput
         key={currentKeyword}
         currentKeyword={currentKeyword}
-        handleEnter={(value) => setBonus((prv) => [value, ...prv])}
+        handleEnter={(value) => {
+          setBonus((prv) => [value, ...prv]);
+          setCurrentKeyword(value);
+        }}
         group={[...bonus, ...keywordsForSearch]}
       />
       <div className="flex gap-[15px]">

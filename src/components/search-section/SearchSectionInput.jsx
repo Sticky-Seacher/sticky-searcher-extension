@@ -22,7 +22,7 @@ export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
   }
 
   useEffect(() => {
-    async function getKeywordElementTotalCount(keyword) {
+    async function getKeywordElementTotalCount(keywordInInput) {
       const tabs = await chrome.tabs.query({
         currentWindow: true,
         active: true,
@@ -30,7 +30,7 @@ export function SearchSectionInput({ currentKeyword, handleEnter, group }) {
       const activeTab = tabs[0];
       const response = await chrome.tabs.sendMessage(activeTab.id, {
         message: "get-keyword-element-total-count",
-        keyword,
+        keyword: keywordInInput,
       });
 
       setTotalCount(response.totalCount);
