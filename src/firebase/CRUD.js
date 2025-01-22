@@ -3,6 +3,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
   query,
   setDoc,
 } from "firebase/firestore";
@@ -55,7 +56,10 @@ async function getGroups(token, callback) {
 }
 
 async function getHistories(token, groupId, callback) {
-  const histories = query(collection(db, token, groupId, "histories"));
+  const histories = query(
+    collection(db, token, groupId, "histories"),
+    limit(10)
+  );
   const historyList = await getDocs(histories);
   historyList.forEach((history) => {
     const historyData = {
