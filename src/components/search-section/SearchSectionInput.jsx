@@ -1,39 +1,41 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-export function SearchSectionInput({ currentKeyword }) {
-  const [currentScrollIndex, setCurrentScrollIndex] = useState(0);
+function Indicator({ currentScrollIndex, countsPerKeywords }) {
+  return (
+    <span className="text-[#ccc] font-extralight leading-[50px]">
+      {`${currentScrollIndex === -1 ? 0 : currentScrollIndex + 1}/${countsPerKeywords[0] ? countsPerKeywords[0].count : 0}`}
+    </span>
+  );
+}
 
-  async function handleSearchClick() {
-    const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
-
-    const activeTab = tabs[0];
-    const response = await chrome.tabs.sendMessage(activeTab.id, {
-      init: true,
-      keyword: currentKeyword,
-    });
-
-    if (response.isDone) {
-      setCurrentScrollIndex(0);
-    }
-  }
+export function SearchSectionInput({ handleEnter, countsPerKeywords }) {
+  const [currentScrollIndex, setCurrentScrollIndex] = useState(-1);
+  const [value, setValue] = useState(
+    countsPerKeywords[0] ? countsPerKeywords[0].keyword : ""
+  );
+  const [isShowing, setIsShowing] = useState(
+    countsPerKeywords[0] ? true : false
+  );
 
   async function handleArrowClick(direction) {
+    const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
+
+    if (!existingKeywords.includes(value)) {
+      return;
+    }
+
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
 
     const activeTab = tabs[0];
     const response = await chrome.tabs.sendMessage(activeTab.id, {
       step: direction === "next" ? 1 : -1,
       currentScrollIndex,
-      keyword: currentKeyword,
+      keyword: value,
     });
 
     if (response.isDone) {
-      if (direction === "next") {
-        setCurrentScrollIndex(currentScrollIndex + 1);
-      } else {
-        setCurrentScrollIndex(currentScrollIndex - 1);
-      }
+      setCurrentScrollIndex(response.newIndex);
     }
   }
 
@@ -43,15 +45,40 @@ export function SearchSectionInput({ currentKeyword }) {
         type="text"
         className="w-full h-[50px] border border-[100] pl-[20px] my-[30px] text-[#333] rounded-full"
         placeholder="키워드를 입력해 주세요"
+        value={value}
+        onChange={(event) => {
+          setIsShowing(false);
+          setValue(event.target.value);
+        }}
+        onKeyDown={(event) => {
+          const existingKeywords = countsPerKeywords.map(
+            ({ keyword }) => keyword
+          );
+
+          if (event.key === "Enter" && !existingKeywords.includes(value)) {
+            handleEnter(value);
+          }
+        }}
       />
       <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
-        <span className="text-[#ccc] font-extralight leading-[50px]">
-          Total
-        </span>
+        {isShowing && (
+          <Indicator
+            currentScrollIndex={currentScrollIndex}
+            countsPerKeywords={countsPerKeywords}
+          />
+        )}
         <button onClick={() => handleArrowClick("prev")}>↑</button>
         <button onClick={() => handleArrowClick("next")}>↓</button>
         <button
-          onClick={() => handleSearchClick()}
+          onClick={() => {
+            const existingKeywords = countsPerKeywords.map(
+              ({ keyword }) => keyword
+            );
+
+            if (!existingKeywords.includes(value)) {
+              handleEnter(value);
+            }
+          }}
           className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full"
         >
           <img
@@ -65,6 +92,12 @@ export function SearchSectionInput({ currentKeyword }) {
   );
 }
 
+Indicator.propTypes = {
+  currentScrollIndex: PropTypes.number.isRequired,
+  countsPerKeywords: PropTypes.array.isRequired,
+};
+
 SearchSectionInput.propTypes = {
-  currentKeyword: PropTypes.string.isRequired,
+  handleEnter: PropTypes.func.isRequired,
+  countsPerKeywords: PropTypes.array.isRequired,
 };
