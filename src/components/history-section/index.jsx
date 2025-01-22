@@ -17,7 +17,7 @@ export default function HistorySection() {
   const groupTitle = "New Keyword Group";
   const favicon = "favicon";
   const siteName = "구글";
-  const url = "google.com";
+  const url = "https://www.google.com/";
   const keywords = { apple: 3, banana: 15 };
 
   function handleMovePage() {
