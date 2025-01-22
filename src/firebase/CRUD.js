@@ -16,13 +16,21 @@ async function addGroup(token, title) {
   });
 }
 
-async function addHistory(token, title, faviconSrc, siteTitle, url, keywords) {
+async function addHistory(
+  token,
+  title,
+  faviconSrc,
+  siteTitle,
+  url,
+  createdTime,
+  keywords
+) {
   const subCollection = doc(collection(db, token, title, "histories"));
   await setDoc(subCollection, {
     faviconSrc,
     siteTitle,
     url,
-    createdTime: "",
+    createdTime,
     keywords,
   });
 }
