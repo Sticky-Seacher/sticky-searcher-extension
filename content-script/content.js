@@ -11,17 +11,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const linkMap = setLinkMap(descriptionElements, keywords);
     const mapJson = JSON.stringify(linkMap, replacer);
 
+    highlightKeywords(keywords, document.body, getLeafTargetElements);
+
     sendResponse(mapJson);
 
     return true;
   }
 
   if (request.keywords) {
-    highlightKeywords(request.keywords, document.body, getLeafTargetElements);
-  }
+    const newKeywords = request.keywords.filter(
+      (keyword) => !document.querySelector(`[data-highlight="${keyword}"]`)
+    );
 
-  if (request.init) {
-    const result = scroll(0, 0, request.keyword);
+    highlightKeywords(newKeywords, document.body, getLeafTargetElements);
+
+    const result = request.keywords.map((keyword) => {
+      return {
+        keyword,
+        count: document.querySelectorAll(`[data-highlight="${keyword}"]`)
+          .length,
+      };
+    });
 
     sendResponse(result);
 
@@ -42,12 +52,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 let defaultStyle = "";
-const UPDATED_STYLE = "background: yellow";
+const UPDATED_STYLE = "background: rgb(76, 168, 128)";
 
 function scroll(step, currentScrollIndex, keyword) {
   const keywordElements = Array.from(
     document.querySelectorAll(`[data-highlight="${keyword}"]`)
   );
+
+  if (currentScrollIndex === -1) {
+    defaultStyle = keywordElements[0].style.cssText;
+  }
 
   if (
     currentScrollIndex + step > keywordElements.length - 1 ||
@@ -56,23 +70,15 @@ function scroll(step, currentScrollIndex, keyword) {
     return { isDone: false, message: "바운데리 값입니다." };
   }
 
-  if (step === 0) {
-    defaultStyle = keywordElements[0].style.cssText;
-    keywordElements[0].scrollIntoView({
-      behavior: "instant",
-      block: "center",
-    });
-    keywordElements[0].style = UPDATED_STYLE;
-
-    return { isDone: true };
-  }
-
   keywordElements[currentScrollIndex + step].scrollIntoView({
     behavior: "instant",
     block: "center",
   });
-  keywordElements[currentScrollIndex + step].style = UPDATED_STYLE;
-  keywordElements[currentScrollIndex].style = defaultStyle;
 
-  return { isDone: true };
+  keywordElements[currentScrollIndex + step].style = UPDATED_STYLE;
+  if (currentScrollIndex !== -1) {
+    keywordElements[currentScrollIndex].style = defaultStyle;
+  }
+
+  return { isDone: true, newIndex: currentScrollIndex + step };
 }
