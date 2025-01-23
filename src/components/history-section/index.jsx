@@ -57,6 +57,24 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
     return history;
   }
 
+  async function getHistoryData(countsPerKeywords) {
+    const tabs = await chrome.tabs.query({
+      currentWindow: true,
+      active: true,
+    });
+    const activeTab = tabs[0];
+
+    const history = {
+      faviconSrc: activeTab.favIconUrl,
+      siteTitle: activeTab.title,
+      url: activeTab.url,
+      createdTime: new Date().toISOString(),
+      keywords: [...countsPerKeywords],
+    };
+
+    return history;
+  }
+
   return (
     <div
       id="urls"
