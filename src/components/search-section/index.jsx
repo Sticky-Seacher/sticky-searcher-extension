@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 import { convertToLinkMap } from "../../../background/convertToLinkMap";
@@ -5,12 +6,13 @@ import TextButton from "../shared/TextButton";
 import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
 
-export default function SearchSection() {
+export default function SearchSection({
+  countsPerKeywords,
+  setCountsPerKeywords,
+}) {
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [bonus, setBonus] = useState([]);
-
-  const [countsPerKeywords, setCountsPerKeywords] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -53,7 +55,7 @@ export default function SearchSection() {
     }
 
     makeCountsPerKeywords([...bonus, ...keywordsForSearch]);
-  }, [bonus, keywordsForSearch]);
+  }, [bonus, keywordsForSearch, setCountsPerKeywords]);
 
   async function fireSearch() {
     const allInOneLinkMap = await collectAllLinkMap();
@@ -112,3 +114,8 @@ export default function SearchSection() {
     </>
   );
 }
+
+SearchSection.propTypes = {
+  countsPerKeywords: PropTypes.array.isRequired,
+  setCountsPerKeywords: PropTypes.func.isRequired,
+};
