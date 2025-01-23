@@ -1,22 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-<<<<<<< HEAD
 import { useState } from "react";
 
 import HistorySection from "./components/history-section";
 import LatelyHistoryGroup from "./components/lately-history-croup/LatelyHistoryGroup";
 import SearchSection from "./components/search-section";
 import UserInfoProvider from "./context/UserInfo";
-=======
->>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
-
-import HistorySection from "./components/history-section";
-import LatelyHistoryGroup from "./components/lately-history-croup/LatelyHistoryGroup";
-import SearchSection from "./components/search-section";
 
 const queryClient = new QueryClient();
 
 function App() {
-<<<<<<< HEAD
   const [countsPerKeywords, setCountsPerKeywords] = useState([]);
   const [historyItem, setHistoryItem] = useState([]);
 
@@ -46,14 +38,6 @@ function App() {
         />
       </QueryClientProvider>
     </UserInfoProvider>
-=======
-  return (
-    <QueryClientProvider client={queryClient}>
-      <HistorySection />
-      <SearchSection />
-      <LatelyHistoryGroup />
-    </QueryClientProvider>
->>>>>>> 950132a ([환경구축] 보일러플레이트 설정 (#1))
   );
 }
 
