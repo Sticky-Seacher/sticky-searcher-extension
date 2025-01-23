@@ -14,7 +14,7 @@ export default function LatelyHistoryGroup() {
       (response) => {
         if (response.message) {
           const userToken = response.message;
-          const groupId = "New Keyword Group";
+          const groupId = "new-keyword-group";
           getHistories(userToken, groupId, setHistoryList);
         }
       }

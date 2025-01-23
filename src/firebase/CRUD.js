@@ -11,7 +11,7 @@ import {
 import { db } from "./firebase";
 
 async function addDefaultGroup(token) {
-  const rootCollection = doc(db, token, "New Keyword Group");
+  const rootCollection = doc(db, token, "new-keyword-group");
   await setDoc(rootCollection, {
     title: "New Keyword Group",
   });
