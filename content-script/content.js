@@ -1,8 +1,14 @@
 import getLeafTargetElements from "./getLeafTargetElements";
 import { getSearchKeywords } from "./getSearchKeywords";
-import { highlightKeywords } from "./highlight";
+import { highlightKeywords, makeRandomBackgroundColor } from "./highlight";
 import { SELECTOR, getDescriptionElements, setLinkMap } from "./linkMap";
 import { replacer } from "./mapToJosn";
+import {
+  applyHighlight,
+  applyHighlightAll,
+  turnOffHighlight,
+  turnOffHighlightAll,
+} from "./toggle";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === "give-me-linkMap") {
@@ -46,6 +52,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
 
     sendResponse(result);
+
+    return true;
+  }
+
+  if (request.message === "toggle-highlight") {
+    if (request.toggleIsOn) {
+      applyHighlight(request.targetKeyword, makeRandomBackgroundColor());
+    } else {
+      turnOffHighlight(request.targetKeyword);
+    }
+
+    return true;
+  }
+
+  if (request.message === "toggle-highlight-all") {
+    if (request.toggleIsOn) {
+      applyHighlightAll(request.targetKeywords);
+    } else {
+      turnOffHighlightAll();
+    }
 
     return true;
   }

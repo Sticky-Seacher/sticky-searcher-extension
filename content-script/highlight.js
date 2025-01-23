@@ -1,28 +1,36 @@
+const BACKGROUND_COLORS = [
+  "#CFF09E",
+  "#A8DBA8",
+  "#D7FFF1",
+  "#ffdb9d",
+  "#DDDDDD",
+  "#FADAD8",
+  "#b0dcff",
+  "#dac8ff",
+];
+
+export function makeRandomBackgroundColor() {
+  return BACKGROUND_COLORS[
+    Math.floor(Math.random() * BACKGROUND_COLORS.length)
+  ];
+}
+
 export function makeRandomColor() {
-  let r = 0;
-  let b = 0;
-  let g = 0;
-  let isReadable = false;
-
-  while (!isReadable) {
-    r = Math.floor(Math.random() * 256);
-    g = Math.floor(Math.random() * 256);
-    b = Math.floor(Math.random() * 256);
-
-    isReadable = 0.2126 * r + 0.7152 * g + 0.0722 * b >= 0.583788;
-  }
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
 
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function getColors(numberOfColorsNeeded) {
+export function getColors(numberOfColorsNeeded, creatColor) {
   const memory = [];
 
   return Array.from(Array(numberOfColorsNeeded), () => {
-    let color = makeRandomColor();
+    let color = creatColor();
 
     while (memory.includes(color)) {
-      color = makeRandomColor();
+      color = creatColor();
     }
 
     memory.push(color);
@@ -73,7 +81,7 @@ function setHighlight(keyword, targetElement, color) {
 
 export function highlightKeywords(keywords, body, selectorAllOfKeywordParent) {
   const targetElements = [];
-  const colors = getColors(keywords.length);
+  const colors = getColors(keywords.length, makeRandomBackgroundColor);
 
   for (const keyword of keywords) {
     targetElements.push(...selectorAllOfKeywordParent(body, keyword));

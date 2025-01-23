@@ -1,16 +1,19 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
 import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
+import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
-export default function SearchSection() {
+export default function SearchSection({
+  countsPerKeywords,
+  setCountsPerKeywords,
+}) {
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [bonus, setBonus] = useState([]);
-
-  const [countsPerKeywords, setCountsPerKeywords] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -53,7 +56,7 @@ export default function SearchSection() {
     }
 
     makeCountsPerKeywords([...bonus, ...keywordsForSearch]);
-  }, [bonus, keywordsForSearch]);
+  }, [bonus, keywordsForSearch, setCountsPerKeywords]);
 
   async function fireSearch() {
     const allInOneLinkMap = await collectAllLinkMap();
@@ -84,6 +87,11 @@ export default function SearchSection() {
     }
   }
 
+  function handleKeywordDelete(keyword) {
+    setBonus((prev) => prev.filter((b) => b !== keyword));
+    setKeywordsForSearch((prev) => prev.filter((k) => k !== keyword));
+  }
+
   return (
     <>
       <SearchSectionInput
@@ -94,13 +102,24 @@ export default function SearchSection() {
         countsPerKeywords={countsPerKeywords}
       />
       <div className="flex gap-[15px]">
-        <TextButton text={"Descrition"} />
         <TextButton
-          text={"keyword"}
+          text={"Start Searcher"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
+        <ToggleableKeywordButton
+          isAll={true}
+          countsPerKeywords={countsPerKeywords}
+        />
       </div>
-      <KeywordGroup countsPerKeywords={countsPerKeywords} />
+      <KeywordGroup
+        countsPerKeywords={countsPerKeywords}
+        handleDelete={handleKeywordDelete}
+      />
     </>
   );
 }
+
+SearchSection.propTypes = {
+  countsPerKeywords: PropTypes.array.isRequired,
+  setCountsPerKeywords: PropTypes.func.isRequired,
+};
