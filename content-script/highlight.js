@@ -15,7 +15,7 @@ export function makeRandomColor() {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function getColors(numberOfColorsNeeded) {
+export function getColors(numberOfColorsNeeded) {
   const memory = [];
 
   return Array.from(Array(numberOfColorsNeeded), () => {

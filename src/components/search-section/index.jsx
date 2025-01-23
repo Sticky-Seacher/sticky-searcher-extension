@@ -5,6 +5,7 @@ import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
 import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
+import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
 export default function SearchSection({
   countsPerKeywords,
@@ -101,10 +102,13 @@ export default function SearchSection({
         countsPerKeywords={countsPerKeywords}
       />
       <div className="flex gap-[15px]">
-        <TextButton text={"Descrition"} />
         <TextButton
-          text={"keyword"}
+          text={"Start"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
+        />
+        <ToggleableKeywordButton
+          isAll={true}
+          countsPerKeywords={countsPerKeywords}
         />
       </div>
       <KeywordGroup

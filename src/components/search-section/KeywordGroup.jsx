@@ -1,36 +1,6 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
-import { ToggleableTextButton } from "../shared/TextButton";
-
-function ToggleableKeywordButton({ keyword }) {
-  const [isOn, setIsOn] = useState(true);
-
-  async function handleClick(isOn) {
-    const nextIsOn = !isOn;
-
-    setIsOn(nextIsOn);
-
-    const tabs = await chrome.tabs.query({
-      currentWindow: true,
-      active: true,
-    });
-    const activeTab = tabs[0];
-    await chrome.tabs.sendMessage(activeTab.id, {
-      message: "toggle-highlight",
-      toggleIsOn: nextIsOn,
-      targetKeyword: keyword,
-    });
-  }
-
-  return (
-    <ToggleableTextButton
-      onClick={() => handleClick(isOn)}
-      text={keyword}
-      isOn={isOn}
-    />
-  );
-}
+import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
 export function KeywordGroup({ countsPerKeywords, handleDelete }) {
   const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
@@ -48,7 +18,10 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
                 key={keyword}
                 className="text-xs py-[10px]"
               >
-                <ToggleableKeywordButton keyword={keyword} />
+                <ToggleableKeywordButton
+                  isAll={false}
+                  keyword={keyword}
+                />
                 <button
                   onClick={() => handleDelete(keyword)}
                   className="px-1"
@@ -67,8 +40,4 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
 KeywordGroup.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,
-};
-
-ToggleableKeywordButton.propTypes = {
-  keyword: PropTypes.string.isRequired,
 };

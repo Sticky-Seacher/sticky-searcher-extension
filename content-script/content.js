@@ -3,7 +3,12 @@ import { getSearchKeywords } from "./getSearchKeywords";
 import { highlightKeywords, makeRandomColor } from "./highlight";
 import { SELECTOR, getDescriptionElements, setLinkMap } from "./linkMap";
 import { replacer } from "./mapToJosn";
-import { applyHighlight, turnOffHighlight } from "./toggle";
+import {
+  applyHighlight,
+  applyHighlightAll,
+  turnOffHighlight,
+  turnOffHighlightAll,
+} from "./toggle";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === "give-me-linkMap") {
@@ -56,6 +61,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       applyHighlight(request.targetKeyword, makeRandomColor());
     } else {
       turnOffHighlight(request.targetKeyword);
+    }
+
+    return true;
+  }
+
+  if (request.message === "toggle-highlight-all") {
+    if (request.toggleIsOn) {
+      applyHighlightAll(request.targetKeywords);
+    } else {
+      turnOffHighlightAll();
     }
 
     return true;
