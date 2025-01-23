@@ -4,24 +4,6 @@ import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
 import IconButton from "../shared/IconButton";
 
 export default function HistorySection({ countsPerKeywords }) {
-  let userToken = "";
-  const options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-  };
-  const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
-    new Date()
-  );
-  const groupId = "new-keyword-group";
-  const favicon = "favicon";
-  const siteName = "구글";
-  const url = "https://www.google.com/";
-  const keywords = { apple: 3, banana: 15 };
-
   function handleMovePage() {
     chrome.runtime.sendMessage(
       {
@@ -29,7 +11,6 @@ export default function HistorySection({ countsPerKeywords }) {
       },
       (response) => {
         if (response.message) {
-          userToken = response.message;
           chrome.tabs.create({ url: "http://localhost:5174" });
         }
       }
@@ -37,8 +18,18 @@ export default function HistorySection({ countsPerKeywords }) {
   }
 
   async function handleAddHistory(countsPerKeywords) {
-    // eslint-disable-next-line no-unused-vars
     const history = await getHistoryData(countsPerKeywords);
+    const groupId = "new-keyword-group";
+    const options = {
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
+      new Date(history.createdTime)
+    );
+    const favicon = history.faviconSrc ? history.faviconSrc : "";
 
     chrome.runtime.sendMessage(
       {
@@ -46,16 +37,16 @@ export default function HistorySection({ countsPerKeywords }) {
       },
       (response) => {
         if (response.message) {
-          userToken = response.message;
+          const userToken = response.message;
           addDefaultGroup(userToken);
           addHistory(
             userToken,
             groupId,
             favicon,
-            siteName,
-            url,
+            history.siteTitle,
+            history.url,
             currentDate,
-            keywords
+            history.keywords
           );
         }
       }
