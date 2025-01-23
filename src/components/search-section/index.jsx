@@ -103,7 +103,7 @@ export default function SearchSection({
       />
       <div className="flex gap-[15px]">
         <TextButton
-          text={"Start"}
+          text={"Start Searcher"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
         <ToggleableKeywordButton
