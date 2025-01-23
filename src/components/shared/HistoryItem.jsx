@@ -6,8 +6,13 @@ export default function HistoryItem({ url, favicon, siteTitle }) {
   }
   return (
     <li className="text-xs text-[#555] bg-[#fff] border px-[15px] mb-[15px] py-[10px] rounded-full w-full">
-      <div onClick={handleMoveUrl}>
-        {favicon}
+      <div
+        onClick={handleMoveUrl}
+        className="flex gap-[10px] justify-start items-center"
+      >
+        <div className="w-[20px] h-[20px] object-fill rounded-full">
+          <img src={favicon} />
+        </div>
         {siteTitle}
       </div>
     </li>
