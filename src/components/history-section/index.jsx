@@ -14,10 +14,10 @@ export default function HistorySection() {
   const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
     new Date()
   );
-  const groupTitle = "New Keyword Group";
+  const groupId = "new-keyword-group";
   const favicon = "favicon";
   const siteName = "구글";
-  const url = "google.com";
+  const url = "https://www.google.com/";
   const keywords = { apple: 3, banana: 15 };
 
   function handleMovePage() {
@@ -45,7 +45,7 @@ export default function HistorySection() {
           addDefaultGroup(userToken);
           addHistory(
             userToken,
-            groupTitle,
+            groupId,
             favicon,
             siteName,
             url,
