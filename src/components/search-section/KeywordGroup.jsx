@@ -42,10 +42,10 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
           Keyword Group
         </p>
         <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
-          {existingKeywords.map((keyword, index) => {
+          {existingKeywords.map((keyword) => {
             return (
               <li
-                key={index}
+                key={keyword}
                 className="text-xs py-[10px]"
               >
                 <ToggleableKeywordButton keyword={keyword} />
