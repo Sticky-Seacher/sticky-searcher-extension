@@ -1,6 +1,6 @@
 import getLeafTargetElements from "./getLeafTargetElements";
 import { getSearchKeywords } from "./getSearchKeywords";
-import { highlightKeywords, makeRandomColor } from "./highlight";
+import { highlightKeywords, makeRandomBackgroundColor } from "./highlight";
 import { SELECTOR, getDescriptionElements, setLinkMap } from "./linkMap";
 import { replacer } from "./mapToJosn";
 import {
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.message === "toggle-highlight") {
     if (request.toggleIsOn) {
-      applyHighlight(request.targetKeyword, makeRandomColor());
+      applyHighlight(request.targetKeyword, makeRandomBackgroundColor());
     } else {
       turnOffHighlight(request.targetKeyword);
     }

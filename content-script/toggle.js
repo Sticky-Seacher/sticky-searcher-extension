@@ -1,4 +1,4 @@
-import { getColors } from "./highlight";
+import { getColors, makeRandomBackgroundColor } from "./highlight";
 
 export function getExistingColor(element) {
   return element.style.getPropertyValue("background");
@@ -29,7 +29,7 @@ export function applyHighlight(keyword, color) {
 }
 
 export function applyHighlightAll(keywords) {
-  const colors = getColors(keywords.length);
+  const colors = getColors(keywords.length, makeRandomBackgroundColor);
 
   for (let i = 0; i < keywords.length; i += 1) {
     const elements = document.querySelectorAll(
