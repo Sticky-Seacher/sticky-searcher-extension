@@ -1,7 +1,9 @@
+import PropTypes from "prop-types";
+
 import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
 import IconButton from "../shared/IconButton";
 
-export default function HistorySection() {
+export default function HistorySection({ countsPerKeywords }) {
   let userToken = "";
   const options = {
     year: "numeric",
@@ -34,7 +36,10 @@ export default function HistorySection() {
     );
   }
 
-  function handleAddHistory() {
+  async function handleAddHistory(countsPerKeywords) {
+    // eslint-disable-next-line no-unused-vars
+    const history = await getHistoryData(countsPerKeywords);
+
     chrome.runtime.sendMessage(
       {
         message: "userStatus",
@@ -57,6 +62,24 @@ export default function HistorySection() {
     );
   }
 
+  async function getHistoryData(countsPerKeywords) {
+    const tabs = await chrome.tabs.query({
+      currentWindow: true,
+      active: true,
+    });
+    const activeTab = tabs[0];
+
+    const history = {
+      faviconSrc: activeTab.favIconUrl,
+      siteTitle: activeTab.title,
+      url: activeTab.url,
+      createdTime: new Date().toISOString(),
+      keywords: [...countsPerKeywords],
+    };
+
+    return history;
+  }
+
   return (
     <div
       id="urls"
@@ -65,7 +88,7 @@ export default function HistorySection() {
       <IconButton
         iconSrc={"./history_icon.png"}
         text={"History"}
-        onClick={handleAddHistory}
+        onClick={() => handleAddHistory(countsPerKeywords)}
       />
       <IconButton
         iconSrc={"./page_Icon.png"}
@@ -75,3 +98,7 @@ export default function HistorySection() {
     </div>
   );
 }
+
+HistorySection.propTypes = {
+  countsPerKeywords: PropTypes.array.isRequired,
+};
