@@ -12,7 +12,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HistorySection />
+      <HistorySection countsPerKeywords={countsPerKeywords} />
       <SearchSection
         countsPerKeywords={countsPerKeywords}
         setCountsPerKeywords={setCountsPerKeywords}
