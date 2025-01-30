@@ -29,13 +29,13 @@ export async function getUser(email) {
   const q = query(usersRef, where("email", "==", email));
 
   const querySnapshot = await getDocs(q);
-  const arr = [];
+  const userIdList = [];
   if (querySnapshot.empty) {
     return null;
   } else {
     querySnapshot.forEach((user) => {
-      arr.push(user.id);
+      userIdList.push(user.id);
     });
-    return arr[0];
+    return userIdList[0];
   }
 }
