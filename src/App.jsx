@@ -22,8 +22,9 @@ function App() {
   });
 
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.message === "success") {
-      localStorage.setItem("userEmail", request.data);
+    if (request.message === "Get user authentication") {
+      localStorage.setItem("userEmail", request.emailData);
+      localStorage.setItem("userAccessToken", request.tokenData);
     }
     return true;
   });
