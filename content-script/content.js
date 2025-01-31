@@ -110,6 +110,12 @@ function scroll(step, currentScrollIndex, keyword) {
 }
 
 const userEmail = localStorage.getItem("userEmail");
+const userAccessToken = localStorage.getItem("userAccessToken");
 
 userEmail &&
-  chrome.runtime.sendMessage({ message: "success", data: userEmail });
+  userAccessToken &&
+  chrome.runtime.sendMessage({
+    message: "Get user authentication",
+    emailData: userEmail,
+    tokenData: userAccessToken,
+  });
