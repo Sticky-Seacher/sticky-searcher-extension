@@ -11,7 +11,7 @@ export default function HistorySection({ countsPerKeywords }) {
       },
       (response) => {
         if (response.message) {
-          chrome.tabs.create({ url: "http://localhost:5174" });
+          chrome.tabs.create({ url: "http://localhost:5173" });
         }
       }
     );

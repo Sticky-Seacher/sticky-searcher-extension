@@ -108,3 +108,8 @@ function scroll(step, currentScrollIndex, keyword) {
 
   return { isDone: true, newIndex: currentScrollIndex + step };
 }
+
+const userEmail = localStorage.getItem("userEmail");
+
+userEmail &&
+  chrome.runtime.sendMessage({ message: "success", data: userEmail });
