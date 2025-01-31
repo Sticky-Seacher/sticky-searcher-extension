@@ -115,7 +115,7 @@ const userAccessToken = localStorage.getItem("userAccessToken");
 userEmail &&
   userAccessToken &&
   chrome.runtime.sendMessage({
-    message: "success",
+    message: "Get user authentication",
     emailData: userEmail,
     tokenData: userAccessToken,
   });

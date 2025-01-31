@@ -1,12 +1,17 @@
 import PropTypes from "prop-types";
 
+import { useUserInfo } from "../../context/UserInfo";
 import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
 import IconButton from "../shared/IconButton";
 
 export default function HistorySection({ countsPerKeywords }) {
+  const { setUserInfo } = useUserInfo();
+
   function handleMovePage() {
     const userEmail = localStorage.getItem("userEmail");
     const userAccessToken = localStorage.getItem("userAccessToken");
+
+    setUserInfo([userEmail, userAccessToken]);
 
     if (userEmail && userAccessToken) {
       chrome.tabs.create({ url: "http://localhost:5173" });
