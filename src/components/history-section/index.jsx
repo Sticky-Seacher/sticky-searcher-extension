@@ -27,6 +27,7 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
       if (!userId) {
         userId = await addNewUserAndDefaultGroup(userInfo[0]);
       }
+      j;
       const history = await getHistoryData(countsPerKeywords);
       await addHistoryToDefaultGroup(userId, history);
 
@@ -37,24 +38,6 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
       }
       getHistoryItem(userInfo[0]);
     }
-  }
-
-  async function getHistoryData(countsPerKeywords) {
-    const tabs = await chrome.tabs.query({
-      currentWindow: true,
-      active: true,
-    });
-    const activeTab = tabs[0];
-
-    const history = {
-      faviconSrc: activeTab.favIconUrl,
-      siteTitle: activeTab.title,
-      url: activeTab.url,
-      createdTime: new Date().toISOString(),
-      keywords: [...countsPerKeywords],
-    };
-
-    return history;
   }
 
   async function getHistoryData(countsPerKeywords) {

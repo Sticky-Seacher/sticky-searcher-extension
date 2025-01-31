@@ -21,6 +21,13 @@ function App() {
     return true;
   });
 
+  chrome.runtime.onMessage.addListener((request) => {
+    if (request.message === "success") {
+      localStorage.setItem("userEmail", request.data);
+    }
+    return true;
+  });
+
   return (
     <UserInfoProvider>
       <QueryClientProvider client={queryClient}>
