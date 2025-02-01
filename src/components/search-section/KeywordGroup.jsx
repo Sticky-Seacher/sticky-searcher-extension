@@ -3,6 +3,17 @@ import PropTypes from "prop-types";
 import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
 export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
+  function toggleIsOn(targetKeyword) {
+    const nextStatus = toggleStatus.map(({ keyword, isOn }) => {
+      if (keyword === targetKeyword) {
+        return { keyword, isOn: !isOn };
+      }
+      return { keyword, isOn };
+    });
+
+    setToggleStatus(nextStatus);
+  }
+
   return (
     <>
       <div>
@@ -11,17 +22,6 @@ export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
         </p>
         <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
           {toggleStatus.map(({ keyword, isOn }) => {
-            function toggleIsOn(targetKeyword) {
-              setToggleStatus((prev) =>
-                prev.map(({ keyword, isOn }) => {
-                  if (keyword === targetKeyword) {
-                    return { keyword, isOn: !isOn };
-                  }
-                  return { keyword, isOn };
-                })
-              );
-            }
-
             return (
               <li
                 key={keyword}

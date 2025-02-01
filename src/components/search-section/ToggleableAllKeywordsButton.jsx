@@ -9,6 +9,15 @@ export function ToggleableAllKeywordsButton({
 }) {
   const [isOn, setIsOn] = useState(true);
 
+  const onCount = toggleStatus.filter(({ isOn }) => isOn === true).length;
+  const offCount = toggleStatus.filter(({ isOn }) => isOn === false).length;
+
+  const wouldChange = (isOn && onCount === 0) || (!isOn && offCount === 0);
+
+  if (toggleStatus.length !== 0 && wouldChange) {
+    setIsOn(!isOn);
+  }
+
   async function handleClickAll(isOn) {
     const nextIsOn = !isOn;
 
