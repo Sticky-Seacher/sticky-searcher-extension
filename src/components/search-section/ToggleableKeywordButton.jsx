@@ -15,7 +15,7 @@ export function ToggleableKeywordButton({ keyword, isOn, toggleKeywordIsOn }) {
     const activeTab = tabs[0];
     await chrome.tabs.sendMessage(activeTab.id, {
       message: "toggle-highlight",
-      toggleIsOn: nextIsOn,
+      isHighlightOn: nextIsOn,
       targetKeyword: keyword,
     });
   }

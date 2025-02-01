@@ -22,7 +22,7 @@ export function ToggleableAllKeywordsButton({
     const activeTab = tabs[0];
     await chrome.tabs.sendMessage(activeTab.id, {
       message: "toggle-highlight-all",
-      toggleIsOn: nextIsOn,
+      isHighlightOn: nextIsOn,
       targetKeywords: toggleStatus.map(({ keyword }) => keyword),
     });
   }
