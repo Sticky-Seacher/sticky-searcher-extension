@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 
 import { useUserInfo } from "../../context/UserInfo";
-import { addHistoryToDefaultGroup } from "../../firebase/history";
+import {
+  addHistoryToDefaultGroup,
+  getHistoriesInDefaultGroup,
+} from "../../firebase/history";
 import { addNewUserAndDefaultGroup, getUser } from "../../firebase/user";
 import IconButton from "../shared/IconButton";
 
-export default function HistorySection({ countsPerKeywords }) {
+export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
   const { userInfo } = useUserInfo();
 
   function handleMovePage() {
@@ -26,6 +29,13 @@ export default function HistorySection({ countsPerKeywords }) {
       }
       const history = await getHistoryData(countsPerKeywords);
       await addHistoryToDefaultGroup(userId, history);
+
+      async function getHistoryItem(userEmail) {
+        let userId = await getUser(userEmail);
+        const histories = await getHistoriesInDefaultGroup(userId);
+        setHistoryItem(histories);
+      }
+      getHistoryItem(userInfo[0]);
     }
   }
 
@@ -68,4 +78,5 @@ export default function HistorySection({ countsPerKeywords }) {
 
 HistorySection.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
+  setHistoryItem: PropTypes.func.isRequired,
 };

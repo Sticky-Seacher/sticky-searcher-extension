@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 
 import { useUserInfo } from "../../context/UserInfo";
 import { getHistoriesInDefaultGroup } from "../../firebase/history";
 import { getUser } from "../../firebase/user";
 import HistoryItem from "../shared/HistoryItem";
 
-export default function LatelyHistoryGroup() {
-  const [historyItem, setHistoryItem] = useState([]);
+export default function LatelyHistoryGroup({ historyItem, setHistoryItem }) {
   const { userInfo } = useUserInfo();
 
   useEffect(() => {
@@ -38,3 +38,8 @@ export default function LatelyHistoryGroup() {
     </div>
   );
 }
+
+LatelyHistoryGroup.propTypes = {
+  historyItem: PropTypes.array.isRequired,
+  setHistoryItem: PropTypes.func.isRequired,
+};
