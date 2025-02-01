@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 
-import { getHistories } from "../../firebase/CRUD";
+import { useUserInfo } from "../../context/UserInfo";
+import { getHistoriesInDefaultGroup } from "../../firebase/history";
+import { getUser } from "../../firebase/user";
 import HistoryItem from "../shared/HistoryItem";
 
-export default function LatelyHistoryGroup() {
-  const [historyList, setHistoryList] = useState([]);
+export default function LatelyHistoryGroup({ historyItem, setHistoryItem }) {
+  const { userInfo } = useUserInfo();
 
   useEffect(() => {
-    chrome.runtime.sendMessage(
-      {
-        message: "userStatus",
-      },
-      (response) => {
-        if (response.message) {
-          const userToken = response.message;
-          const groupId = "new-keyword-group";
-          getHistories(userToken, groupId, setHistoryList);
-        }
-      }
-    );
-  }, []);
+    async function getHistoryItem(userEmail) {
+      let userId = await getUser(userEmail);
+      const histories = await getHistoriesInDefaultGroup(userId);
+      setHistoryItem(histories);
+    }
+    userInfo[0] && getHistoryItem(userInfo[0]);
+  }, [userInfo]);
 
   return (
     <div>
@@ -27,13 +24,13 @@ export default function LatelyHistoryGroup() {
         lately History Group
       </p>
       <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-left px-[10px] py-[20px]">
-        {historyList.map((history, index) => {
+        {historyItem.map((history, index) => {
           return (
             <HistoryItem
               key={index}
-              url={history.url}
               favicon={history.faviconSrc}
               siteTitle={history.siteTitle}
+              url={history.url}
             />
           );
         })}
@@ -41,3 +38,8 @@ export default function LatelyHistoryGroup() {
     </div>
   );
 }
+
+LatelyHistoryGroup.propTypes = {
+  historyItem: PropTypes.array.isRequired,
+  setHistoryItem: PropTypes.func.isRequired,
+};

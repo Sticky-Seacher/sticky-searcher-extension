@@ -1,19 +1,18 @@
 import PropTypes from "prop-types";
 
 import { useUserInfo } from "../../context/UserInfo";
-import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
+import {
+  addHistoryToDefaultGroup,
+  getHistoriesInDefaultGroup,
+} from "../../firebase/history";
+import { addNewUserAndDefaultGroup, getUser } from "../../firebase/user";
 import IconButton from "../shared/IconButton";
 
-export default function HistorySection({ countsPerKeywords }) {
-  const { setUserInfo } = useUserInfo();
+export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
+  const { userInfo } = useUserInfo();
 
   function handleMovePage() {
-    const userEmail = localStorage.getItem("userEmail");
-    const userAccessToken = localStorage.getItem("userAccessToken");
-
-    setUserInfo([userEmail, userAccessToken]);
-
-    if (userEmail && userAccessToken) {
+    if (userInfo[0]) {
       chrome.tabs.create({ url: "http://localhost:5173" });
     } else {
       chrome.tabs.create({ url: "http://localhost:5173/login" });
@@ -21,39 +20,23 @@ export default function HistorySection({ countsPerKeywords }) {
   }
 
   async function handleAddHistory(countsPerKeywords) {
-    const history = await getHistoryData(countsPerKeywords);
-    const groupId = "new-keyword-group";
-    const options = {
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    };
-    const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
-      new Date(history.createdTime)
-    );
-    const favicon = history.faviconSrc ? history.faviconSrc : "";
-
-    chrome.runtime.sendMessage(
-      {
-        message: "userStatus",
-      },
-      (response) => {
-        if (response.message) {
-          const userToken = response.message;
-          addDefaultGroup(userToken);
-          addHistory(
-            userToken,
-            groupId,
-            favicon,
-            history.siteTitle,
-            history.url,
-            currentDate,
-            history.keywords
-          );
-        }
+    if (!userInfo[0]) {
+      chrome.tabs.create({ url: "http://localhost:5173/login" });
+    } else {
+      let userId = await getUser(userInfo[0]);
+      if (!userId) {
+        userId = await addNewUserAndDefaultGroup(userInfo[0]);
       }
-    );
+      const history = await getHistoryData(countsPerKeywords);
+      await addHistoryToDefaultGroup(userId, history);
+
+      async function getHistoryItem(userEmail) {
+        let userId = await getUser(userEmail);
+        const histories = await getHistoriesInDefaultGroup(userId);
+        setHistoryItem(histories);
+      }
+      getHistoryItem(userInfo[0]);
+    }
   }
 
   async function getHistoryData(countsPerKeywords) {
@@ -95,4 +78,5 @@ export default function HistorySection({ countsPerKeywords }) {
 
 HistorySection.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
+  setHistoryItem: PropTypes.func.isRequired,
 };
