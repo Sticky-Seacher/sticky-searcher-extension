@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ToggleableTextButton } from "../shared/TextButton";
 
 export function ToggleableAllKeywordsButton({
-  countsPerKeywords,
+  toggleStatus,
   toggleAllKeywordsIsOn,
 }) {
   const [isOn, setIsOn] = useState(true);
@@ -23,7 +23,7 @@ export function ToggleableAllKeywordsButton({
     await chrome.tabs.sendMessage(activeTab.id, {
       message: "toggle-highlight-all",
       toggleIsOn: nextIsOn,
-      targetKeywords: countsPerKeywords.map(({ keyword }) => keyword),
+      targetKeywords: toggleStatus.map(({ keyword }) => keyword),
     });
   }
 
@@ -37,6 +37,6 @@ export function ToggleableAllKeywordsButton({
 }
 
 ToggleableAllKeywordsButton.propTypes = {
-  countsPerKeywords: PropTypes.array,
+  toggleStatus: PropTypes.array.isRequired,
   toggleAllKeywordsIsOn: PropTypes.func.isRequired,
 };

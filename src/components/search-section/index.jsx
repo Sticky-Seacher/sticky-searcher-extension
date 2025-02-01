@@ -131,7 +131,7 @@ export default function SearchSection({
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
         <ToggleableAllKeywordsButton
-          countsPerKeywords={countsPerKeywords}
+          toggleStatus={toggleStatus}
           toggleAllKeywordsIsOn={toggleAllKeywordsIsOn}
         />
       </div>
