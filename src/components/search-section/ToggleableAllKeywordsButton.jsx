@@ -13,7 +13,7 @@ export function ToggleableAllKeywordsButton({
     const nextIsOn = !isOn;
 
     setIsOn(nextIsOn);
-    toggleAllKeywordsIsOn();
+    toggleAllKeywordsIsOn(nextIsOn);
 
     const tabs = await chrome.tabs.query({
       currentWindow: true,

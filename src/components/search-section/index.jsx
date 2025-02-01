@@ -110,9 +110,9 @@ export default function SearchSection({
     setKeywordsForSearch((prev) => prev.filter((k) => k !== keyword));
   }
 
-  function toggleAllKeywordsIsOn() {
+  function toggleAllKeywordsIsOn(nextIsOn) {
     setToggleStatus((prev) =>
-      prev.map(({ keyword, isOn }) => ({ keyword, isOn: !isOn }))
+      prev.map(({ keyword }) => ({ keyword, isOn: nextIsOn }))
     );
   }
 
