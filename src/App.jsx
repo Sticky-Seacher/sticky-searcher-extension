@@ -25,6 +25,7 @@ function App() {
     if (request.message === "Get user authentication") {
       localStorage.setItem("userEmail", request.emailData);
       localStorage.setItem("userAccessToken", request.tokenData);
+      window.dispatchEvent(new Event("storage"));
     }
     return true;
   });

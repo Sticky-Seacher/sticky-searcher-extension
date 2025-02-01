@@ -13,21 +13,20 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
 
   function handleMovePage() {
     if (userInfo[0]) {
-      chrome.tabs.create({ url: "https://stickysearcher.site" });
+      chrome.tabs.create({ url: "http://localhost:5173" });
     } else {
-      chrome.tabs.create({ url: "https://stickysearcher.site/login" });
+      chrome.tabs.create({ url: "http://localhost:5173/login" });
     }
   }
 
   async function handleAddHistory(countsPerKeywords) {
     if (!userInfo[0]) {
-      chrome.tabs.create({ url: "https://stickysearcher.site/login" });
+      chrome.tabs.create({ url: "http://localhost:5173/login" });
     } else {
       let userId = await getUser(userInfo[0]);
       if (!userId) {
         userId = await addNewUserAndDefaultGroup(userInfo[0]);
       }
-      j;
       const history = await getHistoryData(countsPerKeywords);
       await addHistoryToDefaultGroup(userId, history);
 
