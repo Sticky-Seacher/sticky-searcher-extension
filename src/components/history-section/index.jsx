@@ -6,15 +6,10 @@ import { addNewUserAndDefaultGroup, getUser } from "../../firebase/user";
 import IconButton from "../shared/IconButton";
 
 export default function HistorySection({ countsPerKeywords }) {
-  const { userInfo, setUserInfo } = useUserInfo();
+  const { userInfo } = useUserInfo();
 
   function handleMovePage() {
-    const userEmail = localStorage.getItem("userEmail");
-    const userAccessToken = localStorage.getItem("userAccessToken");
-
-    setUserInfo([userEmail, userAccessToken]);
-
-    if (userEmail && userAccessToken) {
+    if (userInfo[0]) {
       chrome.tabs.create({ url: "http://localhost:5173" });
     } else {
       chrome.tabs.create({ url: "http://localhost:5173/login" });
@@ -22,22 +17,12 @@ export default function HistorySection({ countsPerKeywords }) {
   }
 
   async function handleAddHistory(countsPerKeywords) {
-    const userEmail = localStorage.getItem("userEmail");
-    const userAccessToken = localStorage.getItem("userAccessToken");
-
-    setUserInfo([userEmail, userAccessToken]);
-
-    if (!userEmail && !userAccessToken) {
+    if (!userInfo[0]) {
       chrome.tabs.create({ url: "http://localhost:5173/login" });
     } else {
-      const email = userInfo[0];
-
-      if (!email) {
-        return;
-      }
-      let userId = await getUser(email);
+      let userId = await getUser(userInfo[0]);
       if (!userId) {
-        userId = await addNewUserAndDefaultGroup(email);
+        userId = await addNewUserAndDefaultGroup(userInfo[0]);
       }
       const history = await getHistoryData(countsPerKeywords);
       await addHistoryToDefaultGroup(userId, history);

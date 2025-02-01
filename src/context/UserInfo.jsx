@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const UserInfoContext = createContext(null);
 
@@ -11,6 +11,24 @@ export default function UserInfoProvider({ children }) {
 
     return userInfo;
   });
+
+  useEffect(() => {
+    function setUserData() {
+      const userEmail = localStorage.getItem("userEmail");
+      const userAccessToken = localStorage.getItem("userAccessToken");
+
+      if (
+        userEmail !== null &&
+        userAccessToken !== null &&
+        userEmail !== userInfo[0] &&
+        userAccessToken !== userInfo[1]
+      ) {
+        setUserInfo([userEmail, userAccessToken]);
+      }
+    }
+    window.addEventListener("storage", setUserData);
+    return () => window.removeEventListener("storage", setUserData);
+  }, []);
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
