@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.message === "toggle-highlight") {
-    if (request.toggleIsOn) {
+    if (request.isHighlightOn) {
       applyHighlight(request.targetKeyword, makeRandomBackgroundColor());
     } else {
       turnOffHighlight(request.targetKeyword);
@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.message === "toggle-highlight-all") {
-    if (request.toggleIsOn) {
+    if (request.isHighlightOn) {
       applyHighlightAll(request.targetKeywords);
     } else {
       turnOffHighlightAll();
