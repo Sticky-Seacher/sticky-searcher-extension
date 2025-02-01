@@ -54,15 +54,21 @@ export default function SearchSection({
 
         setCountsPerKeywords(response);
         setToggleStatus((prev) => {
+          const currentKeywords = response.map(({ keyword }) => keyword);
           const prevKeywords = prev.map(({ keyword }) => keyword);
-          const newKeywords = response
-            .map(({ keyword }) => keyword)
-            .filter((keyword) => !prevKeywords.includes(keyword));
+
+          const newKeywords = currentKeywords.filter(
+            (keyword) => !prevKeywords.includes(keyword)
+          );
           const newToggleStatus = newKeywords.map((keyword) => ({
             keyword,
             isOn: true,
           }));
-          return [...prev, ...newToggleStatus];
+
+          const notDeletedPrevToggleStatus = prev.filter(({ keyword }) =>
+            currentKeywords.includes(keyword)
+          );
+          return [...notDeletedPrevToggleStatus, ...newToggleStatus];
         });
       }
     }
