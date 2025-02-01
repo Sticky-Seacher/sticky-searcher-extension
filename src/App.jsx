@@ -10,11 +10,13 @@ const queryClient = new QueryClient();
 
 function App() {
   const [countsPerKeywords, setCountsPerKeywords] = useState([]);
+  const [historyItem, setHistoryItem] = useState([]);
 
   chrome.runtime.onMessage.addListener((request) => {
     if (request.message === "Get user authentication") {
       localStorage.setItem("userEmail", request.emailData);
       localStorage.setItem("userAccessToken", request.tokenData);
+      window.dispatchEvent(new Event("storage"));
     }
     return true;
   });
@@ -22,12 +24,18 @@ function App() {
   return (
     <UserInfoProvider>
       <QueryClientProvider client={queryClient}>
-        <HistorySection countsPerKeywords={countsPerKeywords} />
+        <HistorySection
+          countsPerKeywords={countsPerKeywords}
+          setHistoryItem={setHistoryItem}
+        />
         <SearchSection
           countsPerKeywords={countsPerKeywords}
           setCountsPerKeywords={setCountsPerKeywords}
         />
-        <LatelyHistoryGroup />
+        <LatelyHistoryGroup
+          historyItem={historyItem}
+          setHistoryItem={setHistoryItem}
+        />
       </QueryClientProvider>
     </UserInfoProvider>
   );

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default function HistoryItem({ url, favicon, siteTitle }) {
+export default function HistoryItem({ favicon, siteTitle, url }) {
   function handleMoveUrl() {
     chrome.tabs.create({ url: url });
   }
