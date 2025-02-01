@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
 
 import { useUserInfo } from "../../context/UserInfo";
-import { addDefaultGroup, addHistory } from "../../firebase/CRUD";
+import { addHistoryToDefaultGroup } from "../../firebase/history";
+import { addNewUserAndDefaultGroup, getUser } from "../../firebase/user";
 import IconButton from "../shared/IconButton";
 
 export default function HistorySection({ countsPerKeywords }) {
-  const { setUserInfo } = useUserInfo();
+  const { userInfo, setUserInfo } = useUserInfo();
 
   function handleMovePage() {
     const userEmail = localStorage.getItem("userEmail");
@@ -21,39 +22,26 @@ export default function HistorySection({ countsPerKeywords }) {
   }
 
   async function handleAddHistory(countsPerKeywords) {
-    const history = await getHistoryData(countsPerKeywords);
-    const groupId = "new-keyword-group";
-    const options = {
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    };
-    const currentDate = new Intl.DateTimeFormat("ko-KR", options).format(
-      new Date(history.createdTime)
-    );
-    const favicon = history.faviconSrc ? history.faviconSrc : "";
+    const userEmail = localStorage.getItem("userEmail");
+    const userAccessToken = localStorage.getItem("userAccessToken");
 
-    chrome.runtime.sendMessage(
-      {
-        message: "userStatus",
-      },
-      (response) => {
-        if (response.message) {
-          const userToken = response.message;
-          addDefaultGroup(userToken);
-          addHistory(
-            userToken,
-            groupId,
-            favicon,
-            history.siteTitle,
-            history.url,
-            currentDate,
-            history.keywords
-          );
-        }
+    setUserInfo([userEmail, userAccessToken]);
+
+    if (!userEmail && !userAccessToken) {
+      chrome.tabs.create({ url: "http://localhost:5173/login" });
+    } else {
+      const email = userInfo[0];
+
+      if (!email) {
+        return;
       }
-    );
+      let userId = await getUser(email);
+      if (!userId) {
+        userId = await addNewUserAndDefaultGroup(email);
+      }
+      const history = await getHistoryData(countsPerKeywords);
+      await addHistoryToDefaultGroup(userId, history);
+    }
   }
 
   async function getHistoryData(countsPerKeywords) {
