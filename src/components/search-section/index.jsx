@@ -5,7 +5,7 @@ import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
 import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
-import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
+import { ToggleableAllKeywordsButton } from "./ToggleableAllKeywordsButton";
 
 export default function SearchSection({
   countsPerKeywords,
@@ -106,10 +106,7 @@ export default function SearchSection({
           text={"Start Searcher"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
-        <ToggleableKeywordButton
-          isAll={true}
-          countsPerKeywords={countsPerKeywords}
-        />
+        <ToggleableAllKeywordsButton countsPerKeywords={countsPerKeywords} />
       </div>
       <KeywordGroup
         countsPerKeywords={countsPerKeywords}

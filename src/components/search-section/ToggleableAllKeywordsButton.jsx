@@ -3,10 +3,10 @@ import { useState } from "react";
 
 import { ToggleableTextButton } from "../shared/TextButton";
 
-export function ToggleableKeywordButton({ keyword }) {
+export function ToggleableAllKeywordsButton({ countsPerKeywords }) {
   const [isOn, setIsOn] = useState(true);
 
-  async function handleClick(isOn) {
+  async function handleClickAll(isOn) {
     const nextIsOn = !isOn;
 
     setIsOn(nextIsOn);
@@ -17,21 +17,21 @@ export function ToggleableKeywordButton({ keyword }) {
     });
     const activeTab = tabs[0];
     await chrome.tabs.sendMessage(activeTab.id, {
-      message: "toggle-highlight",
+      message: "toggle-highlight-all",
       toggleIsOn: nextIsOn,
-      targetKeyword: keyword,
+      targetKeywords: countsPerKeywords.map(({ keyword }) => keyword),
     });
   }
 
   return (
     <ToggleableTextButton
-      onClick={() => handleClick(isOn)}
-      text={keyword}
+      onClick={() => handleClickAll(isOn)}
+      text={"Highlight All Keywords"}
       isOn={isOn}
     />
   );
 }
 
-ToggleableKeywordButton.propTypes = {
-  keyword: PropTypes.string,
+ToggleableAllKeywordsButton.propTypes = {
+  countsPerKeywords: PropTypes.array,
 };

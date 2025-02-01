@@ -18,10 +18,7 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
                 key={keyword}
                 className="text-xs py-[10px]"
               >
-                <ToggleableKeywordButton
-                  isAll={false}
-                  keyword={keyword}
-                />
+                <ToggleableKeywordButton keyword={keyword} />
                 <button
                   onClick={() => handleDelete(keyword)}
                   className="px-1"
