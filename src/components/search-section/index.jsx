@@ -5,7 +5,7 @@ import { convertToLinkMap } from "../../../background/convertToLinkMap";
 import TextButton from "../shared/TextButton";
 import { KeywordGroup } from "./KeywordGroup";
 import { SearchSectionInput } from "./SearchSectionInput";
-import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
+import { ToggleableAllKeywordsButton } from "./ToggleableAllKeywordsButton";
 
 export default function SearchSection({
   countsPerKeywords,
@@ -14,6 +14,7 @@ export default function SearchSection({
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [bonus, setBonus] = useState([]);
+  const [toggleStatus, setToggleStatus] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -52,6 +53,23 @@ export default function SearchSection({
         });
 
         setCountsPerKeywords(response);
+        setToggleStatus((prev) => {
+          const currentKeywords = response.map(({ keyword }) => keyword);
+          const prevKeywords = prev.map(({ keyword }) => keyword);
+
+          const newKeywords = currentKeywords.filter(
+            (keyword) => !prevKeywords.includes(keyword)
+          );
+          const newToggleStatus = newKeywords.map((keyword) => ({
+            keyword,
+            isOn: true,
+          }));
+
+          const notDeletedPrevToggleStatus = prev.filter(({ keyword }) =>
+            currentKeywords.includes(keyword)
+          );
+          return [...notDeletedPrevToggleStatus, ...newToggleStatus];
+        });
       }
     }
 
@@ -92,6 +110,12 @@ export default function SearchSection({
     setKeywordsForSearch((prev) => prev.filter((k) => k !== keyword));
   }
 
+  function toggleAllKeywordsIsOn(nextIsOn) {
+    setToggleStatus((prev) =>
+      prev.map(({ keyword }) => ({ keyword, isOn: nextIsOn }))
+    );
+  }
+
   return (
     <>
       <SearchSectionInput
@@ -106,13 +130,14 @@ export default function SearchSection({
           text={"Start Searcher"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
-        <ToggleableKeywordButton
-          isAll={true}
-          countsPerKeywords={countsPerKeywords}
+        <ToggleableAllKeywordsButton
+          toggleStatus={toggleStatus}
+          toggleAllKeywordsIsOn={toggleAllKeywordsIsOn}
         />
       </div>
       <KeywordGroup
-        countsPerKeywords={countsPerKeywords}
+        toggleStatus={toggleStatus}
+        setToggleStatus={setToggleStatus}
         handleDelete={handleKeywordDelete}
       />
     </>
