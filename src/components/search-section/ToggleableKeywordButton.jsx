@@ -1,15 +1,12 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 import { ToggleableTextButton } from "../shared/TextButton";
 
-export function ToggleableKeywordButton({ keyword }) {
-  const [isOn, setIsOn] = useState(true);
-
+export function ToggleableKeywordButton({ keyword, isOn, toggleKeywordIsOn }) {
   async function handleClick(isOn) {
     const nextIsOn = !isOn;
 
-    setIsOn(nextIsOn);
+    toggleKeywordIsOn();
 
     const tabs = await chrome.tabs.query({
       currentWindow: true,
@@ -34,4 +31,6 @@ export function ToggleableKeywordButton({ keyword }) {
 
 ToggleableKeywordButton.propTypes = {
   keyword: PropTypes.string,
+  isOn: PropTypes.bool.isRequired,
+  toggleKeywordIsOn: PropTypes.func.isRequired,
 };

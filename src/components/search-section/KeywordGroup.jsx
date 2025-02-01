@@ -2,9 +2,7 @@ import PropTypes from "prop-types";
 
 import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
-export function KeywordGroup({ countsPerKeywords, handleDelete }) {
-  const existingKeywords = countsPerKeywords.map(({ keyword }) => keyword);
-
+export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
   return (
     <>
       <div>
@@ -12,13 +10,28 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
           Keyword Group
         </p>
         <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
-          {existingKeywords.map((keyword) => {
+          {toggleStatus.map(({ keyword, isOn }) => {
+            function toggleIsOn(targetKeyword) {
+              setToggleStatus((prev) =>
+                prev.map(({ keyword, isOn }) => {
+                  if (keyword === targetKeyword) {
+                    return { keyword, isOn: !isOn };
+                  }
+                  return { keyword, isOn };
+                })
+              );
+            }
+
             return (
               <li
                 key={keyword}
                 className="text-xs py-[10px]"
               >
-                <ToggleableKeywordButton keyword={keyword} />
+                <ToggleableKeywordButton
+                  keyword={keyword}
+                  isOn={isOn}
+                  toggleKeywordIsOn={() => toggleIsOn(keyword)}
+                />
                 <button
                   onClick={() => handleDelete(keyword)}
                   className="px-1"
@@ -35,6 +48,7 @@ export function KeywordGroup({ countsPerKeywords, handleDelete }) {
 }
 
 KeywordGroup.propTypes = {
-  countsPerKeywords: PropTypes.array.isRequired,
+  toggleStatus: PropTypes.array.isRequired,
+  setToggleStatus: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

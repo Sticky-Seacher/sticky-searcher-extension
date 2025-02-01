@@ -3,13 +3,17 @@ import { useState } from "react";
 
 import { ToggleableTextButton } from "../shared/TextButton";
 
-export function ToggleableAllKeywordsButton({ countsPerKeywords }) {
+export function ToggleableAllKeywordsButton({
+  countsPerKeywords,
+  toggleAllKeywordsIsOn,
+}) {
   const [isOn, setIsOn] = useState(true);
 
   async function handleClickAll(isOn) {
     const nextIsOn = !isOn;
 
     setIsOn(nextIsOn);
+    toggleAllKeywordsIsOn();
 
     const tabs = await chrome.tabs.query({
       currentWindow: true,
@@ -34,4 +38,5 @@ export function ToggleableAllKeywordsButton({ countsPerKeywords }) {
 
 ToggleableAllKeywordsButton.propTypes = {
   countsPerKeywords: PropTypes.array,
+  toggleAllKeywordsIsOn: PropTypes.func.isRequired,
 };

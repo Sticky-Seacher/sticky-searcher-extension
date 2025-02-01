@@ -14,6 +14,7 @@ export default function SearchSection({
   const [isKeywordOn, setIsKeywordOn] = useState(false);
   const [keywordsForSearch, setKeywordsForSearch] = useState([]);
   const [bonus, setBonus] = useState([]);
+  const [toggleStatus, setToggleStatus] = useState([]);
 
   async function collectAllLinkMap() {
     const tabIdToLinkMapJson = await chrome.storage.local.get(null);
@@ -52,6 +53,17 @@ export default function SearchSection({
         });
 
         setCountsPerKeywords(response);
+        setToggleStatus((prev) => {
+          const prevKeywords = prev.map(({ keyword }) => keyword);
+          const newKeywords = response
+            .map(({ keyword }) => keyword)
+            .filter((keyword) => !prevKeywords.includes(keyword));
+          const newToggleStatus = newKeywords.map((keyword) => ({
+            keyword,
+            isOn: true,
+          }));
+          return [...prev, ...newToggleStatus];
+        });
       }
     }
 
@@ -92,6 +104,12 @@ export default function SearchSection({
     setKeywordsForSearch((prev) => prev.filter((k) => k !== keyword));
   }
 
+  function toggleAllKeywordsIsOn() {
+    setToggleStatus((prev) =>
+      prev.map(({ keyword, isOn }) => ({ keyword, isOn: !isOn }))
+    );
+  }
+
   return (
     <>
       <SearchSectionInput
@@ -106,10 +124,14 @@ export default function SearchSection({
           text={"Start Searcher"}
           onClick={() => handleKeywordTextButtonClick(isKeywordOn)}
         />
-        <ToggleableAllKeywordsButton countsPerKeywords={countsPerKeywords} />
+        <ToggleableAllKeywordsButton
+          countsPerKeywords={countsPerKeywords}
+          toggleAllKeywordsIsOn={toggleAllKeywordsIsOn}
+        />
       </div>
       <KeywordGroup
-        countsPerKeywords={countsPerKeywords}
+        toggleStatus={toggleStatus}
+        setToggleStatus={setToggleStatus}
         handleDelete={handleKeywordDelete}
       />
     </>
