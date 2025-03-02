@@ -1,4 +1,3 @@
-import iconUrl from "../public/sticky-seacher-logo.png";
 import { convertToLinkMap } from "./convertToLinkMap";
 import { createRules } from "./createRules";
 
@@ -30,23 +29,7 @@ chrome.webNavigation.onCompleted.addListener((details) => {
     }
 
     sendMessageToActiveTab("give-me-linkMap", (response) => {
-      chrome.storage.local.set({ [`${tabId}`]: response }).then(() => {
-        chrome.notifications.create({
-          type: "basic",
-          iconUrl: `${iconUrl}`,
-          title: "description들이 준비되었습니다.",
-          message:
-            "Completed loading: " + details.url + "tabId" + details.tabId,
-        });
-      });
-      chrome.storage.local.get(`${tabId}`).then((data) => {
-        chrome.notifications.create({
-          type: "basic",
-          iconUrl: `${iconUrl}`,
-          title: "다음과 같이 확인이 가능합니다.",
-          message: data[tabId],
-        });
-      });
+      chrome.storage.local.set({ [`${tabId}`]: response });
     });
   }
 });

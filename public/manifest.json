@@ -29,14 +29,10 @@
   },
   "permissions": [
     "sidePanel",
-    "activeTab",
-    "scripting",
     "unlimitedStorage",
     "storage",
     "webNavigation",
-    "notifications",
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback",
     "tabs"
   ],
   "host_permissions": ["<all_urls>"],
