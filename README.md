@@ -1,3 +1,20 @@
+<style>
+  .imgWrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    list-style: none;
+  }
+  .imgWrap li {
+    text-align: center;
+  }
+  .imgWrap img {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+  }
+</style>
+
 # Sticky Searcher
 
 “Sticky Searcher”는 사용자의 검색환경을 개선하여 보다 빠르게 원하는 정보를 찾아볼 수 있도록 도와주는 Chrome 확장 프로그램입니다.
@@ -46,7 +63,7 @@
 
 # ::팀원 소개
 
-<ul style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; list-style: none">
+<ul class="imgWrap">
   <li>
     <h3>이종석</h3>
     <img src="https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f"/>
@@ -69,7 +86,7 @@
 
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
 <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
-<img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white"><br/>
+<img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
 <img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
 
