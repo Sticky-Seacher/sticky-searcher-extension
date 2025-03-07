@@ -9,48 +9,30 @@
 # 목차
 
 1. [Sticky Searcher](#sticky-searcher)
-
    - 크롬 확장 프로그램 개요
-
 2. [Motive](#motive)
-
    - 목적과 문제 해결
-
 3. [팀원 소개](#팀원-소개)
-
    - 팀원 소개
-
 4. [시연 영상](#시연-영상)
-
    - 프로젝트 시연 영상
-
 5. [기술 스택](#기술-스택)
-
    - 프론트엔드 기술
    - 백엔드 기술
    - Firebase 필요성과 이유
-
-6. [트러블슈팅 + 도전과제](#challenges-+-트러블-슈팅)
-
+6. [트러블슈팅 + 도전과제](#challenges-트러블-슈팅)
    - 텍스트 콘텐츠를 찾고 하이라이팅하는 방법
    - 확장 프로그램에서 현재 페이지 접근하기
    - 올바른 타이밍에 이벤트 발동하기
    - 아이콘, UI 스크래핑 문제 해결
-
 7. [로그인 리다이렉션](#login-redirection)
-
    - 에러 상황과 해결 방안
-
 8. [웹사이트 드래그 앤 드롭 구현](#웹사이트-드래그-앤-드롭-구현)
-
    - 마우스 이벤트 처리
    - `useRef()`를 사용한 드래그된 항목 추적
    - 드래그 앤 드롭 문제 해결
-
 9. [localStorage 값 변할 때 데이터 가져오기](#localstorage-값-변할-때-데이터-가져오기)
-
    - localStorage 값 변화를 감지하는 방법
-
 10. [회고록](#회고록)
     - 팀원들의 인사이트와 경험
 
@@ -64,11 +46,11 @@
 
 # ::팀원 소개
 
-**이종석**
-![Image](https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f)
-**김소연**
-![Image](https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00)
-**김연주**
+### 이종석 
+![Image](https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f) <br/>
+### 김소연
+![Image](https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00) <br/>
+### 김연주
 ![Image](https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365)
 
 # ::시연 영상
