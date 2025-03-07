@@ -53,10 +53,10 @@
 # ::시연 영상
 
 - 확장 프로그램 </br>
-  [![Video Label](http://img.youtube.com/vi/Ns1vQ6nq1OU/0.jpg)](https://youtu.be/Ns1vQ6nq1OU)
+  [![Video Label](https://github.com/user-attachments/assets/77f41704-4b6e-47f8-baed-20657ed7b4fc)](https://youtu.be/Ns1vQ6nq1OU)
 
 - 웹사이트 </br>
-  [![Video Label](http://img.youtube.com/vi/oc8xGLn2KfQ/0.jpg)](https://youtu.be/oc8xGLn2KfQ)
+  [![Video Label](https://github.com/user-attachments/assets/edf7041e-ab55-410e-b346-98482aa40a5d)](https://youtu.be/oc8xGLn2KfQ)
 
 # ::기술 스택
 
