@@ -52,6 +52,12 @@
 
 # ::시연 영상
 
+- 확장 프로그램 </br>
+  [![Video Label](http://img.youtube.com/vi/Ns1vQ6nq1OU/0.jpg)](https://youtu.be/Ns1vQ6nq1OU)
+
+- 웹사이트 </br>
+  [![Video Label](http://img.youtube.com/vi/oc8xGLn2KfQ/0.jpg)](https://youtu.be/oc8xGLn2KfQ)
+
 # ::기술 스택
 
 ### **FrontEnd**
