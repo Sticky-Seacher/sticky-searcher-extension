@@ -46,9 +46,9 @@
 
 # ::팀원 소개
 
-### 이종석 김소연 김연주
-
-![Image](https://github.com/user-attachments/assets/2fd4bd3b-9b47-4ca4-ac51-704bf6249bff)
+| 이종석                                                                                    | 김소연                                                                                    | 김연주                                                                                    |
+| :---------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| ![Image](https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f) | ![Image](https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00) | ![Image](https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365) |
 
 # ::시연 영상
 
