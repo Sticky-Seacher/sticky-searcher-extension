@@ -1,20 +1,3 @@
-<style>
-  .imgWrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    list-style: none;
-  }
-  .imgWrap li {
-    text-align: center;
-  }
-  .imgWrap img {
-    width: 100%;
-    max-width: 150px;
-    height: auto;
-  }
-</style>
-
 # Sticky Searcher
 
 “Sticky Searcher”는 사용자의 검색환경을 개선하여 보다 빠르게 원하는 정보를 찾아볼 수 있도록 도와주는 Chrome 확장 프로그램입니다.
@@ -63,20 +46,9 @@
 
 # ::팀원 소개
 
-<div style="display: flex; justify-content: space-between; gap: 10px;">
-  <div style="text-align: center;">
-    <h3>이종석</h3>
-    <img src="https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f" width="150" height="150"/>
-  </div>
-  <div style="text-align: center;">
-    <h3>김소연</h3>
-    <img src="https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00" width="150" height="150"/>
-  </div>
-  <div style="text-align: center;">
-    <h3>김연주</h3>
-    <img src="https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365" width="150" height="150"/>
-  </div>
-</div>
+### 이종석 김소연 김연주
+
+![Image](https://github.com/user-attachments/assets/2fd4bd3b-9b47-4ca4-ac51-704bf6249bff)
 
 # ::시연 영상
 
