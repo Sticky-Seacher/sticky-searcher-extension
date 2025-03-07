@@ -20,13 +20,6 @@
       "js": ["assets/content.js"]
     }
   ],
-  "oauth2": {
-    "client_id": "399990500021-6u6jceebjt0hmvcmmlbvfrm3iakq7ef1.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ]
-  },
   "permissions": [
     "sidePanel",
     "unlimitedStorage",
