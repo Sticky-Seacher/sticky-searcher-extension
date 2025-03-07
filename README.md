@@ -63,20 +63,20 @@
 
 # ::팀원 소개
 
-<ul class="imgWrap">
-  <li>
+<div style="display: flex; justify-content: space-between; gap: 10px;">
+  <div style="text-align: center;">
     <h3>이종석</h3>
-    <img src="https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f"/>
-  </li>
-  <li>
+    <img src="https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f" width="150" height="150"/>
+  </div>
+  <div style="text-align: center;">
     <h3>김소연</h3>
-    <img src="https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00"/>
-  </li>
-  <li>
+    <img src="https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00" width="150" height="150"/>
+  </div>
+  <div style="text-align: center;">
     <h3>김연주</h3>
-    <img src="https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365"/>
-  </li>
-</ul>
+    <img src="https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365" width="150" height="150"/>
+  </div>
+</div>
 
 # ::시연 영상
 
