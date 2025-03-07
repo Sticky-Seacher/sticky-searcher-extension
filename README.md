@@ -46,12 +46,20 @@
 
 # ::팀원 소개
 
-### 이종석 
-![Image](https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f) <br/>
-### 김소연
-![Image](https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00) <br/>
-### 김연주
-![Image](https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365)
+<ul style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; list-style: none">
+  <li>
+    <h3>이종석</h3>
+    <img src="https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f"/>
+  </li>
+  <li>
+    <h3>김소연</h3>
+    <img src="https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00"/>
+  </li>
+  <li>
+    <h3>김연주</h3>
+    <img src="https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365"/>
+  </li>
+</ul>
 
 # ::시연 영상
 
@@ -59,13 +67,15 @@
 
 ### **FrontEnd**
 
-- React
-- Tailwind + daisyUI
-- Vite
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+<img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
+<img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white"><br/>
+<img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
 
 ### **BackEnd**
 
-- Firebase
+<img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">
 
 ### Firebase 필요성
 
