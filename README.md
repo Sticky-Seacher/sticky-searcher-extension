@@ -1,3 +1,6 @@
+
+![128*128_ss237](https://github.com/user-attachments/assets/b199caad-8c73-4398-9a93-b70f5f66d4c5)
+
 # Sticky Searcher
 
 “Sticky Searcher”는 사용자의 검색환경을 개선하여 보다 빠르게 원하는 정보를 찾아볼 수 있도록 도와주는 Chrome 확장 프로그램입니다.
