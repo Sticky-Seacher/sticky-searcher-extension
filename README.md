@@ -42,10 +42,8 @@
 
 # 개발 배경
 
-우리는 검색창에 궁금했던 단어나 문장을 입력하고 원하는 정보를 빠르게 얻어 가길 원합니다.
-
+우리는 검색창에 궁금했던 단어나 문장을 입력하고 원하는 정보를 빠르게 얻어 가길 원합니다.<br>
 하지만 불필요한 설명들이 포함되어 있어 원했던 정보를 찾기까지 수많은 스크롤을 해야 하는 불편함이 있었습니다.<br>
-
 저희는 사용자의 평소 익숙했던 환경을 편리하게 개선해 주고자 해당 프로젝트를 진행하게 되었습니다.
 
 # 시연 영상
@@ -60,7 +58,7 @@
 
 # 기술 스택
 
-### **FrontEnd**
+### **Frontend**
 
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
 <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
@@ -68,7 +66,7 @@
 <img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
 
-### **BackEnd**
+### **Backend**
 
 <img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">
 
@@ -234,11 +232,7 @@ function setHighlight(keyword, targetElement, color) {
 
 리다이렉션 룰을 설정할 때는, chrome storage에 저장해 놓은 URL과 description을 text fragment와 결합하여 리다이렉션 도착지로 사용될 새로운 URL을 생성해 룰을 지정했습니다. background에서 declarativeNetRequest를 사용하여 네트워크 요청에 접근 할 때 생성된 룰을 활용했습니다.
 
-# 트러블 슈팅
-
-## Login redirection
-
-### **에러상황**
+## 로그인 리다이렉트
 
 - 사용자의 이메일 / Token Value가 있어도 Login 페이지가 지속적으로 이동되는 상황
 - 해당 에러상황이 어떤 이슈점들이 있을 수 있었는지?
@@ -283,7 +277,7 @@ const ProtectedRoute = ({ element }) => {
 };
 ```
 
-## WebSite DragAndDrop 기능구현
+## 웹사이트 드래그앤드롭 기능구현
 
 ### **마우스 이벤트 처리**
 
