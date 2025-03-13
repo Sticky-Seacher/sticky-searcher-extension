@@ -14,29 +14,29 @@
 
 1. [Sticky Searcher](#sticky-searcher)
    - 크롬 확장 프로그램 개요
-2. [Motive](#motive)
+2. [개발 배경](#개발배경)
    - 목적과 문제 해결
-3. [팀원 소개](#팀원-소개)
-   - 팀원 소개
-4. [시연 영상](#시연-영상)
-   - 프로젝트 시연 영상
-5. [기술 스택](#기술-스택)
-   - 프론트엔드 기술
-   - 백엔드 기술
-   - Firebase 필요성과 이유
-6. [트러블슈팅 + 도전과제](#challenges-트러블-슈팅)
+3. [시연 영상](#시연-영상)
+   - [확장프로그램]
+   - [웹사이트]
+4. [기술 스택](#기술-스택)
+   - [Frontend](#Frontend)
+   - [Backend](#Backend)
+5. [개발 과정](#개발과정)
    - 텍스트 콘텐츠를 찾고 하이라이팅하는 방법
    - 확장 프로그램에서 현재 페이지 접근하기
    - 올바른 타이밍에 이벤트 발동하기
    - 아이콘, UI 스크래핑 문제 해결
-7. [로그인 리다이렉션](#login-redirection)
-   - 에러 상황과 해결 방안
-8. [웹사이트 드래그 앤 드롭 구현](#웹사이트-드래그-앤-드롭-구현)
-   - 마우스 이벤트 처리
-   - `useRef()`를 사용한 드래그된 항목 추적
-   - 드래그 앤 드롭 문제 해결
-9. [localStorage 값 변할 때 데이터 가져오기](#localstorage-값-변할-때-데이터-가져오기)
+6. [로그인 리다이렉션](#login-redirection)
+   - [에러 상황과 해결 방안](#에러-상황과-해결-방안)
+7. [웹사이트 드래그 앤 드롭 구현](#웹사이트-드래그-앤-드롭-구현)
+   - [마우스 이벤트 처리](#마우스-이벤트-처리)
+   - [`useRef()`를 사용한 드래그된 항목 추적](#useref를-사용한-드래그된-항목-추적)
+   - [드래그 앤 드롭 문제 해결](#드래그-앤-드롭-문제-해결)
+8. [localStorage 값 변할 때 데이터 가져오기](#localstorage-값-변할-때-데이터-가져오기)
    - localStorage 값 변화를 감지하는 방법
+9. [팀원 소개](#팀원-소개)
+   - 팀원 소개
 10. [회고록](#회고록)
     - 팀원들의 인사이트와 경험
 
@@ -232,16 +232,16 @@ function setHighlight(keyword, targetElement, color) {
 
 리다이렉션 룰을 설정할 때는, chrome storage에 저장해 놓은 URL과 description을 text fragment와 결합하여 리다이렉션 도착지로 사용될 새로운 URL을 생성해 룰을 지정했습니다. background에서 declarativeNetRequest를 사용하여 네트워크 요청에 접근 할 때 생성된 룰을 활용했습니다.
 
-## 로그인 리다이렉션 오류 해결
-
-### 해당 상황에서 어떤 문제들이 있을 수 있었는지?
-
-- 로그인을 성공하더라도 사용자의 이메일이나 인증 토큰이 제대로 설정되지 않으면, <br> 상태를 유지하지 못하고 다시 로그인 페이지로 돌아가는 상황입니다.
+## 로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]
 
 ### **인증 토큰(accessToken)이란?**
 
 - "로그인 인증을 위한 증명서" 같은 개념입니다.<br>
   우리가 로그인을 할 때 사용하는 비밀번호처럼 사용자가 제대로 로그인했는지 시스템이 확인할 수 있습니다.
+
+### 해당 상황에서 어떤 문제들이 있을 수 있었는지?
+
+- 로그인을 성공하더라도 사용자의 이메일이나 인증 토큰이 제대로 설정되지 않으면, <br> 상태를 유지하지 못하고 다시 로그인 페이지로 돌아가는 상황입니다.
 
 ### **해결방안**
 
@@ -249,7 +249,7 @@ function setHighlight(keyword, targetElement, color) {
 
 ### **해결 전 코드**
 
-```
+```jsx
 const ProtectedRoute = ({ element }) => {
   const { userId } = useUserId();
 
@@ -263,7 +263,7 @@ const ProtectedRoute = ({ element }) => {
 
 ### **해결 후 코드**
 
-```
+```jsx
 const ProtectedRoute = ({ element }) => {
   const { userId } = useUserId();
   const accessToken = localStorage.getItem("userAccessToken");
@@ -281,26 +281,26 @@ const ProtectedRoute = ({ element }) => {
 };
 ```
 
-## 웹사이트 드래그앤드롭 기능 구현 순서
+## 검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]
 
-### 1. **마우스 이벤트 처리**
+### **마우스 이벤트 처리**
 
 - `mousedown` (마우스 버튼 누름): 사용자가 요소를 드래그하거나 놓을 때 발생하는 여러 이벤트를 처리합니다.
 - `mousemove` (마우스 이동): 요소로 드래그하는 동안 추적합니다.
 - `mosueup` (마우스 버튼 떼기): 마우스를 놓을 때 발생하며, 드래그가 끝나는 시점을 추적합니다.
 
-### 2. **마우스 이벤트 속성 `draagable`**
+### **마우스 이벤트 속성 `draagable`**
 
 - draagable는 `true`인 값은 대표적으로 `<a>` 태그가 있고 반면에 `<span>`태그는 불가합니다.
 
-### 2-1. `dragenter` / `dragstart` / `dragleave` 속성이란?
+### `dragenter` / `dragstart` / `dragleave` 속성이란?
 
 - `dragenter` 이벤트를 적용한 요소에 드래그한 아이템이 닿을 경우 콜백함수가 실행됩니다.
 - `dragstart` 이벤트를 적용한 요소에 드래그한 아이템이 위치하면 계속해서 콜백함수가 실행됩니다.
 - `dragleave` 이벤트는 드래그 중인 요소가 자신을 감싸고 있던 영역을 벗어 났을 때 콜백함수가 실행된다. `e.preventDefault()`를 사용하게 된다면 이벤트 동작이 겹치는 것을 방지합니다.
 - `dragend` 이벤트는 드래그를 끝낼 시에 콜백 함수가 실행됩니다.
 
-### 3. `useRef()` **드래그되는 항목 추적**
+### `useRef()` **드래그되는 항목 추적**
 
 - `useRef()` 는 변수명에 초기값을 적는 식으로 만들어 결과값을 `{ current: 초기값 }` 을 지닌 객체가 반환됩니다.
 - `dragstart` 는 콜백함수의 매개변수로 그룹인덱스와 와 키워드의 `초기값` 을 받고있습니다.
@@ -309,14 +309,34 @@ const ProtectedRoute = ({ element }) => {
 
 - `dragPosition.current`: 드래그가 시작된 위치 <br>(즉, 키워드의 그룹 인덱스와 키워드)를 저장합니다.
 
-### 4. 해당 상황에서 어떤 문제들이 있을 수 있었는지?
+  ```jsx
+  const startDrag = (historyGroupIndex, history) => {
+    dragPosition.current = {
+      historyGroupIndex: historyGroupIndex,
+      history: history,
+    };
+  };
+  ```
+
+### 해당 상황에서 어떤 문제들이 있을 수 있었는지?
 
 - 2개의 그룹이 있다면 영역내에 드래그한 요소를 다른 박스로 옮길 때 삭제되거나 중복되어 추가되는 상황이 있었습니다.
+  <img alt="Image" src="https://github.com/user-attachments/assets/fbb35a40-63e4-436d-9172-14e773ee40b1" />
 
-### 5. **해결 방안**
+### **해결 방안**
 
 - 기존 그룹내에 리스트 요소들이 있다면 `index`가 중요하고<br>
   각 해당되는 리스트들의 고유한 `key`값을 주었더니 해결되었습니다.
+
+  ```
+     {historyGroups.map((historyGroup, historyGroupIndex) => (
+        <KeywordGroup
+          key={historyGroup.id}
+          onDragStart={(history) => startDrag(historyGroupIndex, history)}
+          //...
+        />
+      ))}
+  ```
 
 ## localStorage value가 변할 때 데이터 가져오기
 
