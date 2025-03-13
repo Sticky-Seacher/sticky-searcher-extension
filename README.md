@@ -1,13 +1,14 @@
-
-![128*128_ss237](https://github.com/user-attachments/assets/b199caad-8c73-4398-9a93-b70f5f66d4c5)
-
 # Sticky Searcher
 
-“Sticky Searcher”는 사용자의 검색환경을 개선하여 보다 빠르게 원하는 정보를 찾아볼 수 있도록 도와주는 Chrome 확장 프로그램입니다.
+<p align="center"><img src="https://github.com/user-attachments/assets/b199caad-8c73-4398-9a93-b70f5f66d4c5" height="128px" width="128px"></p>
 
-앱을 실행시킨 후 검색 창에 검색어를 입력할 시 검색 결과 창에 해당 검색어에 하이라이팅이 표시됩니다.
+<p style="text-align:center"> "Sticky Searcher"는 구글에서 검색어를 입력하면 관련된 문구들이 자동으로 하이라이팅 표시되며,<br>
+검색을 통해 얻고자 했던 정보들에 빠르게 도달할 수 있는 크롬 확장 프로그램입니다.</p>
 
-검색어를 저장 해둔 상황에서 검색어에 맞게 로드되면 원하는 웹사이트로 이동 시 해당 웹사이트의 Description으로 자동 스크롤되어 보다 원하는 정보를 빠르게 찾을 수 있습니다.
+# 링크
+
+[Sticky Searcher 웹사이트](https://github.com/Sticky-Seacher/sticky-searcher-website) |
+[Sticky Searcher 확장프로그램](https://github.com/Sticky-Seacher/sticky-searcher-extension)
 
 # 목차
 
@@ -39,21 +40,15 @@
 10. [회고록](#회고록)
     - 팀원들의 인사이트와 경험
 
-# ::Motive
+# 개발 배경
 
-검색어를 입력할 때마다, 검색 결과 페이지에서 해당 검색어에 대한 상세 설명란으로 자동 스크롤되는 기능이 활성화됩니다.
+우리는 검색창에 궁금했던 단어나 문장을 입력하고 원하는 정보를 빠르게 얻어 가길 원합니다.
 
-하지만 이 설명란이 종종 너무 길거나, 원하지 않는 정보가 포함되어 있어 사용자가 필요한 정보를 찾기 전에 불필요하게 스크롤을 해야 하는 불편함이 있었습니다. 이로 인해 시간이 소요되며, 검색 효율성이 떨어지는 문제가 발생했습니다.
+하지만 불필요한 설명들이 포함되어 있어 원했던 정보를 찾기까지 수많은 스크롤을 해야 하는 불편함이 있었습니다.<br>
 
-이를 해결하기 위해, 검색어와 관련된 정보를 더 빠르고 정확하게 찾을 수 있도록 개선된 방식의 검색 기능을 개발하게 되었습니다. 사용자가 원하는 정보를 더욱 직관적이고 신속하게 접근할 수 있도록, 불필요한 스크롤을 최소화하고 검색 결과의 효율성을 극대화하는 방향으로 해당 프로젝트를 진행하게 되었습니다.
+저희는 사용자의 평소 익숙했던 환경을 편리하게 개선해 주고자 해당 프로젝트를 진행하게 되었습니다.
 
-# ::팀원 소개
-
-| 이종석                                                                                    | 김소연                                                                                    | 김연주                                                                                    |
-| :---------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
-| ![Image](https://github.com/user-attachments/assets/fb643ba2-e2d5-48bd-aab2-b3e6a62c013f) | ![Image](https://github.com/user-attachments/assets/f9e6fcec-aba2-4e34-857e-6ea15754ac00) | ![Image](https://github.com/user-attachments/assets/deb0047c-3103-413b-ad91-5d2314840365) |
-
-# ::시연 영상
+# 시연 영상
 
 ### 확장 프로그램
 
@@ -63,7 +58,7 @@
 
 [![Video Label](https://github.com/user-attachments/assets/44bf694b-fd65-4eb6-87f2-b02478162cd8)](https://youtu.be/oc8xGLn2KfQ)
 
-# ::기술 스택
+# 기술 스택
 
 ### **FrontEnd**
 
@@ -77,20 +72,7 @@
 
 <img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">
 
-### Firebase 필요성
-
-- **DB가 필요한 이유?**
-
-  1.  본 프로젝트에서는 사용자가 검색했던 검색어와 해당 웹사이트 링크를 저장하기 위한 DB가 필요
-  2.  프론트엔드 구축에 보다 더 집중을 하기 위해 서비스형 백엔드를 선택
-
-- **왜 Firebase인가?**
-
-  1.  레퍼런스 → 크롬 확장 프로그램 manifest가 v3로 업데이트 됨에 따라, 이에 맞춰 가이드 문서를 제공
-  2.  쉽고 빠른 소셜로그인 인증시스템(Google 로그인 사용)
-  3.  러닝커브 최소화 → 팀원 모두 Firebase 사용경험이 있어 보다 친숙함. → 타 플랫폼과 비교 시 다양한 기능 제공 및 사용자 편의성이 높아 러닝커브를 최소화 할 수 있다고 판단
-
-# ::Challenges + 트러블 슈팅
+# 개발 과정
 
 ### 특정 text 콘텐츠를 어떻게 찾고 하이라이팅 할까?
 
@@ -252,6 +234,8 @@ function setHighlight(keyword, targetElement, color) {
 
 리다이렉션 룰을 설정할 때는, chrome storage에 저장해 놓은 URL과 description을 text fragment와 결합하여 리다이렉션 도착지로 사용될 새로운 URL을 생성해 룰을 지정했습니다. background에서 declarativeNetRequest를 사용하여 네트워크 요청에 접근 할 때 생성된 룰을 활용했습니다.
 
+# 트러블 슈팅
+
 ## Login redirection
 
 ### **에러상황**
@@ -356,7 +340,15 @@ if (request.message === "Get user authentication") {
 }
 ```
 
-# ::회고록
+# 팀원 소개
+
+- 이종석: josuk0212@gmail.com
+
+- 김소연: hong7ya@gmail.com
+
+- 김연주: mpnisck@gmail.com
+
+# 회고록
 
 - ### 이종석
 
