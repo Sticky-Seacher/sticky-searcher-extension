@@ -72,165 +72,107 @@
 
 # 개발 과정
 
-### 특정 text 콘텐츠를 어떻게 찾고 하이라이팅 할까?
+## 멀티 하이라이팅
 
-사실 window.find()라는 특정 텍스트를 찾아주고 어떤 브라우저에서는 하이라이팅 처리도 해주는 메서드가 있었습니다. 그러나 이는 비표준 기능이었기 때문에 배포단계에 문제가 생길 수도 있었습니다. 표준 기능들을 사용해서 특정 text content를 찾고 하이라이팅하기 위해 4가지의 어려움이 있었습니다.
+멀티 하이라이팅 기능은 사용자가 보고 있는 페이지에서 여러 단어들을 각 단어 별로 하이라이팅해 시각적인 분류를 돕는 기능입니다. content script 영역에 접근해서 사용자가 보고 있는 페이지를 수정하고, onCompleted이벤트와 sendMessage를 사용하여 적절한 타이밍에 작업을 시작했습니다. NodeIterator를 사용해 DOM을 탐색하고 원하는 텍스트만 텍스트 노드로 만들어서 요소에 삽입한 후 기존의 텍스트를 제거하는 방식으로 작업을 진행했습니다.
 
-- extension계층에서, 사용자가 보고 있는 현재 페이지에 어떻게 접근 하는 가?
-- 원하는 타이밍에 발동 시킬 수 있는 가?
-- 특정 text 콘텐츠를 찾기 위해 DOM 탐색을 어떻게 할 것 인 가?
-- 어떻게 하이라이팅 시킬 것인 가? </aside>
+보다 자세한 설명은 다음과 같습니다.
 
-### **extension 계층에서, 사용자가 보고 있는 현재 페이지에 어떻게 접근 하는 가?**
+### 사용자가 보고 있는 페이지를 조작할 수 있는 방법 - [content script 사용]
 
-여러 사이트를 넘나드는 기능을 구현하는 만큼 extension으로 구현을 진행하고 있습니다. 그런데 사이드 패널 세상에 갇혀있는 상태라 브라우저의 다른 부분들에 접근하기 위해서는 해당 부분을 칭하는 정의와 할 수 있는 작업에 대해 알아야 했습니다. extension 개발을 처음 진행하는 만큼 공식문서를 통해 계층 정의를 먼저 선행했습니다.
+크롬 익스텐션의 여러 영역들 중에 사용자가 보고 있는 페이지에서 작업할 수 있는 영역은 content script 영역으로, 웹 페이지안에서 JavaScript가 실행되도록 합니다. 실행할 파일을 manifest 파일에서 연결해 해당 영역에 접근했습니다
 
-사용자가 보고 있는 페이지 영역은 content_script이며 이 영역에서 할 작업들을 manifest의 content_scripts의 키에 값으로 선언해 놓으면 되었습니다. 그러면 기존 브라우저에서 개발하던 대부분의 기능을 사용할 수 있었습니다.
+<img width="450" alt="영역 설명" src="https://github.com/user-attachments/assets/9a33c3ed-2f92-4623-9890-bc60e9599b66" />
 
-### 원하는 타이밍에 발동 시킬 수 있는 가?
+content script 영역은 웹 페이지의 DOM을 보고 수정할 수 있으며 다른 영역으로 정보를 전달할 수 있습니다. 다른 영역으로는 브라우저 배경에서 실행되는 service worker 영역, 본 프로젝트 UI를 표현하는 side panel 영역이 있습니다.
 
-extension 계층 마다 할 수 있는 작업이 달라 원하는 타이밍에 원하는 작업을 발동 시키는 것은 조금 복잡했습니다.
+manifest 파일은 크롬 익스텐션 프로그램 개발 시 필수 파일입니다. 브라우저 권한 요청과 각 영역에서 사용할 파일을 연결하는 역할을 합니다.
 
-- content_script에 접근해야 하는 타이밍
-  - 구글 검색 완료 페이지에 사용자가 위치했을 때
-  - 구글 검색 완료 페이지 중 특정 링크를 눌러 이동한 페이지에서, “Start Searcher” 버튼을 클릭했을 때
+크롬 익스텐션에서 작업하는 방법과 각 기능에 대해서는 공식문서와 예제 프로젝트들이 모여 있는 깃허브 레포를 참고했습니다. 추가적으로 레포를 통해서도 확인이 안되는 사항에 대해서는 MDN에서도 확장프로그램 레포를 발견할 수 있었습니다. 실제 실행하고 코드를 수정하고 확인하면서 빠르게 크롬 익스텐션 구조를 파악할 수 있었습니다.
 
-해당 타이밍들은 세세한 제약 사항들이 존재합니다. 하이라이팅 처리를 하고 SPA 페이지에 대응하기 위해, 단순히 페이지가 로드된 순간이 아니라 DOM 형성이 완료된 순간을 감지 할 수 있어야 했습니다.
+### 대상 텍스트 찾기
 
-이는 background 영역이 책임을 가지고 있기에 추가적으로 background와 content_script 사이의 통신도 필요했습니다. 또한 버튼을 클릭한 순간 이벤트가 발생되고 결과 데이터를 얻어야 하므로 side_panel과의 통신도 필요했습니다.
+#### 타이밍 - [onCompleted이벤트와 sendMessage 사용]
 
-- 추가된 요구사항
-  - DOM이 형성되었을 때
-  - tab의 URL이 특정 URL일 때
-  - background ↔ content_script 통신
-  - side_panel ↔ content_script 통신
+본론부터 밝히자면 사용자가 보고 있는 페이지의 DOM 형성이 완료되었을 때를 onCompleted를 사용해서 감지하여 DOM 탐색을 시작했습니다. 그리고 그 타이밍을 sendMessage와 onMessage를 사용해 관리했습니다.
 
-결과적으로 background에서는 DOM 형성이 완료된 순간에 이벤트를 걸었습니다. 특정 URL에 위치해있다는 사실도 함께 확인 된다면 content_script에게 sendMessage 함수로 통신을 시도합니다.
+DOM 형성이 완료된 순간을 감지한 이유는 SPA인 페이지에 대응하기 위함이었습니다. 이는 service worker 영역에서 감지할 수 있는데, 해당 영역에서 onCompleted 이벤트를 사용할 수 있습니다. service worker 영역은 브라우저의 배경에서 실행되는데, 탭을 닫거나 네비게이션에 접근 하는 등의 기능을 할 수 있습니다.
 
-side_panel에서는 특정 버튼에 클릭이벤트 핸들러를 걸었습니다. 특정 URL에 위치해있다는 사실도 함께 확인 된다면 content_script에게 sendMessage 함수로 통신을 시도합니다.
+onCompleted 이벤트는 chrome의 webnavigation의 메서드로 제공되며 이벤트 핸들러를 등록할 수 있습니다. 참조되는 모든 리소스를 포함해서 전체 페이지로드가 완료되면 실행됩니다.
 
-content_script에게도 메시지도 도달한 순간을 감지하는 이벤트를 걸었습니다. content_script는 다양한 메시지를 수신 받는 만큼 requset를 분간하는 작업을 거칩니다. 특정 request 라는 것이 확인되면 content_script는 DOM 탐색 작업을 거칠 것입니다.
+sendMessage를 사용한 이유는 다음과 같습니다. DOM 형성이 감지된 순간 다음 작업을 처리할 수 있는 영역은 content script입니다. DOM 탐색이 가능한 영역이 바로 content script이기 때문입니다. 따라서 service worker 영역에서 content script 영역으로 메시지를 보내야 합니다. 때문에 chrome의 tabs의 메서드로 제공되는 sendMessage를 사용했습니다.
 
-### 특정 text 콘텐츠를 찾기 위해 DOM 탐색을 어떻게 할 것 인가?
+onMessage를 사용한 이유는 다음과 같습니다. content script 입장에서는 메시지가 도달한 순간을 감지하는 onMessage 이벤트를 걸고 메시지들을 분간하는 과정이 필요합니다. onMessage 이벤트는 chrome의 runtime의 메서드로 제공되며 이벤트 핸들러를 등록할 수 있습니다. sendMessage가 다른 영역에서 실행되어서 메시지를 전송받았을 때 실행 됩니다.
 
-document.querySelector 등은 이미 특정 요소를 찾는 메서드 였습니다. 현재 프로젝트에서는 요소의 conten인 text를 찾아야 하기 때문에 사용하기에는 어려웠습니다.
+#### DOM 탐색 - [NodeIterator]
 
-DOM이 트리구조라는 것에서 착안하여 이진 트리 알고리즘을 다음 사항으로 검토해보았으나, DOM의 노드는 자식의 갯수가 2개로 한정되어 있지 않기 때문에 사용하기에는 어려웠습니다.
+DOM 형성이 완료된 순간을 감지해서 DOM 탐색을 시작할 타이밍을 인지하게 되었습니다. DOM 탐색 방법으로 NodeIterator를 사용했습니다. document.createNodeIterator 함수를 사용하여 NodeIterator를 만든 다음 for 문 등을 이용해서 한 순회마다 다음 노드를 방문하면서 탐색했습니다. 그리고 순회 결과로 대상 텍스트가 포함된 리프 요소를 찾았습니다.
 
-페이지의 tag들을 string으로 받아서 text를 발견하는 것도 아이디어로 생각해 보았으나 결국 사용자의 화면에 리페인팅 없이 반영하기 위해서는 element 삽입이 필요하며 결국 DOM에서의 삽입 위치를 알아야하기 때문에 아이디어를 발전시키는 사항은 보류처리했습니다.
+NodeIterator의 특징은 다음과 같습니다. 모든 종류의 모든 노드를 탐색할 수 있으며 필터링한 종류, 예를 들어 텍스트 노드에만 방문할 수도 있습니다. 다음 노드가 페이지 위에서 아래의 사용자 시각의 흐름이기 때문에 이해하기도 쉬웠습니다.
 
-조사를 거친 끝에 DOM을 순회하는 메서드를 발견했습니다. NodeIterator와 TreeWalker 입니다. 두 메서드 모두 루트 노드를 제공할 수 있고, 탐색 할 노드의 타입을 명시할 수 있고, 탐색을 이어갈 지 멈출지도 결정할 수 있었습니다.
+NodeIterator를 사용하게된 이유는 텍스트 노드인 콘텐츠를 찾을 수 있고, 해당 요소의 위치도 사용할 수 있었기 때문입니다. 예를 들어서 document.querySelector는 콘텐츠를 찾을 수는 없고 이미 알고 있는 특정 요소를 찾는 메서드이기에 사용하기 어렵습니다. 또 이진 트리 알고리즘은 노드의 자식 갯수가 2개로 한정되어 있기에 사용하기 어렵습니다. 전체 페이지의 테그들을 문자열로 받아서 텍스트를 발견하는 것도 추후 하이라이팅 작업 시 DOM에서의 위치를 알고 있어야 하기 때문에 사용하기 어려웠습니다.
 
-사용자가 보는 화면을 대응하고 싶었기에 body tag를 루트 노드로 제공하고, text content에 관심이 있었기에 text node들만 탐색할 수도 있었습니다. NodeIterator가 먼저 출시되고 이후에 TreeWalker가 출시 되었습니다.
+NodeIterator는 루트 노드를 제공할 수 있고, 탐색 할 노드의 타입을 명시할 수 있고, 탐색을 이어갈 지 멈출지도 결정할 수 있습니다. 본 프로젝트에서는 루트 노트로 body 테그를 제공하고 텍스트 노드에만 방문하도록 필터링 했습니다. 유사하게 TreeWalker도 존재하는데, 저희 프로젝트에서는 다음 노드로만 가면 되었기에 복잡성을 줄이고자 NodeIterator를 사용했습니다.
 
-둘의 가장 큰 차이점으로, TreeWalker는 노드를 순회할 때 다양한 방향으로 갈 수 있다는 것이었습니다. 저희 프로젝트에서는 다음 노드로만 가면 되었기에 복잡성을 줄이고자 NodeIterator를 사용했습니다.
+### 텍스트를 요소로 만들기 - [태그 문법]
 
-### 어떻게 하이라이팅 시킬 것 인가?
+DOM 탐색 결과 얻게 된 리프 요소를 대상으로 다시 한 번 NodeIterator를 사용해 순회해야 합니다. 원하는 단어를 기준으로 split 한 후, 원하는 단어는 배경색이 지정된 요소화 해서 삽입하고 그 이외의 텍스트들은 텍스트 노드화 해서 삽입했습니다. 그 이후 기존 텍스트 콘텐츠 전문은 삭제 처리했습니다.
 
-text content를 하이라이팅 시키고 이후 스크롤 초점을 부여하기 위해 text를 tag로 감싸는 과정이 필요했습니다. 처음에는 text를 담고 있는 leaf Elemenet에서 innerHTML로 content를 얻은 다음 replace로 해당 text를 tag로 감싸진 html string으로 바꿔친 다음에 다시 innerHTML을 사용하는 방법을 썼습니다.
-
-- 트러블슈팅 대상 코드
-
-```jsx
-const origin = targetElement.innerHTML;
-
-let replace = origin;
-
-replace = replace.replace(
-  keyword,
-  `<span style="background:${color}">${keyword}</span>`
-);
-
-targetElement.innerHTML = replace;
-```
-
-그러나 이 방법은 tag의 속성과 기능들을 고려하지 못한 방법이었습니다. 예로 다음과 같은 tag 문법 위반 사례가 발생합니다.
-
-- 오류 화면
+리프 노드로 범위를 좁힌 다음에 다시 NodeIteragtor를 사용한 이유는 다음과 같은 DOM 구조에 대응하기 위함입니다. 상황 예시로 class라는 단어를 하이라이팅하고 싶은 상황을 가정하겠습니다.
 
 ```html
-<!-- 예 : class를 키워드로 할 경우, 다음과 같은 상황이 됨 -->
-<a ... <span class='highlight'>class</span>="somethingClassName" />
+<span>
+  class는 교육기관에서 사용하는 단위 입니다.
+  <div class="class">class</div>
+  반 또는 학급이라는 단위로 대체될 수도 있습니다.
+  <textarea
+    id="class"
+    name="class"
+    rows="5"
+    cols="33"
+  >
+    class의 다른 의미를 찾아 제출하십시오.
+  </textarea>
+</span>
 ```
 
-이에 html을 string으로 다루는 방법을 폐기하고 DOM을 조작하기로 했습니다. 이 과정에서 jsbin과 debugger의 효과를 채감할 수 있었습니다. jsbin으로 작은 단위의 DOM에서 우선 작은 기능 구현을 성공했습니다. 특히 만약 키워드 text content가 전체 content의 맨 앞에 있거나 맨 뒤에 있을 경우 등의 엣지케이스를 검증했습니다.
+위의 span에 innerHTML을 사용한 다음에 class단어만 replace처리한다면 속성이 요소로 감싸지는 등 문법 위반 사례가 발생하기 쉬웠습니다. 그리고 textarea 요소와 같이 내부 콘텐츠에 다른 요소를 삽입할 수 없는 요소의 존재를 대응하기 어려워졌습니다.
 
-그리고 MDN 사이트 등 본격적인 사이트에서 콘솔 탭을 열어 해당 함수를 적용시켜 보았고, debugger를 쓰면서 점진적으로 하나씩 하이라이트가 찍히는 모습과 해당하는 코드 로직을 따라가며 버그를 잡아 냈습니다.
+그러므로 NodeIterator로 위의 span을 순회하면서 tagName이 input이나 textarea일 경우는 탐색에서 제외했습니다. 순수하게 텍스트 노드로 존재하는 class라는 단어만 요소로 만들었습니다.
 
-결과적으로 leaf Element를 대상으로 NodeIterator로 순회하면서 input이나 textarea는 탐색에서 제외했습니다. 키워드 text를 기준으로 split한 후, 키워드 아닌 것은 text Node화 해서 삽입하고 키워드 인 것은 element화 해서 삽입했습니다. 그리고 기존 text는 삭제 처리했습니다. 그 결과 무사히 기능 구현이 가능했습니다.
+이 과정에서 jsbin과 debugger의 효과를 채감할 수 있었습니다. jsbin으로 작은 단위의 DOM에서 우선 작은 기능 구현을 도전했습니다. 주로 단어가 전체 콘텐츠의 맨 앞에 있거나 맨 뒤에 있을 경우 등의 엣지케이스를 확인하는 데 좋았습니다. 그리고 MDN 사이트 등 본격적인 사이트에서 콘솔 탭을 열어 해당 함수를 적용시켜 보았고, debugger를 쓰면서 점진적으로 하나씩 하이라이트가 찍히는 모습과 해당하는 코드 로직을 따라가며 버그를 잡아 내니 문제 해결에 걸리는 시간을 단축할 수 있었습니다.
 
-- 개선된 코드
+## 페이지 간 description 자동 스크롤
 
-```jsx
-function setHighlight(keyword, targetElement, color) {
-  const textNodeIterator = document.createNodeIterator(
-    targetElement,
-    NodeFilter.SHOW_TEXT
-  );
+페이지 간 description 자동 스크롤 기능은 구글 검색 페이지에서 링크당 단락을 표시해 줄 경우, 해당 링크를 누르면 해당 단락이 위치한 곳으로 자동으로 스크롤을 내려주는 기능입니다. 구글 검색페이지에 위치했을 때 chrome storage에 단락들을 미리 저장해 놓은 후, 페이지 이동 시 text fragments로 만들어 URL 끝에 추가해 리다이렉션을 시키는 방식으로 작업을 진행했습니다.
 
-  for (
-    let currentTextNode = textNodeIterator.nextNode();
-    currentTextNode;
-    currentTextNode = textNodeIterator.nextNode()
-  ) {
-    const parentElement = currentTextNode.parentElement;
+description은 다음 영역의 텍스트를 가리키는 용어로 팀 내에서 공통된 단어로 소통하기 위해 명명해서 사용하고 있습니다.
 
-    if (
-      parentElement.tagName.toLowerCase() === "input" ||
-      parentElement.tagName.toLowerCase() === "textarea"
-    ) {
-      continue;
-    }
+<img width="450" alt="description" src="https://github.com/user-attachments/assets/fa1b782f-031f-4b53-ad7a-ca4ec15abe9b" />
 
-    const text = currentTextNode.textContent;
+보다 자세한 설명은 다음과 같습니다.
 
-    const excludedList = text.split(keyword);
+### description 취득과 chrome storage
 
-    excludedList.forEach((stringFragment, index) => {
-      const notKeywordText = document.createTextNode(stringFragment);
-      parentElement.insertBefore(notKeywordText, currentTextNode);
+현재 URL이 구글 검색 페이지 일 경우, 구글 검색 결과 리스트 중 desciption 부분들만 정제하고 chrome storage에 저장했습니다. 그리고 구글 검색 페이지 탭을 닫을 경우 저장한 description을 삭제하도록 했습니다.
 
-      if (index !== excludedList.length - 1) {
-        const highlightedSpan = document.createElement("span");
-        highlightedSpan.textContent = keyword;
-        highlightedSpan.style = `background:${color}`;
-        highlightedSpan.dataset.highlight = keyword;
-        parentElement.insertBefore(highlightedSpan, currentTextNode);
-      }
-    });
+현재 URL이 구글 검색 페이지인 지 확인하는 과정은 크롬 익스텐션의 여러 영역들 중 service workers 영역에서 가능합니다. 네비게이션에 접근해야 하기 때문입니다. 반면에 구글 검색 결과 리스트 중 desciption 부분들만 정제하는 과정은 content script 영역에서 가능합니다. 웹 페이지의 DOM에 접근해야 하기 때문입니다. 이에 sendMessage와 onMessage를 사용해서 영역간 통신을 했습니다.
 
-    parentElement.removeChild(currentTextNode);
-  }
-}
-```
+description 부분만 정제할 때는 날짜나 이미지 등의 불필요한 사항은 제거하고 한 문장만 취득했습니다. 그리고 더불어 해당 description이 속한 링크의 주소도 함께 취득했습니다. 하나의 탭을 기준으로 주소를 키로하고 description을 값으로 하는 구조체를 만들어서 chrome storage에 저장했습니다.
 
-## description을 어떻게 찾고 자동으로 스크롤 될까?
+chrome storage 크롬 익스텐션의 모든 영역에서 접근 가능한 클라이언트 측 저장공간입니다. 링크와 description들은 사용자가 해당 링크를 클릭하지 않을 수도 있어 쓰지 않을 수도 있는 임시 데이터이기 때문에 클라이언트 측에 저장하기로 했습니다. 이때 local storage 등의 기존 Web Storage API는 service workers 영역에서 접근 할 수 없기 때문에 chrome storage를 사용했습니다.
 
-저희 팀은 공통된 단어로 소통하는 것을 중요시 하여 다음과 같은 것을 description이라 명명해서 사용했습니다.
+chrome storage 저장 용량은 기본 10MB입니다. 이는 unlimitedStorage 권한을 요청하여 늘릴 수 있으나, 용량을 효율적으로 사용하기 위해 구글 검색 페이지 탭을 닫을 경우 삭제하도록 했습니다. chrome의 tabs의 onRemoved 이벤트를 사용해서 특정 고유한 id의 탭이 삭제되었을 경우를 알아차릴 수 있었습니다.
 
-- 이동 당한 페이지에서 description을 어떻게 찾을 것인가?
-- 어떻게 링크 클릭시 자동으로 스크롤이 촉발되게 할 것인가?
-- 얼만큼 미리 저장해 놓을 것인가?
+### 리다이렉션과 text fragment, declarativeNetRequest
 
-### 이동 당한 페이지에서 description을 어떻게 찾을 것인가?
+페이지를 이동하고 동시에 자동으로 스크롤을 시키기 위해, 규칙으로 선언해놓은 URL로 이동할려고 할 경우 text fragment가 적용된 URL로 리다이렉션 시켰습니다. 이를 위해 declarativeNetRequest를 사용해 리다이렉션 규칙들을 만들고 chrome storage와 동기화 시켰습니다.
 
-### 어떻게 링크 클릭시 자동으로 스크롤이 촉발되게 할 것인가?
+text fragment는 웹 페이지의 특정 부분을 링크로 공유할 수 있도록 해줍니다. URL 끝에 `#:~:text=` 라는 접두사를 넣어 추가할 수 있습니다. 그 결과 접두사 뒤의 글자들이 있는 위치로 웹 페이치를 스크롤 시킬 수 있습니다. 다만 URL의 일부분인 만큼 encodeURIComponent를 사용하여 인코딩하는 과정을 거치는 것이 안전했습니다.
 
-정확도를 높이고 스크롤을 자동으로 작동 시키게 하기 위해 text-fragment를 사용했습니다. 키워드와는 달리 description은 한 번만 스크롤되면 되고, 중간에 여러 tag들이 끼워져 있어도 텍스트들만 대상으로 하기에 정확성도 높았습니다.
+declarativeNetRequest는 네트워크 요청을 수정하거나 차단할 수 있는 chrome API 입니다. 구글 검색 페이지에서 description을 취득할 때 함께 취득한 링크들에 대해서 리다이렉션 규칙들을 지정했습니다. 해당 URL과 동일한 네트워크 요청을 보낼 경우 text fragment가 추가된 URL로 요청이 리다이렉션 됩니다.
 
-사용방법도 url에 fragment를 추가하여 사용이 가능했습니다. 이를 위해서는 다음에 해당 링크를 클릭 시 fragment가 적용된 url로 리다이렉션을 시키는 것이 필요했습니다.
-
-- 추가된 고려사항
-  - 얼만큼 미리 저장해 놓을 것인가?
-  - 리다이렉션을 어떻게 시킬 것인가?
-
-사실 URL과 description은 사용자가 해당 링크를 클릭하지 않을 수도 있어 쓰지 않을 수도 있는 임시 데이터입니다. 이에 클라이언트상에 저장해 놓기로 했습니다.
-
-한정적인 저장공간을 고려하여, 사용자가 구글 검색 페이지를 이동할 때 마다 새로이 저장하며, 해당 탭을 닫으면 제거되도록 로직을 구현했습니다.
-
-클라이언트 상에는 저장 공간이 여럿인데, 이 중 extension에서 접근이 자유로운 chrome storage 선택했습니다. chrome storage에 변경이 감지되면 새로운 리다이렉션 룰을 설정합니다.
-
-리다이렉션 룰을 설정할 때는, chrome storage에 저장해 놓은 URL과 description을 text fragment와 결합하여 리다이렉션 도착지로 사용될 새로운 URL을 생성해 룰을 지정했습니다. background에서 declarativeNetRequest를 사용하여 네트워크 요청에 접근 할 때 생성된 룰을 활용했습니다.
+chrome stroage에 onChange 이벤트를 걸어 놓아 리다이렉트 규칙들을 동기화시켰습니다. chrome storage에 새로운 description과 링크들이 저장되면 리다이렉트 규칙들도 업데이트가 되며, chrome storage가 비워지면 리다이렉트 규칙도 비워집니다. 이는 chrome storage를 진실의 원천으로 삼아 관련된 로직들이 chrome storage에 반응하여 작동하도록 하기 위함이었습니다.
 
 ## 로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]
 
