@@ -9,11 +9,13 @@
     "preview": "vite preview",
     "prepare": "husky",
     "lint": "eslint --cache .",
-    "format": "prettier --cache --write ."
+    "format": "prettier --cache --write .",
+    "toc": "markdown-toc -i README.md"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.64.1",
     "firebase": "^11.2.0",
+    "markdown-toc": "^1.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

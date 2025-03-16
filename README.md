@@ -12,41 +12,52 @@
 
 # 목차
 
-1. [Sticky Searcher](#sticky-searcher)
-   - 크롬 확장 프로그램 개요
-2. [개발 배경](#개발배경)
-   - 목적과 문제 해결
-3. [시연 영상](#시연-영상)
-   - [확장프로그램]
-   - [웹사이트]
-4. [기술 스택](#기술-스택)
-   - [Frontend](#Frontend)
-   - [Backend](#Backend)
-5. [개발 과정](#개발과정)
-   - 텍스트 콘텐츠를 찾고 하이라이팅하는 방법
-   - 확장 프로그램에서 현재 페이지 접근하기
-   - 올바른 타이밍에 이벤트 발동하기
-   - 아이콘, UI 스크래핑 문제 해결
-6. [로그인 리다이렉션](#login-redirection)
-   - [에러 상황과 해결 방안](#에러-상황과-해결-방안)
-7. [웹사이트 드래그 앤 드롭 구현](#웹사이트-드래그-앤-드롭-구현)
-   - [마우스 이벤트 처리](#마우스-이벤트-처리)
-   - [`useRef()`를 사용한 드래그된 항목 추적](#useref를-사용한-드래그된-항목-추적)
-   - [드래그 앤 드롭 문제 해결](#드래그-앤-드롭-문제-해결)
-8. [localStorage 값 변할 때 데이터 가져오기](#localstorage-값-변할-때-데이터-가져오기)
-   - localStorage 값 변화를 감지하는 방법
-9. [팀원 소개](#팀원-소개)
-   - 팀원 소개
-10. [회고록](#회고록)
-    - 팀원들의 인사이트와 경험
+<!-- toc -->
 
-# 개발 배경
+- [1. 개발 배경](#1-%EA%B0%9C%EB%B0%9C-%EB%B0%B0%EA%B2%BD)
+- [2. 기능 소개](#2-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
+- [3. 기술 스택](#3-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
+    + [Frontend](#frontend)
+    + [Backend](#backend)
+- [4. 개발 과정](#4-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
+  * [멀티 하이라이팅](#%EB%A9%80%ED%8B%B0-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8C%85)
+    + [사용자가 보고 있는 페이지를 조작할 수 있는 방법 - [content script 사용]](#%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%B3%B4%EA%B3%A0-%EC%9E%88%EB%8A%94-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95---content-script-%EC%82%AC%EC%9A%A9)
+    + [대상 텍스트 찾기](#%EB%8C%80%EC%83%81-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%B0%BE%EA%B8%B0)
+      - [타이밍 - [onCompleted이벤트와 sendMessage 사용]](#%ED%83%80%EC%9D%B4%EB%B0%8D---oncompleted%EC%9D%B4%EB%B2%A4%ED%8A%B8%EC%99%80-sendmessage-%EC%82%AC%EC%9A%A9)
+      - [DOM 탐색 - [NodeIterator]](#dom-%ED%83%90%EC%83%89---nodeiterator)
+    + [텍스트를 요소로 만들기 - [태그 문법]](#%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9A%94%EC%86%8C%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0---%ED%83%9C%EA%B7%B8-%EB%AC%B8%EB%B2%95)
+  * [페이지 간 description 자동 스크롤](#%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-description-%EC%9E%90%EB%8F%99-%EC%8A%A4%ED%81%AC%EB%A1%A4)
+    + [description 취득과 chrome storage](#description-%EC%B7%A8%EB%93%9D%EA%B3%BC-chrome-storage)
+    + [리다이렉션과 text fragment, declarativeNetRequest](#%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98%EA%B3%BC-text-fragment-declarativenetrequest)
+  * [로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]](#%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0---%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken-%EA%B8%B0%EC%A4%80-%EC%A1%B0%EA%B1%B4%EB%AC%B8)
+    + [인증 토큰(accessToken)이란?](#%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken%EC%9D%B4%EB%9E%80)
+    + [해당 상황에서 어떤 문제들이 있을 수 있었는지?](#%ED%95%B4%EB%8B%B9-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-%EC%96%B4%EB%96%A4-%EB%AC%B8%EC%A0%9C%EB%93%A4%EC%9D%B4-%EC%9E%88%EC%9D%84-%EC%88%98-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80)
+    + [해결방안](#%ED%95%B4%EA%B2%B0%EB%B0%A9%EC%95%88)
+    + [해결 전 코드](#%ED%95%B4%EA%B2%B0-%EC%A0%84-%EC%BD%94%EB%93%9C)
+    + [해결 후 코드](#%ED%95%B4%EA%B2%B0-%ED%9B%84-%EC%BD%94%EB%93%9C)
+  * [검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]](#%EA%B2%80%EC%83%89-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-%EC%88%9C%EC%84%9C---draagable-%EC%86%8D%EC%84%B1--useref)
+    + [마우스 이벤트 처리](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B2%98%EB%A6%AC)
+    + [마우스 이벤트 속성 `draagable`](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draagable)
+    + [`dragenter` / `dragstart` / `dragleave` 속성이란?](#dragenter--dragstart--dragleave-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
+    + [`useRef()` 드래그되는 항목 추적](#useref-%EB%93%9C%EB%9E%98%EA%B7%B8%EB%90%98%EB%8A%94-%ED%95%AD%EB%AA%A9-%EC%B6%94%EC%A0%81)
+    + [해당 상황에서 어떤 문제들이 있을 수 있었는지?](#%ED%95%B4%EB%8B%B9-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-%EC%96%B4%EB%96%A4-%EB%AC%B8%EC%A0%9C%EB%93%A4%EC%9D%B4-%EC%9E%88%EC%9D%84-%EC%88%98-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80-1)
+    + [해결 방안](#%ED%95%B4%EA%B2%B0-%EB%B0%A9%EC%95%88)
+  * [localStorage value가 변할 때 데이터 가져오기](#localstorage-value%EA%B0%80-%EB%B3%80%ED%95%A0-%EB%95%8C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
+- [5. 팀원 소개](#5-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
+- [6. 회고록](#6-%ED%9A%8C%EA%B3%A0%EB%A1%9D)
+    + [이종석](#%EC%9D%B4%EC%A2%85%EC%84%9D)
+    + [김소연](#%EA%B9%80%EC%86%8C%EC%97%B0)
+    + [김연주](#%EA%B9%80%EC%97%B0%EC%A3%BC)
+
+<!-- tocstop -->
+
+# 1. 개발 배경
 
 우리는 검색창에 궁금했던 단어나 문장을 입력하고 원하는 정보를 빠르게 얻어 가길 원합니다.<br>
 하지만 불필요한 설명들이 포함되어 있어 원했던 정보를 찾기까지 수많은 스크롤을 해야 하는 불편함이 있었습니다.<br>
 저희는 사용자의 평소 익숙했던 환경을 편리하게 개선해 주고자 해당 프로젝트를 진행하게 되었습니다.
 
-# 기능 소개
+# 2. 기능 소개
 
 | 이미지                                                                                     | 설명                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,9 +66,9 @@
 | ![image3](https://github.com/user-attachments/assets/5afc7c00-a357-4046-bf43-4e5633a399f2) | - 미 로그인 시, History 또는 History Page 버튼 클릭 시 로그인 페이지로 이동되며, 구글 계정을 통해 로그인이 가능합니다. </br> - History 버튼 클릭 시, 현재 보고있는 탭의 주소 및 검색한 단어(=history)를 저장할 수 있습니다. </br> - Lately History Group에는 최근 저장한 history를 확인할 수 있으며, 클릭 시 해당 주소로 이동할 수 있습니다. </br> History Page 버튼 클릭 시, 저장한 history를 관리할 수 있는 페이지로 이동합니다. |
 | ![image4](https://github.com/user-attachments/assets/0f43ff3e-6794-4d70-b53b-bfea7557da99) | - Add Group 버튼을 클릭하여 새로운 그룹을 추가하고, Drag & Drop을 이용하여 저장한 history를 분류하여 관리할 수 있습니다.                                                                                                                                                                                                                                                                                                           |
 
-# 기술 스택
+# 3. 기술 스택
 
-### **Frontend**
+### Frontend
 
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
 <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
@@ -65,11 +76,11 @@
 <img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
 
-### **Backend**
+### Backend
 
 <img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">
 
-# 개발 과정
+# 4. 개발 과정
 
 ## 멀티 하이라이팅
 
@@ -175,7 +186,7 @@ chrome stroage에 onChange 이벤트를 걸어 놓아 리다이렉트 규칙들�
 
 ## 로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]
 
-### **인증 토큰(accessToken)이란?**
+### 인증 토큰(accessToken)이란?
 
 - "로그인 인증을 위한 증명서" 같은 개념입니다.<br>
   우리가 로그인을 할 때 사용하는 비밀번호처럼 사용자가 제대로 로그인했는지 시스템이 확인할 수 있습니다.
@@ -184,11 +195,11 @@ chrome stroage에 onChange 이벤트를 걸어 놓아 리다이렉트 규칙들�
 
 - 로그인을 성공하더라도 사용자의 이메일이나 인증 토큰이 제대로 설정되지 않으면, <br> 상태를 유지하지 못하고 다시 로그인 페이지로 돌아가는 상황입니다.
 
-### **해결방안**
+### 해결방안
 
 - 사용자의 이메일 값을 가져와 조건을 주는 시도를 하려다 이메일 정보만 알면 제 3자가 로그인을 할 수 있는 보안의 이슈가 있어 고유한 값인 인증 토큰을 갖고와서 조건을 걸어주었습니다.
 
-### **해결 전 코드**
+### 해결 전 코드
 
 ```jsx
 const ProtectedRoute = ({ element }) => {
@@ -202,7 +213,7 @@ const ProtectedRoute = ({ element }) => {
 };
 ```
 
-### **해결 후 코드**
+### 해결 후 코드
 
 ```jsx
 const ProtectedRoute = ({ element }) => {
@@ -224,13 +235,13 @@ const ProtectedRoute = ({ element }) => {
 
 ## 검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]
 
-### **마우스 이벤트 처리**
+### 마우스 이벤트 처리
 
 - `mousedown` (마우스 버튼 누름): 사용자가 요소를 드래그하거나 놓을 때 발생하는 여러 이벤트를 처리합니다.
 - `mousemove` (마우스 이동): 요소로 드래그하는 동안 추적합니다.
 - `mosueup` (마우스 버튼 떼기): 마우스를 놓을 때 발생하며, 드래그가 끝나는 시점을 추적합니다.
 
-### **마우스 이벤트 속성 `draagable`**
+### 마우스 이벤트 속성 `draagable`
 
 - draagable는 `true`인 값은 대표적으로 `<a>` 태그가 있고 반면에 `<span>`태그는 불가합니다.
 
@@ -241,7 +252,7 @@ const ProtectedRoute = ({ element }) => {
 - `dragleave` 이벤트는 드래그 중인 요소가 자신을 감싸고 있던 영역을 벗어 났을 때 콜백함수가 실행된다. `e.preventDefault()`를 사용하게 된다면 이벤트 동작이 겹치는 것을 방지합니다.
 - `dragend` 이벤트는 드래그를 끝낼 시에 콜백 함수가 실행됩니다.
 
-### `useRef()` **드래그되는 항목 추적**
+### `useRef()` 드래그되는 항목 추적
 
 - `useRef()` 는 변수명에 초기값을 적는 식으로 만들어 결과값을 `{ current: 초기값 }` 을 지닌 객체가 반환됩니다.
 - `dragstart` 는 콜백함수의 매개변수로 그룹인덱스와 와 키워드의 `초기값` 을 받고있습니다.
@@ -264,7 +275,7 @@ const ProtectedRoute = ({ element }) => {
 - 2개의 그룹이 있다면 영역내에 드래그한 요소를 다른 박스로 옮길 때 삭제되거나 중복되어 추가되는 상황이 있었습니다.
   <img alt="Image" src="https://github.com/user-attachments/assets/fbb35a40-63e4-436d-9172-14e773ee40b1" />
 
-### **해결 방안**
+### 해결 방안
 
 - 기존 그룹내에 리스트 요소들이 있다면 `index`가 중요하고<br>
   각 해당되는 리스트들의 고유한 `key`값을 주었더니 해결되었습니다.
@@ -302,7 +313,7 @@ if (request.message === "Get user authentication") {
 }
 ```
 
-# 팀원 소개
+# 5. 팀원 소개
 
 - 이종석: josuk0212@gmail.com
 
@@ -310,7 +321,7 @@ if (request.message === "Get user authentication") {
 
 - 김연주: mpnisck@gmail.com
 
-# 회고록
+# 6. 회고록
 
 - ### 이종석
 
