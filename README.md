@@ -31,8 +31,8 @@
     + [리다이렉션과 text fragment, declarativeNetRequest](#%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98%EA%B3%BC-text-fragment-declarativenetrequest)
   * [로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]](#%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0---%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken-%EA%B8%B0%EC%A4%80-%EC%A1%B0%EA%B1%B4%EB%AC%B8)
     + [인증 토큰(accessToken)이란?](#%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken%EC%9D%B4%EB%9E%80)
-    + [해당 상황에서 어떤 문제들이 있을 수 있었는지?](#%ED%95%B4%EB%8B%B9-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-%EC%96%B4%EB%96%A4-%EB%AC%B8%EC%A0%9C%EB%93%A4%EC%9D%B4-%EC%9E%88%EC%9D%84-%EC%88%98-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80)
-    + [해결방안](#%ED%95%B4%EA%B2%B0%EB%B0%A9%EC%95%88)
+    + [상황](#%EC%83%81%ED%99%A9)
+    + [해결](#%ED%95%B4%EA%B2%B0)
     + [해결 전 코드](#%ED%95%B4%EA%B2%B0-%EC%A0%84-%EC%BD%94%EB%93%9C)
     + [해결 후 코드](#%ED%95%B4%EA%B2%B0-%ED%9B%84-%EC%BD%94%EB%93%9C)
   * [검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]](#%EA%B2%80%EC%83%89-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-%EC%88%9C%EC%84%9C---draagable-%EC%86%8D%EC%84%B1--useref)
@@ -40,9 +40,11 @@
     + [마우스 이벤트 속성 `draagable`](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draagable)
     + [`dragenter` / `dragstart` / `dragleave` 속성이란?](#dragenter--dragstart--dragleave-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
     + [`useRef()` 드래그되는 항목 추적](#useref-%EB%93%9C%EB%9E%98%EA%B7%B8%EB%90%98%EB%8A%94-%ED%95%AD%EB%AA%A9-%EC%B6%94%EC%A0%81)
-    + [해당 상황에서 어떤 문제들이 있을 수 있었는지?](#%ED%95%B4%EB%8B%B9-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-%EC%96%B4%EB%96%A4-%EB%AC%B8%EC%A0%9C%EB%93%A4%EC%9D%B4-%EC%9E%88%EC%9D%84-%EC%88%98-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80-1)
-    + [해결 방안](#%ED%95%B4%EA%B2%B0-%EB%B0%A9%EC%95%88)
+    + [상황](#%EC%83%81%ED%99%A9-1)
+    + [해결](#%ED%95%B4%EA%B2%B0-1)
   * [localStorage value가 변할 때 데이터 가져오기](#localstorage-value%EA%B0%80-%EB%B3%80%ED%95%A0-%EB%95%8C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
+    + [상황](#%EC%83%81%ED%99%A9-2)
+    + [해결](#%ED%95%B4%EA%B2%B0-2)
 - [5. 팀원 소개](#5-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
 - [6. 회고록](#6-%ED%9A%8C%EA%B3%A0%EB%A1%9D)
     + [이종석](#%EC%9D%B4%EC%A2%85%EC%84%9D)
@@ -191,11 +193,11 @@ chrome stroage에 onChange 이벤트를 걸어 놓아 리다이렉트 규칙들�
 - "로그인 인증을 위한 증명서" 같은 개념입니다.<br>
   우리가 로그인을 할 때 사용하는 비밀번호처럼 사용자가 제대로 로그인했는지 시스템이 확인할 수 있습니다.
 
-### 해당 상황에서 어떤 문제들이 있을 수 있었는지?
+### 상황
 
 - 로그인을 성공하더라도 사용자의 이메일이나 인증 토큰이 제대로 설정되지 않으면, <br> 상태를 유지하지 못하고 다시 로그인 페이지로 돌아가는 상황입니다.
 
-### 해결방안
+### 해결
 
 - 사용자의 이메일 값을 가져와 조건을 주는 시도를 하려다 이메일 정보만 알면 제 3자가 로그인을 할 수 있는 보안의 이슈가 있어 고유한 값인 인증 토큰을 갖고와서 조건을 걸어주었습니다.
 
@@ -247,10 +249,9 @@ const ProtectedRoute = ({ element }) => {
 
 ### `dragenter` / `dragstart` / `dragleave` 속성이란?
 
-- `dragenter` 이벤트를 적용한 요소에 드래그한 아이템이 닿을 경우 콜백함수가 실행됩니다.
-- `dragstart` 이벤트를 적용한 요소에 드래그한 아이템이 위치하면 계속해서 콜백함수가 실행됩니다.
-- `dragleave` 이벤트는 드래그 중인 요소가 자신을 감싸고 있던 영역을 벗어 났을 때 콜백함수가 실행된다. `e.preventDefault()`를 사용하게 된다면 이벤트 동작이 겹치는 것을 방지합니다.
-- `dragend` 이벤트는 드래그를 끝낼 시에 콜백 함수가 실행됩니다.
+| `dragenter`                                                               | `dragenter`                                                                       | `dragleave`                                                                                                                                                          | `dragend`                                           |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| 이벤트를 적용한 요소에 드래그한 아이템이 닿을 경우 콜백함수가 실행됩니다. | 이벤트를 적용한 요소에 드래그한 아이템이 위치하면 계속해서 콜백함수가 실행됩니다. | 이벤트는 드래그 중인 요소가 자신을 감싸고 있던 영역을 벗어 났을 때 콜백함수가 실행되며, `e.preventDefault()`를 사용하게 된다면 이벤트 동작이 겹치는 것을 방지합니다. | 이벤트는 드래그를 끝낼 시에 콜백 함수가 실행됩니다. |
 
 ### `useRef()` 드래그되는 항목 추적
 
@@ -270,12 +271,12 @@ const ProtectedRoute = ({ element }) => {
   };
   ```
 
-### 해당 상황에서 어떤 문제들이 있을 수 있었는지?
+### 상황
 
 - 2개의 그룹이 있다면 영역내에 드래그한 요소를 다른 박스로 옮길 때 삭제되거나 중복되어 추가되는 상황이 있었습니다.
   <img alt="Image" src="https://github.com/user-attachments/assets/fbb35a40-63e4-436d-9172-14e773ee40b1" />
 
-### 해결 방안
+### 해결
 
 - 기존 그룹내에 리스트 요소들이 있다면 `index`가 중요하고<br>
   각 해당되는 리스트들의 고유한 `key`값을 주었더니 해결되었습니다.
@@ -292,9 +293,11 @@ const ProtectedRoute = ({ element }) => {
 
 ## localStorage value가 변할 때 데이터 가져오기
 
-- **상황**
-  1.  사용자 식별을 위해 사용자 localStorage에 이메일을 저장하여 사용하도록 기획
-  2.  로그인 이전에는 사용자 데이터가 존재하지 않고, 사용자가 로그인을 하더라도 아래의 코드로는 변화를 감지하지 않아 storage에는 계속 “userEmail”의 value가 null로 저장되어 있어 사용자 식별이 불가함
+### 상황
+
+1.  사용자 식별을 위해 사용자 localStorage에 이메일을 저장하여 사용하도록 기획
+2.  로그인 이전에는 사용자 데이터가 존재하지 않고, 사용자가 로그인을 하더라도 아래의 코드로는 변화를 감지하지 않아
+    storage에는 계속 “userEmail”의 value가 null로 저장되어 있어 사용자 식별이 불가함
 
 ```jsx
 if (request.message === "Get user authentication") {
@@ -302,9 +305,10 @@ if (request.message === "Get user authentication") {
 }
 ```
 
-- **해결**
-  1.  수동으로 이벤트를 강제시키는 window.dispatchEvent 사용(매개변수로 이벤트 객체를 받음)
-  2.  storage의 값이 변경될 때마다 발생하는 “storage”이벤트 객체를 매개변수로 전달하여 value의 변화를 감지
+### 해결
+
+1.  수동으로 이벤트를 강제시키는 window.dispatchEvent 사용(매개변수로 이벤트 객체를 받음)
+2.  storage의 값이 변경될 때마다 발생하는 “storage”이벤트 객체를 매개변수로 전달하여 value의 변화를 감지
 
 ```jsx
 if (request.message === "Get user authentication") {
