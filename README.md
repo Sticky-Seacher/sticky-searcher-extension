@@ -46,15 +46,15 @@
 하지만 불필요한 설명들이 포함되어 있어 원했던 정보를 찾기까지 수많은 스크롤을 해야 하는 불편함이 있었습니다.<br>
 저희는 사용자의 평소 익숙했던 환경을 편리하게 개선해 주고자 해당 프로젝트를 진행하게 되었습니다.
 
-# 시연 영상
+# 기능 소개
 
 ### 확장 프로그램
 
-[![Video Label](https://github.com/user-attachments/assets/28ec8715-7f1a-4b73-8fe8-ebdb6df54986)](https://youtu.be/Ns1vQ6nq1OU)
-
-### 웹사이트
-
-[![Video Label](https://github.com/user-attachments/assets/44bf694b-fd65-4eb6-87f2-b02478162cd8)](https://youtu.be/oc8xGLn2KfQ)
+<img width="500" src="https://github.com/user-attachments/assets/f2b5fb18-100f-4a04-a4fe-60c708ae5223"> | - 단어를 검색 시 검색한 단어에 하이라이트 효과가 제공됩니다. </br> - 웹사이트에 접속하면, 웹사이트 제목 아래에 위치한 설명 문단으로 바로 이동하여 하이라이트된 정보를 통해 원하는 내용을 빠르게 확인할 수 있습니다. |
+<img width="500" src="https://github.com/user-attachments/assets/87254561-03f3-4f2a-865e-2291185a739e"> | - Start Seacher 버튼 클릭 시, 초기에 검색한 단어가 Keyword Group에 추가되며, 단어는 하이라이트가 적용됩니다. </br> - 확장 프로그램 내 검색창에 단어를 추가로 입력하여 여러 단어를 하이라이팅 할 수 있습니다. </br> - Keyword Group에 추가된 단어를 클릭 시, 하이라이트 효과를 추가하거나 제거할 수 있습니다. |
+<img width="500" src="https://github.com/user-attachments/assets/5afc7c00-a357-4046-bf43-4e5633a399f2"> | - 미 로그인 시, History 또는 History Page 버튼 클릭 시 로그인 페이지로 이동되며, 구글 계정을 통해 로그인이 가능합니다. </br> - History 버튼 클릭 시, 현재 보고있는 탭의 주소 및 검색한 단어(=history)를 저장할 수 있습니다. </br> - Lately History Group에는 최근 저장한 history를 확인할 수 있으며, 클릭 시 해당 주소로 이동할 수 있습니다. </br> History Page 버튼 클릭 시, 저장한 history를 관리할 수 있는 페이지로 이동합니다. |
+<img width="500" src="https://github.com/user-attachments/assets/0f43ff3e-6794-4d70-b53b-bfea7557da99"> | - Add Group 버튼을 클릭하여 새로운 그룹을 추가하고, Drag & Drop을 이용하여 저장한 history를 분류하여 관리할 수 있습니다. |
+---|---|
 
 # 기술 스택
 
