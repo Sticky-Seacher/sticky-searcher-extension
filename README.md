@@ -38,7 +38,7 @@
     + [해결 후 코드](#%ED%95%B4%EA%B2%B0-%ED%9B%84-%EC%BD%94%EB%93%9C)
   * [검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]](#%EA%B2%80%EC%83%89-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-%EC%88%9C%EC%84%9C---draagable-%EC%86%8D%EC%84%B1--useref)
     + [마우스 이벤트 처리](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B2%98%EB%A6%AC)
-    + [마우스 이벤트 속성 `draagable`](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draagable)
+    + [마우스 이벤트 속성 draagable](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draagable)
     + [dragenter / dragstart / dragleave 속성이란?](#dragenter--dragstart--dragleave-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
     + [useRef() 드래그되는 항목 추적](#useref-%EB%93%9C%EB%9E%98%EA%B7%B8%EB%90%98%EB%8A%94-%ED%95%AD%EB%AA%A9-%EC%B6%94%EC%A0%81)
     + [상황](#%EC%83%81%ED%99%A9-1)
@@ -251,7 +251,7 @@ const ProtectedRoute = ({ element }) => {
 - `mousemove` (마우스 이동): 요소로 드래그하는 동안 추적합니다.
 - `mosueup` (마우스 버튼 떼기): 마우스를 놓을 때 발생하며, 드래그가 끝나는 시점을 추적합니다.
 
-### 마우스 이벤트 속성 `draagable`
+### 마우스 이벤트 속성 draagable
 
 - draagable는 `true`인 값은 대표적으로 `<a>` 태그가 있고 반면에 `<span>`태그는 불가합니다.
 
