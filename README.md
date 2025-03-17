@@ -39,8 +39,8 @@
   * [검색 리스트 드래그앤드롭 기능 구현 순서 - [draagable 속성 + useRef]](#%EA%B2%80%EC%83%89-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-%EC%88%9C%EC%84%9C---draagable-%EC%86%8D%EC%84%B1--useref)
     + [마우스 이벤트 처리](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B2%98%EB%A6%AC)
     + [마우스 이벤트 속성 `draagable`](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draagable)
-    + [`dragenter` / `dragstart` / `dragleave` 속성이란?](#dragenter--dragstart--dragleave-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
-    + [`useRef()` 드래그되는 항목 추적](#useref-%EB%93%9C%EB%9E%98%EA%B7%B8%EB%90%98%EB%8A%94-%ED%95%AD%EB%AA%A9-%EC%B6%94%EC%A0%81)
+    + [dragenter / dragstart / dragleave 속성이란?](#dragenter--dragstart--dragleave-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
+    + [useRef() 드래그되는 항목 추적](#useref-%EB%93%9C%EB%9E%98%EA%B7%B8%EB%90%98%EB%8A%94-%ED%95%AD%EB%AA%A9-%EC%B6%94%EC%A0%81)
     + [상황](#%EC%83%81%ED%99%A9-1)
     + [해결](#%ED%95%B4%EA%B2%B0-1)
   * [localStorage value가 변할 때 데이터 가져오기](#localstorage-value%EA%B0%80-%EB%B3%80%ED%95%A0-%EB%95%8C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
@@ -255,13 +255,13 @@ const ProtectedRoute = ({ element }) => {
 
 - draagable는 `true`인 값은 대표적으로 `<a>` 태그가 있고 반면에 `<span>`태그는 불가합니다.
 
-### `dragenter` / `dragstart` / `dragleave` 속성이란?
+### dragenter / dragstart / dragleave 속성이란?
 
-| `dragenter`                                                               | `dragenter`                                                                       | `dragleave`                                                                                                                                                          | `dragend`                                           |
+| dragenter                                                                 | dragenter                                                                         | dragleave                                                                                                                                                            | dragend                                             |
 | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | 이벤트를 적용한 요소에 드래그한 아이템이 닿을 경우 콜백함수가 실행됩니다. | 이벤트를 적용한 요소에 드래그한 아이템이 위치하면 계속해서 콜백함수가 실행됩니다. | 이벤트는 드래그 중인 요소가 자신을 감싸고 있던 영역을 벗어 났을 때 콜백함수가 실행되며, `e.preventDefault()`를 사용하게 된다면 이벤트 동작이 겹치는 것을 방지합니다. | 이벤트는 드래그를 끝낼 시에 콜백 함수가 실행됩니다. |
 
-### `useRef()` 드래그되는 항목 추적
+### useRef() 드래그되는 항목 추적
 
 - `useRef()` 는 변수명에 초기값을 적는 식으로 만들어 결과값을 `{ current: 초기값 }` 을 지닌 객체가 반환됩니다.
 - `dragstart` 는 콜백함수의 매개변수로 그룹인덱스와 와 키워드의 `초기값` 을 받고있습니다.
