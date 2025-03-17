@@ -25,7 +25,7 @@
     + [사용자가 보고 있는 페이지를 조작할 수 있는 방법 - [content script 사용]](#%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%B3%B4%EA%B3%A0-%EC%9E%88%EB%8A%94-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95---content-script-%EC%82%AC%EC%9A%A9)
     + [대상 텍스트 찾기](#%EB%8C%80%EC%83%81-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%B0%BE%EA%B8%B0)
       - [타이밍 - [onCompleted이벤트와 sendMessage 사용]](#%ED%83%80%EC%9D%B4%EB%B0%8D---oncompleted%EC%9D%B4%EB%B2%A4%ED%8A%B8%EC%99%80-sendmessage-%EC%82%AC%EC%9A%A9)
-      - [DOM 탐색 - [NodeIterator]](#dom-%ED%83%90%EC%83%89---nodeiterator)
+      - [DOM 트리 탐색 - [NodeIterator]](#dom-%ED%8A%B8%EB%A6%AC-%ED%83%90%EC%83%89---nodeiterator)
     + [텍스트를 요소로 만들기 - [태그 문법]](#%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9A%94%EC%86%8C%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0---%ED%83%9C%EA%B7%B8-%EB%AC%B8%EB%B2%95)
   * [페이지 간 description 자동 스크롤](#%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-description-%EC%9E%90%EB%8F%99-%EC%8A%A4%ED%81%AC%EB%A1%A4)
     + [description 취득과 chrome storage](#description-%EC%B7%A8%EB%93%9D%EA%B3%BC-chrome-storage)
@@ -94,7 +94,7 @@
 
 ## 멀티 하이라이팅
 
-멀티 하이라이팅 기능은 사용자가 보고 있는 페이지에서 여러 단어들을 각 단어 별로 하이라이팅해 시각적인 분류를 돕는 기능입니다. content script 영역에 접근해서 사용자가 보고 있는 페이지를 수정하고, onCompleted이벤트와 sendMessage를 사용하여 적절한 타이밍에 작업을 시작했습니다. NodeIterator를 사용해 DOM을 탐색하고 원하는 텍스트만 텍스트 노드로 만들어서 요소에 삽입한 후 기존의 텍스트를 제거하는 방식으로 작업을 진행했습니다.
+멀티 하이라이팅 기능은 사용자가 보고 있는 페이지에서 여러 단어들을 각 단어 별로 하이라이팅해 시각적인 분류를 돕는 기능입니다. content script 영역에 접근해서 사용자가 보고 있는 페이지를 수정하고, onCompleted이벤트와 sendMessage를 사용하여 적절한 타이밍에 작업을 시작했습니다. NodeIterator를 사용해 DOM 트리를 탐색하고 원하는 텍스트만 텍스트 노드로 만들어서 요소에 삽입한 후 기존의 텍스트를 제거하는 방식으로 작업을 진행했습니다.
 
 보다 자세한 설명은 다음과 같습니다.
 
@@ -104,7 +104,7 @@
 
 <img width="450" alt="영역 설명" src="https://github.com/user-attachments/assets/9a33c3ed-2f92-4623-9890-bc60e9599b66" />
 
-content script 영역은 웹 페이지의 DOM을 보고 수정할 수 있으며 다른 영역으로 정보를 전달할 수 있습니다. 다른 영역으로는 브라우저 배경에서 실행되는 service worker 영역, 본 프로젝트 UI를 표현하는 side panel 영역이 있습니다.
+content script 영역은 웹 페이지의 DOM을 보고 수정할 수 있으며 다른 영역으로 정보를 전달할 수 있습니다. 다른 영역으로는 브라우저 백그라운드에서 실행되는 service worker 영역, 본 프로젝트 UI를 표현하는 side panel 영역이 있습니다.
 
 manifest 파일은 크롬 익스텐션 프로그램 개발 시 필수 파일입니다. 브라우저 권한 요청과 각 영역에서 사용할 파일을 연결하는 역할을 합니다.
 
@@ -114,9 +114,9 @@ manifest 파일은 크롬 익스텐션 프로그램 개발 시 필수 파일입�
 
 #### 타이밍 - [onCompleted이벤트와 sendMessage 사용]
 
-본론부터 밝히자면 사용자가 보고 있는 페이지의 DOM 형성이 완료되었을 때를 onCompleted를 사용해서 감지하여 DOM 탐색을 시작했습니다. 그리고 그 타이밍을 sendMessage와 onMessage를 사용해 관리했습니다.
+본론부터 밝히자면 사용자가 보고 있는 페이지의 DOM 형성이 완료되었을 때를 onCompleted를 사용해서 감지하여 DOM 트리 탐색을 시작했습니다. 그리고 그 타이밍을 sendMessage와 onMessage를 사용해 관리했습니다.
 
-DOM 형성이 완료된 순간을 감지한 이유는 SPA인 페이지에 대응하기 위함이었습니다. 이는 service worker 영역에서 감지할 수 있는데, 해당 영역에서 onCompleted 이벤트를 사용할 수 있습니다. service worker 영역은 브라우저의 배경에서 실행되는데, 탭을 닫거나 네비게이션에 접근 하는 등의 기능을 할 수 있습니다.
+DOM 형성이 완료된 순간을 감지한 이유는 SPA인 페이지에 대응하기 위함이었습니다. 이는 service worker 영역에서 감지할 수 있는데, 해당 영역에서 onCompleted 이벤트를 사용할 수 있습니다. service worker 영역은 브라우저의 백그라운드에서 실행되는데, 탭을 닫거나 네비게이션에 접근 하는 등의 기능을 할 수 있습니다.
 
 onCompleted 이벤트는 chrome의 webnavigation의 메서드로 제공되며 이벤트 핸들러를 등록할 수 있습니다. 참조되는 모든 리소스를 포함해서 전체 페이지로드가 완료되면 실행됩니다.
 
@@ -124,21 +124,21 @@ sendMessage를 사용한 이유는 다음과 같습니다. DOM 형성이 감지�
 
 onMessage를 사용한 이유는 다음과 같습니다. content script 입장에서는 메시지가 도달한 순간을 감지하는 onMessage 이벤트를 걸고 메시지들을 분간하는 과정이 필요합니다. onMessage 이벤트는 chrome의 runtime의 메서드로 제공되며 이벤트 핸들러를 등록할 수 있습니다. sendMessage가 다른 영역에서 실행되어서 메시지를 전송받았을 때 실행 됩니다.
 
-#### DOM 탐색 - [NodeIterator]
+#### DOM 트리 탐색 - [NodeIterator]
 
-DOM 형성이 완료된 순간을 감지해서 DOM 탐색을 시작할 타이밍을 인지하게 되었습니다. DOM 탐색 방법으로 NodeIterator를 사용했습니다. document.createNodeIterator 함수를 사용하여 NodeIterator를 만든 다음 for 문 등을 이용해서 한 순회마다 다음 노드를 방문하면서 탐색했습니다. 그리고 순회 결과로 대상 텍스트가 포함된 리프 요소를 찾았습니다.
+DOM 형성이 완료된 순간을 감지해서 DOM 트리 탐색을 시작할 타이밍을 인지하게 되었습니다. DOM 트리 탐색 방법으로 NodeIterator를 사용했습니다. document.createNodeIterator 함수를 사용하여 NodeIterator를 만든 다음 for 문 등을 이용해서 한 순회마다 다음 노드를 방문하면서 탐색했습니다. 그리고 순회 결과로 대상 텍스트가 포함된 리프 요소를 찾았습니다.
 
 NodeIterator의 특징은 다음과 같습니다. 모든 종류의 모든 노드를 탐색할 수 있으며 필터링한 종류, 예를 들어 텍스트 노드에만 방문할 수도 있습니다. 다음 노드가 페이지 위에서 아래의 사용자 시각의 흐름이기 때문에 이해하기도 쉬웠습니다.
 
-NodeIterator를 사용하게된 이유는 텍스트 노드인 콘텐츠를 찾을 수 있고, 해당 요소의 위치도 사용할 수 있었기 때문입니다. 예를 들어서 document.querySelector는 콘텐츠를 찾을 수는 없고 이미 알고 있는 특정 요소를 찾는 메서드이기에 사용하기 어렵습니다. 또 이진 트리 알고리즘은 노드의 자식 갯수가 2개로 한정되어 있기에 사용하기 어렵습니다. 전체 페이지의 테그들을 문자열로 받아서 텍스트를 발견하는 것도 추후 하이라이팅 작업 시 DOM에서의 위치를 알고 있어야 하기 때문에 사용하기 어려웠습니다.
+NodeIterator를 사용하게된 이유는 텍스트 노드인 콘텐츠를 찾을 수 있고, 해당 요소의 위치도 사용할 수 있었기 때문입니다. 예를 들어서 document.querySelector는 콘텐츠를 찾을 수는 없고 이미 알고 있는 특정 요소를 찾는 메서드이기에 사용하기 어렵습니다. 또 이진 트리 알고리즘은 노드의 자식 갯수가 2개로 한정되어 있기에 사용하기 어렵습니다. 전체 페이지의 테그들을 문자열로 받아서 텍스트를 발견하는 것도 추후 하이라이팅 작업 시 DOM 트리에서의 위치를 알고 있어야 하기 때문에 사용하기 어려웠습니다.
 
 NodeIterator는 루트 노드를 제공할 수 있고, 탐색 할 노드의 타입을 명시할 수 있고, 탐색을 이어갈 지 멈출지도 결정할 수 있습니다. 본 프로젝트에서는 루트 노트로 body 테그를 제공하고 텍스트 노드에만 방문하도록 필터링 했습니다. 유사하게 TreeWalker도 존재하는데, 저희 프로젝트에서는 다음 노드로만 가면 되었기에 복잡성을 줄이고자 NodeIterator를 사용했습니다.
 
 ### 텍스트를 요소로 만들기 - [태그 문법]
 
-DOM 탐색 결과 얻게 된 리프 요소를 대상으로 다시 한 번 NodeIterator를 사용해 순회해야 합니다. 원하는 단어를 기준으로 split 한 후, 원하는 단어는 배경색이 지정된 요소화 해서 삽입하고 그 이외의 텍스트들은 텍스트 노드화 해서 삽입했습니다. 그 이후 기존 텍스트 콘텐츠 전문은 삭제 처리했습니다.
+DOM 트리 탐색 결과 얻게 된 리프 요소를 대상으로 다시 한 번 NodeIterator를 사용해 순회해야 합니다. 원하는 단어를 기준으로 split 한 후, 원하는 단어는 배경색이 지정된 요소화 해서 삽입하고 그 이외의 텍스트들은 텍스트 노드화 해서 삽입했습니다. 그 이후 기존 텍스트 콘텐츠 전문은 삭제 처리했습니다.
 
-리프 노드로 범위를 좁힌 다음에 다시 NodeIteragtor를 사용한 이유는 다음과 같은 DOM 구조에 대응하기 위함입니다. 상황 예시로 class라는 단어를 하이라이팅하고 싶은 상황을 가정하겠습니다.
+리프 노드로 범위를 좁힌 다음에 다시 NodeIteragtor를 사용한 이유는 다음과 같은 DOM 트리 구조에 대응하기 위함입니다. 상황 예시로 class라는 단어를 하이라이팅하고 싶은 상황을 가정하겠습니다.
 
 ```html
 <span>
