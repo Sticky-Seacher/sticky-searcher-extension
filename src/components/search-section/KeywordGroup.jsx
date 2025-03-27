@@ -2,17 +2,33 @@ import PropTypes from "prop-types";
 
 import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
+const BACKGROUND_COLORS = [
+  "#CFF09E",
+  "#A8DBA8",
+  "#D7FFF1",
+  "#ffdb9d",
+  "#DDDDDD",
+  "#FADAD8",
+  "#b0dcff",
+  "#dac8ff",
+];
+
 export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
   function toggleIsOn(targetKeyword) {
-    const nextStatus = toggleStatus.map(({ keyword, isOn }) => {
+    const nextStatus = toggleStatus.map(({ keyword, isOn, color }) => {
       if (keyword === targetKeyword) {
-        return { keyword, isOn: !isOn };
+        return { keyword, isOn: !isOn, color };
       }
-      return { keyword, isOn };
+      return { keyword, isOn, color };
     });
 
     setToggleStatus(nextStatus);
   }
+
+  const updatedToggleStatus = toggleStatus.map(({ keyword, isOn }, index) => {
+    const color = BACKGROUND_COLORS[index % BACKGROUND_COLORS.length];
+    return { keyword, isOn, color };
+  });
 
   return (
     <>
@@ -21,7 +37,7 @@ export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
           Keyword Group
         </p>
         <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
-          {toggleStatus.map(({ keyword, isOn }) => {
+          {updatedToggleStatus.map(({ keyword, isOn, color }) => {
             return (
               <li
                 key={keyword}
@@ -30,6 +46,7 @@ export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
                 <ToggleableKeywordButton
                   keyword={keyword}
                   isOn={isOn}
+                  color={color}
                   toggleKeywordIsOn={() => toggleIsOn(keyword)}
                 />
                 <button

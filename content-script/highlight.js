@@ -1,12 +1,12 @@
 const BACKGROUND_COLORS = [
-  "#CFF09E",
-  "#A8DBA8",
-  "#D7FFF1",
-  "#ffdb9d",
+  "#8fbb4d",
+  "#687668",
+  "#63c5a3",
+  "#deb671",
   "#DDDDDD",
-  "#FADAD8",
-  "#b0dcff",
-  "#dac8ff",
+  "#dca29e",
+  "#6ea1ca",
+  "#b9a9da",
 ];
 
 export function makeRandomBackgroundColor() {
@@ -15,16 +15,13 @@ export function makeRandomBackgroundColor() {
   ];
 }
 
-export function getColors(numberOfColorsNeeded, creatColor) {
+export function getColors(numberOfColorsNeeded) {
   const memory = [];
-
-  return Array.from(Array(numberOfColorsNeeded), () => {
-    let color = creatColor();
-
+  return Array.from(Array(numberOfColorsNeeded), (_, index) => {
+    let color = BACKGROUND_COLORS[index % BACKGROUND_COLORS.length];
     while (memory.includes(color)) {
-      color = creatColor();
+      color = BACKGROUND_COLORS[index % BACKGROUND_COLORS.length];
     }
-
     memory.push(color);
     return color;
   });

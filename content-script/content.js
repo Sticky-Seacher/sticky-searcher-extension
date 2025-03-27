@@ -1,6 +1,6 @@
 import getLeafTargetElements from "./getLeafTargetElements";
 import { getSearchKeywords } from "./getSearchKeywords";
-import { highlightKeywords, makeRandomBackgroundColor } from "./highlight";
+import { highlightKeywords } from "./highlight";
 import { SELECTOR, getDescriptionElements, setLinkMap } from "./linkMap";
 import { replacer } from "./mapToJosn";
 import {
@@ -10,6 +10,17 @@ import {
   turnOffHighlightAll,
 } from "./toggle";
 
+const BACKGROUND_COLORS = [
+  "#CFF09E",
+  "#A8DBA8",
+  "#D7FFF1",
+  "#ffdb9d",
+  "#DDDDDD",
+  "#FADAD8",
+  "#b0dcff",
+  "#dac8ff",
+];
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === "give-me-linkMap") {
     const descriptionElements = getDescriptionElements(SELECTOR);
@@ -17,10 +28,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const linkMap = setLinkMap(descriptionElements, keywords);
     const mapJson = JSON.stringify(linkMap, replacer);
 
-    highlightKeywords(keywords, document.body, getLeafTargetElements);
+    highlightKeywords(
+      keywords,
+      document.body,
+      getLeafTargetElements,
+      BACKGROUND_COLORS
+    );
 
     sendResponse(mapJson);
-
     return true;
   }
 
@@ -29,7 +44,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       (keyword) => !document.querySelector(`[data-highlight="${keyword}"]`)
     );
 
-    highlightKeywords(newKeywords, document.body, getLeafTargetElements);
+    highlightKeywords(
+      newKeywords,
+      document.body,
+      getLeafTargetElements,
+      BACKGROUND_COLORS
+    );
 
     const result = request.keywords.map((keyword) => {
       return {
@@ -40,7 +60,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
 
     sendResponse(result);
-
     return true;
   }
 
@@ -50,15 +69,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       request.currentScrollIndex,
       request.keyword
     );
-
     sendResponse(result);
-
     return true;
   }
 
   if (request.message === "toggle-highlight") {
+    const color = request.color || BACKGROUND_COLORS[0];
+
     if (request.isHighlightOn) {
-      applyHighlight(request.targetKeyword, makeRandomBackgroundColor());
+      applyHighlight(request.targetKeyword, color);
     } else {
       turnOffHighlight(request.targetKeyword);
     }
@@ -68,7 +87,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.message === "toggle-highlight-all") {
     if (request.isHighlightOn) {
-      applyHighlightAll(request.targetKeywords);
+      applyHighlightAll(request.targetKeywords, BACKGROUND_COLORS);
     } else {
       turnOffHighlightAll();
     }
@@ -86,7 +105,7 @@ function scroll(step, currentScrollIndex, keyword) {
   );
 
   if (currentScrollIndex === -1) {
-    defaultStyle = keywordElements[0].style.cssText;
+    defaultStyle = keywordElements[0]?.style.cssText || "";
   }
 
   if (
