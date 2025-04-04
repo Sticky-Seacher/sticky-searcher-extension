@@ -1,25 +1,36 @@
 import PropTypes from "prop-types";
 
-export function ToggleableKeywordButton({
-  keyword,
-  isOn,
-  color,
-  toggleKeywordIsOn,
-}) {
+import { ToggleableTextButton } from "../shared/TextButton";
+
+export function ToggleableKeywordButton({ keyword, isOn, toggleKeywordIsOn }) {
+  async function handleClick(isOn) {
+    const nextIsOn = !isOn;
+
+    toggleKeywordIsOn();
+
+    const tabs = await chrome.tabs.query({
+      currentWindow: true,
+      active: true,
+    });
+    const activeTab = tabs[0];
+    await chrome.tabs.sendMessage(activeTab.id, {
+      message: "toggle-highlight",
+      isHighlightOn: nextIsOn,
+      targetKeyword: keyword,
+    });
+  }
+
   return (
-    <button
-      onClick={toggleKeywordIsOn}
-      style={{ backgroundColor: isOn ? color : "#ccc" }}
-      className="px-2 py-1 rounded"
-    >
-      {keyword}
-    </button>
+    <ToggleableTextButton
+      onClick={() => handleClick(isOn)}
+      text={keyword}
+      isOn={isOn}
+    />
   );
 }
 
 ToggleableKeywordButton.propTypes = {
-  keyword: PropTypes.string.isRequired,
+  keyword: PropTypes.string,
   isOn: PropTypes.bool.isRequired,
-  color: PropTypes.string.isRequired,
   toggleKeywordIsOn: PropTypes.func.isRequired,
 };

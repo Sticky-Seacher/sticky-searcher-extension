@@ -1,4 +1,4 @@
-import { getColors, makeRandomBackgroundColor } from "./highlight";
+import { getColors } from "./highlight";
 
 export function getExistingColor(element) {
   return element.style.getPropertyValue("background");
@@ -40,7 +40,7 @@ export function applyHighlightAll(keywords) {
       });
     }
   } else {
-    const colors = getColors(keywords.length, makeRandomBackgroundColor);
+    const colors = getColors(keywords.length);
     for (let i = 0; i < keywords.length; i += 1) {
       const elements = document.querySelectorAll(
         `[data-highlight="${keywords[i]}"]`

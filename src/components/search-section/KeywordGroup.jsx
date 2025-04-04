@@ -2,33 +2,17 @@ import PropTypes from "prop-types";
 
 import { ToggleableKeywordButton } from "./ToggleableKeywordButton";
 
-const BACKGROUND_COLORS = [
-  "#CFF09E",
-  "#A8DBA8",
-  "#D7FFF1",
-  "#ffdb9d",
-  "#DDDDDD",
-  "#FADAD8",
-  "#b0dcff",
-  "#dac8ff",
-];
-
 export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
   function toggleIsOn(targetKeyword) {
-    const nextStatus = toggleStatus.map(({ keyword, isOn, color }) => {
+    const nextStatus = toggleStatus.map(({ keyword, isOn }) => {
       if (keyword === targetKeyword) {
-        return { keyword, isOn: !isOn, color };
+        return { keyword, isOn: !isOn };
       }
-      return { keyword, isOn, color };
+      return { keyword, isOn };
     });
 
     setToggleStatus(nextStatus);
   }
-
-  const updatedToggleStatus = toggleStatus.map(({ keyword, isOn }, index) => {
-    const color = BACKGROUND_COLORS[index % BACKGROUND_COLORS.length];
-    return { keyword, isOn, color };
-  });
 
   return (
     <>
@@ -36,17 +20,16 @@ export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
         <p className="text-lg font-semibold mt-[10px] mb-[10px]">
           Keyword Group
         </p>
-        <ul className="bg-[#f6f6f6] h-[200px] overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
-          {updatedToggleStatus.map(({ keyword, isOn, color }) => {
+        <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-center grid grid-cols-3 gap-[15px] px-[10px] py-[20px]">
+          {toggleStatus.map(({ keyword, isOn }) => {
             return (
               <li
                 key={keyword}
-                className="text-xs py-[10px] h-fit"
+                className="text-xs py-[10px]"
               >
                 <ToggleableKeywordButton
                   keyword={keyword}
                   isOn={isOn}
-                  color={color}
                   toggleKeywordIsOn={() => toggleIsOn(keyword)}
                 />
                 <button
