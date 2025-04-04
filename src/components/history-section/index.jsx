@@ -60,7 +60,7 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
   return (
     <div
       id="urls"
-      className="historyButton_wrap rounded-[15px] flex gap-[15px] "
+      className="historyButton_wrap rounded-[15px] flex gap-[15px]"
     >
       <IconButton
         iconSrc={"./history_icon.png"}

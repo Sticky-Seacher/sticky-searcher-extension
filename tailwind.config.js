@@ -12,4 +12,15 @@ export default {
     },
   },
   plugins: [daisyui],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#6CAFD9",
+          secondary: "#333",
+        },
+      },
+      "light",
+    ],
+  },
 };

@@ -60,7 +60,7 @@ export function SearchSectionInput({ handleEnter, countsPerKeywords }) {
           }
         }}
       />
-      <div className="buttonWrap absolute top-[75px] right-0 h-[50px] flex gap-[15px]">
+      <div className="buttonWrap absolute top-[92px] right-[22px] h-[50px] flex gap-[10px]">
         {isShowing && (
           <Indicator
             currentScrollIndex={currentScrollIndex}
@@ -79,12 +79,12 @@ export function SearchSectionInput({ handleEnter, countsPerKeywords }) {
               handleEnter(value);
             }
           }}
-          className="bg-[#333] w-[70px] h-full flex justify-center items-center rounded-r-full"
+          className=" w-[40px] h-full flex justify-center items-center rounded-r-full"
         >
           <img
             src="./search_icon.png"
             alt="search_icon"
-            className="w-[30px]"
+            className="w-[25px]"
           />
         </button>
       </div>
