@@ -1,11 +1,8 @@
 const BACKGROUND_COLORS = [
   "#CFF09E",
-  "#A8DBA8",
   "#D7FFF1",
-  "#ffdb9d",
-  "#DDDDDD",
+  "#aaaaaa",
   "#FADAD8",
-  "#b0dcff",
   "#dac8ff",
 ];
 
@@ -13,14 +10,6 @@ export function makeRandomBackgroundColor() {
   return BACKGROUND_COLORS[
     Math.floor(Math.random() * BACKGROUND_COLORS.length)
   ];
-}
-
-export function makeRandomColor() {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-
-  return `rgb(${r}, ${g}, ${b})`;
 }
 
 export function getColors(numberOfColorsNeeded, creatColor) {
