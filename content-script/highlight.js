@@ -1,12 +1,12 @@
 const BACKGROUND_COLORS = [
-  "#8fbb4d",
-  "#687668",
-  "#63c5a3",
-  "#deb671",
+  "#dac8ff",
+  "#CFF09E",
+  "#A8DBA8",
+  "#D7FFF1",
+  "#ffdb9d",
   "#DDDDDD",
-  "#dca29e",
-  "#6ea1ca",
-  "#b9a9da",
+  "#FADAD8",
+  "#b0dcff",
 ];
 
 export function makeRandomBackgroundColor() {
@@ -27,7 +27,7 @@ export function getColors(numberOfColorsNeeded) {
   });
 }
 
-function setHighlight(keyword, targetElement, color) {
+export function setHighlight(keyword, targetElement, color) {
   const textNodeIterator = document.createNodeIterator(
     targetElement,
     NodeFilter.SHOW_TEXT
@@ -81,6 +81,27 @@ export function highlightKeywords(keywords, body, selectorAllOfKeywordParent) {
   for (const element of uniqueElements) {
     for (let i = 0; i < keywords.length; i += 1) {
       setHighlight(keywords[i], element, colors[i]);
+    }
+  }
+}
+
+export function highlightKeywordsWithColors(
+  keywordColorPairs,
+  body,
+  selectorAllOfKeywordParent
+) {
+  const targetElements = [];
+  for (const { keyword } of keywordColorPairs) {
+    targetElements.push(...selectorAllOfKeywordParent(body, keyword));
+  }
+
+  const uniqueElements = new Set(targetElements);
+
+  for (const { keyword, color } of keywordColorPairs) {
+    for (const element of uniqueElements) {
+      if (element.textContent.includes(keyword)) {
+        setHighlight(keyword, element, color);
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import getLeafTargetElements from "./getLeafTargetElements";
 import { getSearchKeywords } from "./getSearchKeywords";
 import { highlightKeywords } from "./highlight";
+import { setHighlight } from "./highlight";
 import { SELECTOR, getDescriptionElements, setLinkMap } from "./linkMap";
 import { replacer } from "./mapToJosn";
 import {
@@ -11,6 +12,7 @@ import {
 } from "./toggle";
 
 const BACKGROUND_COLORS = [
+  "#dac8ff",
   "#CFF09E",
   "#A8DBA8",
   "#D7FFF1",
@@ -18,8 +20,24 @@ const BACKGROUND_COLORS = [
   "#DDDDDD",
   "#FADAD8",
   "#b0dcff",
-  "#dac8ff",
 ];
+
+function highlightKeywordsWithColors(
+  keywordColorPairs,
+  rootElement,
+  getTargetElements
+) {
+  const elements = getTargetElements(rootElement);
+  const uniqueElements = new Set(elements);
+
+  for (const { keyword, color } of keywordColorPairs) {
+    for (const el of uniqueElements) {
+      if (el.textContent.includes(keyword)) {
+        setHighlight(keyword, el, color);
+      }
+    }
+  }
+}
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === "give-me-linkMap") {
@@ -40,27 +58,51 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.keywords) {
-    const newKeywords = request.keywords.filter(
-      (keyword) => !document.querySelector(`[data-highlight="${keyword}"]`)
-    );
+    const isColorStructured =
+      typeof request.keywords[0] === "object" &&
+      "keyword" in request.keywords[0];
 
-    highlightKeywords(
-      newKeywords,
-      document.body,
-      getLeafTargetElements,
-      BACKGROUND_COLORS
-    );
+    if (isColorStructured) {
+      const newKeywordColorPairs = request.keywords.filter(
+        ({ keyword }) =>
+          !document.querySelector(`[data-highlight="${keyword}"]`)
+      );
 
-    const result = request.keywords.map((keyword) => {
-      return {
+      highlightKeywordsWithColors(
+        newKeywordColorPairs,
+        document.body,
+        getLeafTargetElements
+      );
+
+      const result = request.keywords.map(({ keyword }) => ({
         keyword,
         count: document.querySelectorAll(`[data-highlight="${keyword}"]`)
           .length,
-      };
-    });
+      }));
 
-    sendResponse(result);
-    return true;
+      sendResponse(result);
+      return true;
+    } else {
+      const newKeywords = request.keywords.filter(
+        (keyword) => !document.querySelector(`[data-highlight="${keyword}"]`)
+      );
+
+      highlightKeywords(
+        newKeywords,
+        document.body,
+        getLeafTargetElements,
+        BACKGROUND_COLORS
+      );
+
+      const result = request.keywords.map((keyword) => ({
+        keyword,
+        count: document.querySelectorAll(`[data-highlight="${keyword}"]`)
+          .length,
+      }));
+
+      sendResponse(result);
+      return true;
+    }
   }
 
   if (request.step) {
@@ -74,24 +116,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.message === "toggle-highlight") {
-    const color = request.color || BACKGROUND_COLORS[0];
-
+    const color = request.color || BACKGROUND_COLORS;
     if (request.isHighlightOn) {
       applyHighlight(request.targetKeyword, color);
     } else {
       turnOffHighlight(request.targetKeyword);
     }
-
     return true;
   }
 
   if (request.message === "toggle-highlight-all") {
     if (request.isHighlightOn) {
-      applyHighlightAll(request.targetKeywords, BACKGROUND_COLORS);
+      applyHighlightAll(request.targetKeywords);
     } else {
       turnOffHighlightAll();
     }
-
     return true;
   }
 });
@@ -105,7 +144,7 @@ function scroll(step, currentScrollIndex, keyword) {
   );
 
   if (currentScrollIndex === -1) {
-    defaultStyle = keywordElements[0]?.style.cssText || "";
+    defaultStyle = keywordElements?.style.cssText || "";
   }
 
   if (
