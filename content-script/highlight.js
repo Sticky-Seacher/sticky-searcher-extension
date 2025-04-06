@@ -1,10 +1,4 @@
-const BACKGROUND_COLORS = [
-  "#CFF09E",
-  "#D7FFF1",
-  "#aaaaaa",
-  "#FADAD8",
-  "#dac8ff",
-];
+const BACKGROUND_COLORS = ["#88b14b", "#58a1d0", "#929292"];
 
 export function makeRandomBackgroundColor() {
   return BACKGROUND_COLORS[
