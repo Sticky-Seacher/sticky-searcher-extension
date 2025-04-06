@@ -1,4 +1,6 @@
-import { getColors, makeRandomBackgroundColor } from "./highlight";
+import { getColors, makeBackgroundColor } from "./highlight";
+
+const colorMap = {};
 
 export function getExistingColor(element) {
   return element.style.getPropertyValue("background");
@@ -23,21 +25,29 @@ export function turnOffHighlightAll() {
 export function applyHighlight(keyword, color) {
   const elements = document.querySelectorAll(`[data-highlight="${keyword}"]`);
 
+  if (!colorMap[keyword]) {
+    colorMap[keyword] = color;
+  }
+
   Array.from(elements).forEach((element) => {
-    element.style.setProperty("background", color);
+    element.style.setProperty("background", colorMap[keyword]);
   });
 }
 
 export function applyHighlightAll(keywords) {
-  const colors = getColors(keywords.length, makeRandomBackgroundColor);
+  const colors = getColors(keywords.length, makeBackgroundColor);
 
   for (let i = 0; i < keywords.length; i += 1) {
-    const elements = document.querySelectorAll(
-      `[data-highlight="${keywords[i]}"]`
-    );
+    const keyword = keywords[i];
+
+    if (!colorMap[keyword]) {
+      colorMap[keyword] = colors[i];
+    }
+
+    const elements = document.querySelectorAll(`[data-highlight="${keyword}"]`);
 
     Array.from(elements).forEach((element) => {
-      element.style.setProperty("background", colors[i]);
+      element.style.setProperty("background", colorMap[keyword]);
     });
   }
 }

@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import { useRef } from "react";
 
-import { makeRandomBackgroundColor } from "../../../content-script/highlight.js";
+import { makeBackgroundColor } from "../../../content-script/highlight.js";
 
 export default function TextButton({ text, onClick }) {
-  const colorRef = useRef(makeRandomBackgroundColor());
+  const colorRef = useRef(makeBackgroundColor());
 
   return (
     <button
@@ -18,7 +18,7 @@ export default function TextButton({ text, onClick }) {
 }
 
 export function ToggleableTextButton({ text, onClick, isOn }) {
-  const colorRef = useRef(makeRandomBackgroundColor());
+  const colorRef = useRef(makeBackgroundColor());
 
   return (
     <button
