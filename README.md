@@ -80,15 +80,15 @@
 
 ### Frontend
 
-<img src="https://github.com/user-attachments/public/assets/React-61DAFB.svg" />
-<img src="https://github.com/user-attachments/public/assets/React Router-CA4245.svg" />
-<img src="https://github.com/user-attachments/public/assets/Tailwind-06B6D4.svg" />
-<img src="https://github.com/user-attachments/public/assets/DaisyUI-1AD1A5.svg" />
-<img src="https://github.com/user-attachments/public/assets/Vite-646CFF.svg" />
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+<img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
+<img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
+<img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
 
 ### Backend
 
-<img src="https://github.com/user-attachments/src/assets/Firebase-DD2C00.svg" />
+<img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">
 
 # 4. 개발 과정
 
