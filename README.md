@@ -80,15 +80,15 @@
 
 ### Frontend
 
-<img src="https://github.com/user-attachments/assets/React-61DAFB.svg" />
-<img src="https://github.com/user-attachments/assets/React Router-CA4245.svg" />
-<img src="https://github.com/user-attachments/assets/Tailwind-06B6D4.svg" />
-<img src="https://github.com/user-attachments/assets/DaisyUI-1AD1A5.svg" />
-<img src="https://github.com/user-attachments/assets/Vite-646CFF.svg" />
+<img src="https://github.com/user-attachments/public/assets/React-61DAFB.svg" />
+<img src="https://github.com/user-attachments/public/assets/React Router-CA4245.svg" />
+<img src="https://github.com/user-attachments/public/assets/Tailwind-06B6D4.svg" />
+<img src="https://github.com/user-attachments/public/assets/DaisyUI-1AD1A5.svg" />
+<img src="https://github.com/user-attachments/public/assets/Vite-646CFF.svg" />
 
 ### Backend
 
-<img src="https://github.com/user-attachments/assets/Firebase-DD2C00.svg" />
+<img src="https://github.com/user-attachments/src/assets/Firebase-DD2C00.svg" />
 
 # 4. 개발 과정
 
