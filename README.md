@@ -7,8 +7,8 @@
 
 # 링크
 
-[Sticky Searcher 웹사이트](https://github.com/Sticky-Seacher/sticky-searcher-website/tree/docs/README?tab=readme-ov-file#sticky-searcher) |
-[Sticky Searcher 확장프로그램](https://github.com/Sticky-Seacher/sticky-searcher-extension/tree/docs/README?tab=readme-ov-file#sticky-searcher)
+- [확장 프로그램 리드미](https://github.com/Sticky-Seacher/sticky-searcher-extension/tree/docs/README?tab=readme-ov-file#sticky-searcher) | [다운로드 바로가기](https://chromewebstore.google.com/detail/sticky-searcher/hgffglicdkekapoilckejhebgopacdld?hl=ko&utm_source=ext_sidebar) </br>
+- [웹 사이트 리드미](https://github.com/Sticky-Seacher/sticky-searcher-website/tree/docs/README?tab=readme-ov-file#sticky-searcher) | [웹 사이트 바로가기](https://stickysearcher.site/)
 
 # 목차
 
