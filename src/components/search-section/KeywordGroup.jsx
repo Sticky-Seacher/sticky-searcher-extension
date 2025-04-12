@@ -25,7 +25,7 @@ export function KeywordGroup({ toggleStatus, setToggleStatus, handleDelete }) {
             return (
               <li
                 key={keyword}
-                className="text-xs py-[10px]"
+                className="text-xs py-[10px] h-fit"
               >
                 <ToggleableKeywordButton
                   keyword={keyword}

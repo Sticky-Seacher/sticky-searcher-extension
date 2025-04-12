@@ -1,7 +1,7 @@
 {
   "name": "Sticky Searcher",
   "description": "사용자의 검색환경을 개선해보자 🔎",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 3,
   "action": {
     "default_title": "Click to open panel",
