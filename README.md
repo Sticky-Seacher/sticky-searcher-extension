@@ -21,29 +21,29 @@
     + [Frontend](#frontend)
     + [Backend](#backend)
 - [4. 개발 과정](#4-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
-  * [검색어 멀티 하이라이팅](#%EA%B2%80%EC%83%89%EC%96%B4-%EB%A9%80%ED%8B%B0-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8C%85)
-    + [사용자가 보고 있는 페이지를 조작할 수 있는 방법 - [content script 사용]](#%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%B3%B4%EA%B3%A0-%EC%9E%88%EB%8A%94-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95---content-script-%EC%82%AC%EC%9A%A9)
+  * [웹페이지 내에 검색 키워드를 하이라이팅 하는 기능](#%EC%9B%B9%ED%8E%98%EC%9D%B4%EC%A7%80-%EB%82%B4%EC%97%90-%EA%B2%80%EC%83%89-%ED%82%A4%EC%9B%8C%EB%93%9C%EB%A5%BC-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8C%85-%ED%95%98%EB%8A%94-%EA%B8%B0%EB%8A%A5)
+    + [사용자가 보고 있는 페이지를 조작할 수 있는 방법](#%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%B3%B4%EA%B3%A0-%EC%9E%88%EB%8A%94-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95)
     + [대상 텍스트 찾기](#%EB%8C%80%EC%83%81-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%B0%BE%EA%B8%B0)
       - [타이밍 - [onCompleted이벤트와 sendMessage 사용]](#%ED%83%80%EC%9D%B4%EB%B0%8D---oncompleted%EC%9D%B4%EB%B2%A4%ED%8A%B8%EC%99%80-sendmessage-%EC%82%AC%EC%9A%A9)
       - [DOM 트리 탐색 - [NodeIterator]](#dom-%ED%8A%B8%EB%A6%AC-%ED%83%90%EC%83%89---nodeiterator)
     + [텍스트를 요소로 만들기 - [태그 문법]](#%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9A%94%EC%86%8C%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0---%ED%83%9C%EA%B7%B8-%EB%AC%B8%EB%B2%95)
-  * [페이지 간 description 자동 스크롤](#%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-description-%EC%9E%90%EB%8F%99-%EC%8A%A4%ED%81%AC%EB%A1%A4)
+  * [페이지간 검색 키워드 관련 핵심 단락 위치로 자동 스크롤 기능](#%ED%8E%98%EC%9D%B4%EC%A7%80%EA%B0%84-%EA%B2%80%EC%83%89-%ED%82%A4%EC%9B%8C%EB%93%9C-%EA%B4%80%EB%A0%A8-%ED%95%B5%EC%8B%AC-%EB%8B%A8%EB%9D%BD-%EC%9C%84%EC%B9%98%EB%A1%9C-%EC%9E%90%EB%8F%99-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EA%B8%B0%EB%8A%A5)
     + [description 취득과 chrome storage](#description-%EC%B7%A8%EB%93%9D%EA%B3%BC-chrome-storage)
     + [리다이렉션과 text fragment, declarativeNetRequest](#%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98%EA%B3%BC-text-fragment-declarativenetrequest)
-  * [로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]](#%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0---%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken-%EA%B8%B0%EC%A4%80-%EC%A1%B0%EA%B1%B4%EB%AC%B8)
+  * [로그인 리다이렉션 오류 해결](#%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
     + [인증 토큰(accessToken)이란?](#%EC%9D%B8%EC%A6%9D-%ED%86%A0%ED%81%B0accesstoken%EC%9D%B4%EB%9E%80)
     + [상황](#%EC%83%81%ED%99%A9)
     + [해결](#%ED%95%B4%EA%B2%B0)
     + [해결 전 코드](#%ED%95%B4%EA%B2%B0-%EC%A0%84-%EC%BD%94%EB%93%9C)
     + [해결 후 코드](#%ED%95%B4%EA%B2%B0-%ED%9B%84-%EC%BD%94%EB%93%9C)
-  * [검색 리스트 드래그앤드롭 기능 구현 순서 - [draggable 속성 + useRef]](#%EA%B2%80%EC%83%89-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84-%EC%88%9C%EC%84%9C---draggable-%EC%86%8D%EC%84%B1--useref)
+  * [검색 히스토리 그룹화 드래그앤드롭 기능](#%EA%B2%80%EC%83%89-%ED%9E%88%EC%8A%A4%ED%86%A0%EB%A6%AC-%EA%B7%B8%EB%A3%B9%ED%99%94-%EB%93%9C%EB%9E%98%EA%B7%B8%EC%95%A4%EB%93%9C%EB%A1%AD-%EA%B8%B0%EB%8A%A5)
     + [마우스 이벤트 처리](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B2%98%EB%A6%AC)
     + [마우스 이벤트 속성 draggable](#%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8D%EC%84%B1-draggable)
     + [onDragEnter / onDragStart / dragPosition 속성이란?](#ondragenter--ondragstart--dragposition-%EC%86%8D%EC%84%B1%EC%9D%B4%EB%9E%80)
     + [드래그 앤 드롭에서 useRef() 사용하기](#%EB%93%9C%EB%9E%98%EA%B7%B8-%EC%95%A4-%EB%93%9C%EB%A1%AD%EC%97%90%EC%84%9C-useref-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
     + [상황](#%EC%83%81%ED%99%A9-1)
     + [해결](#%ED%95%B4%EA%B2%B0-1)
-  * [localStorage value가 변할 때 데이터 가져오기](#localstorage-value%EA%B0%80-%EB%B3%80%ED%95%A0-%EB%95%8C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
+  * [사용자 식별을 위한 사용자 정보 데이터 변화 감지](#%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%8B%9D%EB%B3%84%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%A0%95%EB%B3%B4-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B3%80%ED%99%94-%EA%B0%90%EC%A7%80)
     + [상황](#%EC%83%81%ED%99%A9-2)
     + [해결](#%ED%95%B4%EA%B2%B0-2)
 - [5. 팀원 소개](#5-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
@@ -80,11 +80,13 @@
 
 ### Frontend
 
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
-<img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=react&logoColor=white" />
-<img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-<img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
-<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
+<div align="left">
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+  <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
+</div>
 
 ### Backend
 
@@ -92,7 +94,7 @@
 
 # 4. 개발 과정
 
-## 검색어 멀티 하이라이팅
+## 웹페이지 내에 검색 키워드를 하이라이팅 하는 기능
 
 검색어 멀티 하이라이팅 기능은 사용자가 보고 있는 웹 페이지의 텍스트를 각 단어별로 시각적으로 분류해 강조 표시하는 기능입니다.<br>
 • content script에서 페이지에 접근한 뒤, onCompleted 이벤트와 sendMessage를 활용해 작업 시작 시점을 제어<br>
@@ -102,7 +104,7 @@
 
 보다 자세한 설명은 다음과 같습니다.
 
-### 사용자가 보고 있는 페이지를 조작할 수 있는 방법 - [content script 사용]
+### 사용자가 보고 있는 페이지를 조작할 수 있는 방법
 
 크롬 익스텐션의 여러 영역들 중에 사용자가 보고 있는 페이지에서 작업할 수 있는 영역은 content script 영역으로, 웹 페이지안에서 JavaScript가 실행되도록 합니다. 실행할 파일을 manifest 파일에서 연결해 해당 영역에 접근했습니다
 
@@ -166,7 +168,7 @@ DOM 트리 탐색 결과 얻게 된 리프 요소를 대상으로 다시 한 번
 
 이 과정에서 jsbin과 debugger의 효과를 채감할 수 있었습니다. jsbin으로 작은 단위의 DOM에서 우선 작은 기능 구현을 도전했습니다. 주로 단어가 전체 콘텐츠의 맨 앞에 있거나 맨 뒤에 있을 경우 등의 엣지케이스를 확인하는 데 좋았습니다. 그리고 MDN 사이트 등 본격적인 사이트에서 콘솔 탭을 열어 해당 함수를 적용시켜 보았고, debugger를 쓰면서 점진적으로 하나씩 하이라이트가 찍히는 모습과 해당하는 코드 로직을 따라가며 버그를 잡아 내니 문제 해결에 걸리는 시간을 단축할 수 있었습니다.
 
-## 페이지 간 description 자동 스크롤
+## 페이지간 검색 키워드 관련 핵심 단락 위치로 자동 스크롤 기능
 
 페이지 간 description 자동 스크롤 기능은 구글 검색 페이지에서 링크당 단락을 표시해 줄 경우, 해당 링크를 누르면 해당 단락이 위치한 곳으로 자동으로 스크롤을 내려주는 기능입니다. 구글 검색페이지에 위치했을 때 chrome storage에 단락들을 미리 저장해 놓은 후, 페이지 이동 시 text fragments로 만들어 URL 끝에 추가해 리다이렉션을 시키는 방식으로 작업을 진행했습니다.
 
@@ -198,7 +200,7 @@ declarativeNetRequest는 네트워크 요청을 수정하거나 차단할 수 �
 
 chrome stroage에 onChange 이벤트를 걸어 놓아 리다이렉트 규칙들을 동기화시켰습니다. chrome storage에 새로운 description과 링크들이 저장되면 리다이렉트 규칙들도 업데이트가 되며, chrome storage가 비워지면 리다이렉트 규칙도 비워집니다. 이는 chrome storage를 진실의 원천으로 삼아 관련된 로직들이 chrome storage에 반응하여 작동하도록 하기 위함이었습니다.
 
-## 로그인 리다이렉션 오류 해결 - [인증 토큰(accessToken) 기준 조건문]
+## 로그인 리다이렉션 오류 해결
 
 ### 인증 토큰(accessToken)이란?
 
@@ -247,7 +249,7 @@ const ProtectedRoute = ({ element }) => {
 };
 ```
 
-## 검색 리스트 드래그앤드롭 기능 구현 순서 - [draggable 속성 + useRef]
+## 검색 히스토리 그룹화 드래그앤드롭 기능
 
 ### 마우스 이벤트 처리
 
@@ -301,7 +303,7 @@ const ProtectedRoute = ({ element }) => {
       ))}
   ```
 
-## localStorage value가 변할 때 데이터 가져오기
+## 사용자 식별을 위한 사용자 정보 데이터 변화 감지
 
 ### 상황
 
@@ -329,9 +331,9 @@ if (request.message === "Get user authentication") {
 
 # 5. 팀원 소개
 
-- 이종석: josuk0212@gmail.com
+- 이종석: jongsuk.dev@gmail.com
 
-- 김소연: hong7ya@gmail.com
+- 김소연: soyeon.software@gmail.com
 
 - 김연주: mpnisck@gmail.com
 
