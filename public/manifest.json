@@ -1,7 +1,7 @@
 {
   "name": "Sticky Searcher",
   "description": "사용자의 검색환경을 개선해보자 🔎",
-  "version": "1.1",
+  "version": "1.1.1",
   "manifest_version": 3,
   "action": {
     "default_title": "Click to open panel",
@@ -32,8 +32,9 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "windows": "Ctrl + F",
-        "mac": "Command + F"
+        "default": "Alt + F",
+        "windows": "Alt + F",
+        "mac": "Alt + F"
       }
     }
   }
