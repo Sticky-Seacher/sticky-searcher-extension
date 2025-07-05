@@ -1,15 +1,12 @@
 import PropTypes from "prop-types";
 
 import { useUserInfo } from "../../context/UserInfo";
-import {
-  addHistoryToDefaultGroup,
-  getHistoriesInDefaultGroup,
-} from "../../firebase/history";
-import { addNewUserAndDefaultGroup, getUser } from "../../firebase/user";
+import useHistories from "../../hooks/useHistories";
 import IconButton from "../shared/IconButton";
 
-export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
+export default function HistorySection({ countsPerKeywords }) {
   const { userInfo } = useUserInfo();
+  const { historiesMutation } = useHistories();
 
   function handleMovePage() {
     if (userInfo[0]) {
@@ -23,19 +20,9 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
     if (!userInfo[0]) {
       chrome.tabs.create({ url: "https://stickysearcher.site/login" });
     } else {
-      let userId = await getUser(userInfo[0]);
-      if (!userId) {
-        userId = await addNewUserAndDefaultGroup(userInfo[0]);
-      }
       const history = await getHistoryData(countsPerKeywords);
-      await addHistoryToDefaultGroup(userId, history);
 
-      async function getHistoryItem(userEmail) {
-        let userId = await getUser(userEmail);
-        const histories = await getHistoriesInDefaultGroup(userId);
-        setHistoryItem(histories);
-      }
-      getHistoryItem(userInfo[0]);
+      historiesMutation.mutate(history);
     }
   }
 
@@ -78,5 +65,4 @@ export default function HistorySection({ countsPerKeywords, setHistoryItem }) {
 
 HistorySection.propTypes = {
   countsPerKeywords: PropTypes.array.isRequired,
-  setHistoryItem: PropTypes.func.isRequired,
 };
