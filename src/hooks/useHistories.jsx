@@ -25,6 +25,7 @@ export default function useHistories() {
 
       return histories;
     },
+    initialData: [],
   });
 
   const historiesMutation = useMutation({
