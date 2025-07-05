@@ -12,5 +12,6 @@ export default defineConfig({
         entryFileNames: "assets/[name].js",
       },
     },
+    sourcemap: true,
   },
 });
