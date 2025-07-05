@@ -19,7 +19,6 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 
 function App() {
   const [countsPerKeywords, setCountsPerKeywords] = useState([]);
-  const [historyItem, setHistoryItem] = useState([]);
 
   const [showDevtools, setShowDevtools] = useState(false);
 
@@ -39,18 +38,12 @@ function App() {
   return (
     <UserInfoProvider>
       <QueryClientProvider client={queryClient}>
-        <HistorySection
-          countsPerKeywords={countsPerKeywords}
-          setHistoryItem={setHistoryItem}
-        />
+        <HistorySection countsPerKeywords={countsPerKeywords} />
         <SearchSection
           countsPerKeywords={countsPerKeywords}
           setCountsPerKeywords={setCountsPerKeywords}
         />
-        <LatelyHistoryGroup
-          historyItem={historyItem}
-          setHistoryItem={setHistoryItem}
-        />
+        <LatelyHistoryGroup />
         {/* [빌드된 파일에서 ReactQueryDevtools 사용] 사이트 패널의 콘솔에서 window.toggleDevtools() 입력시 사용 가능 */}
         <ReactQueryDevtools initialIsOpen />
         {showDevtools && (
