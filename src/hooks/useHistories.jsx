@@ -25,7 +25,7 @@ export default function useHistories() {
 
       return histories;
     },
-    initialData: [],
+    placeholderData: [],
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
   });
