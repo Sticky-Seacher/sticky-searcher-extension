@@ -1,22 +1,10 @@
-import PropTypes from "prop-types";
-import { useEffect } from "react";
-
-import { useUserInfo } from "../../context/UserInfo";
-import { getHistoriesInDefaultGroup } from "../../firebase/history";
-import { getUser } from "../../firebase/user";
+import useHistories from "../../hooks/useHistories";
 import HistoryItem from "../shared/HistoryItem";
 
-export default function LatelyHistoryGroup({ historyItem, setHistoryItem }) {
-  const { userInfo } = useUserInfo();
-
-  useEffect(() => {
-    async function getHistoryItem(userEmail) {
-      let userId = await getUser(userEmail);
-      const histories = await getHistoriesInDefaultGroup(userId);
-      setHistoryItem(histories);
-    }
-    userInfo[0] && getHistoryItem(userInfo[0]);
-  }, [userInfo]);
+export default function LatelyHistoryGroup() {
+  const {
+    historiesQuery: { data: histories },
+  } = useHistories();
 
   return (
     <div>
@@ -24,7 +12,7 @@ export default function LatelyHistoryGroup({ historyItem, setHistoryItem }) {
         lately History Group
       </p>
       <ul className="bg-[#f6f6f6] h-60 overflow-y-scroll border text-left px-[10px] py-[20px]">
-        {historyItem.map((history, index) => {
+        {histories.map((history, index) => {
           return (
             <HistoryItem
               key={index}
@@ -38,8 +26,3 @@ export default function LatelyHistoryGroup({ historyItem, setHistoryItem }) {
     </div>
   );
 }
-
-LatelyHistoryGroup.propTypes = {
-  historyItem: PropTypes.array.isRequired,
-  setHistoryItem: PropTypes.func.isRequired,
-};

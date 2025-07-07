@@ -10,7 +10,6 @@ const queryClient = new QueryClient();
 
 function App() {
   const [countsPerKeywords, setCountsPerKeywords] = useState([]);
-  const [historyItem, setHistoryItem] = useState([]);
 
   chrome.runtime.onMessage.addListener((request) => {
     if (request.message === "Get user authentication") {
@@ -24,18 +23,12 @@ function App() {
   return (
     <UserInfoProvider>
       <QueryClientProvider client={queryClient}>
-        <HistorySection
-          countsPerKeywords={countsPerKeywords}
-          setHistoryItem={setHistoryItem}
-        />
+        <HistorySection countsPerKeywords={countsPerKeywords} />
         <SearchSection
           countsPerKeywords={countsPerKeywords}
           setCountsPerKeywords={setCountsPerKeywords}
         />
-        <LatelyHistoryGroup
-          historyItem={historyItem}
-          setHistoryItem={setHistoryItem}
-        />
+        <LatelyHistoryGroup />
       </QueryClientProvider>
     </UserInfoProvider>
   );
